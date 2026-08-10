@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fake News Detection & Claim Verification System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-left">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+          <path d="M12 22C12 22 20 18 20 12V5L12 2L4 5V12C4 18 12 22 12 22Z" fill="#eff6ff" stroke="#2563eb" stroke-width="2" stroke-linejoin="round"/>
+          <path d="M9 12L11 14L15 10" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <h1>Fake News Detection <span>&</span><br>Claim Verification System</h1>
+      </div>
+    </div>
+
+    <nav class="header-nav">
+      <a href="#" class="nav-link active" id="nav-home">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+        </svg>
+        Home
+      </a>
+      <a href="#" class="nav-link" id="nav-history">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        History
+      </a>
+      <a href="#" class="nav-link" id="nav-how">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+        </svg>
+        How it Works
+      </a>
+      <a href="#" class="nav-link" id="nav-about">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        About Us
+      </a>
+    </nav>
+
+    <div class="header-right">
+      <div class="lang-selector">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+        </svg>
+        <span>English</span>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px; stroke-width:3;">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- Dashboard Container -->
+  <div class="dashboard-container">
+    
+    <!-- Main Content Layout Grid -->
+    <main class="main-grid view-section" id="home-view">
+      
+      <!-- Left Sidebar (Inputs) -->
+      <section class="card input-claim-card">
+        <div class="sidebar-title-group">
+          <h2>1. Input Your Claim</h2>
+          <p>Enter text or upload image / PDF</p>
+        </div>
+
+        <div class="tabs-container">
+          <button class="tab-btn active" data-tab="text">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path>
+            </svg>
+            Text
+          </button>
+          <button class="tab-btn" data-tab="image">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            Image
+          </button>
+          <button class="tab-btn" data-tab="pdf">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            PDF
+          </button>
+        </div>
+
+        <div class="textarea-container">
+          <textarea class="claim-textarea" id="claim-text" placeholder="Type your claim statement here..." maxlength="2000">ISRO successfully sent humans to Mars in 2025.</textarea>
+          <div class="char-counter" id="char-counter">45/2000</div>
+        </div>
+
+        <div class="file-upload-section">
+          <h3>Or upload files</h3>
+          <div class="upload-btn-container">
+            <label class="upload-btn-label" for="image-upload">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <span>Upload Image</span>
+            </label>
+            <input type="file" id="image-upload" class="file-input" accept="image/*">
+
+            <label class="upload-btn-label" for="pdf-upload">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span>Upload PDF</span>
+            </label>
+            <input type="file" id="pdf-upload" class="file-input" accept="application/pdf">
+          </div>
+          <p class="upload-info-text">Supports JPG, PNG, PDF (Max 10MB)</p>
+        </div>
+
+        <div class="tips-box">
+          <div class="tips-header">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+            Tips
+          </div>
+          <ul>
+            <li>Enter specific claims for better results.</li>
+            <li>Our system searches reliable sources and provides an explainable verdict.</li>
+          </ul>
+        </div>
+
+        <button class="start-btn" id="start-btn">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          Start Verification
+        </button>
+      </section>
+
+      <!-- Center Container (Steps Indicator & Step Card) -->
+      <section class="center-container">
+        
+        <!-- Top steps bar -->
+        <div class="top-steps-bar">
+          <div class="steps-connector-line"></div>
+          
+          <div class="step-node active" data-step="1">
+            <div class="step-badge">1</div>
+            <div class="step-label">Input Claim</div>
+          </div>
+          <div class="step-node" data-step="2">
+            <div class="step-badge">2</div>
+            <div class="step-label">Extract Text</div>
+          </div>
+          <div class="step-node" data-step="3">
+            <div class="step-badge">3</div>
+            <div class="step-label">NLP Analysis</div>
+          </div>
+          <div class="step-node" data-step="4">
+            <div class="step-badge">4</div>
+            <div class="step-label">Search Evidence</div>
+          </div>
+          <div class="step-node" data-step="5">
+            <div class="step-badge">5</div>
+            <div class="step-label">Verify Sources</div>
+          </div>
+          <div class="step-node" data-step="6">
+            <div class="step-badge">6</div>
+            <div class="step-label">Compare & Evaluate</div>
+          </div>
+          <div class="step-node" data-step="7">
+            <div class="step-badge">7</div>
+            <div class="step-label">Final Verdict</div>
+          </div>
+        </div>
+
+        <p class="steps-desc-banner" id="steps-summary-desc">We verify your claim in 7 simple steps. Click "Next" to see how it works.</p>
+
+        <!-- Center step card -->
+        <div class="card step-content-card" id="step-card-container">
+          <div class="step-pill" id="step-badge-pill">Step 1 of 7</div>
+          
+          <div class="step-body-container" id="step-content-body">
+            <!-- Content will be dynamically inserted here via app.js -->
+            <!-- Initial Step 1 markup shown for instant load and visual clarity -->
+            <div class="step-illustration-panel">
+              <svg class="svg-illustration" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Decorative background elements -->
+                <circle cx="120" cy="120" r="100" fill="#f0f7ff" />
+                <path d="M40 80C30 95 32 120 40 135" stroke="#dbeafe" stroke-width="3" stroke-linecap="round" />
+                <path d="M200 160C210 145 208 120 200 105" stroke="#dbeafe" stroke-width="3" stroke-linecap="round" />
+                
+                <!-- Main News Document -->
+                <g filter="url(#drop-shadow)">
+                  <rect x="70" y="50" width="100" height="120" rx="8" fill="white" stroke="#e2e8f0" stroke-width="2"/>
+                  <!-- News Lines -->
+                  <rect x="85" y="65" width="45" height="12" rx="2" fill="#eff6ff" />
+                  <line x1="85" y1="92" x2="155" y2="92" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" />
+                  <line x1="85" y1="105" x2="155" y2="105" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" />
+                  <line x1="85" y1="118" x2="135" y2="118" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" />
+                  <line x1="85" y1="131" x2="145" y2="131" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" />
+                </g>
+
+                <!-- Warning exclamation icon (Bottom Left) -->
+                <circle cx="65" cy="165" r="16" fill="#ef4444" stroke="white" stroke-width="3" />
+                <path d="M65 158V166M65 171H65.01" stroke="white" stroke-width="3" stroke-linecap="round" />
+
+                <!-- Magnifier glass overlapping (Right Bottom) -->
+                <g filter="url(#drop-shadow-heavy)">
+                  <circle cx="130" cy="130" r="24" fill="white" stroke="#2563eb" stroke-width="4" />
+                  <line x1="147" y1="147" x2="175" y2="175" stroke="#2563eb" stroke-width="5" stroke-linecap="round" />
+                  <!-- Checkmark inside magnifier representing input verify state -->
+                  <path d="M122 130L127 135L138 124" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                </g>
+
+                <defs>
+                  <filter id="drop-shadow" x="60" y="44" width="120" height="140" filterUnits="userSpaceOnUse">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.05"/>
+                  </filter>
+                  <filter id="drop-shadow-heavy" x="98" y="98" width="90" height="90" filterUnits="userSpaceOnUse">
+                    <feDropShadow dx="2" dy="8" stdDeviation="6" flood-color="#1e3a8a" flood-opacity="0.12"/>
+                  </filter>
+                </defs>
+              </svg>
+            </div>
+
+            <div class="step-details-panel">
+              <div class="step-title-group">
+                <div class="step-title-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
+                </div>
+                <h2>Input Claim</h2>
+              </div>
+              <p>We have received your claim. Click "Next" to continue.</p>
+              
+              <div class="your-claim-box">
+                <h4>Your Claim</h4>
+                <p id="claim-display-card">ISRO successfully sent humans to Mars in 2025.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-navigation-container">
+            <button class="step-nav-btn" id="prev-step-btn" style="display:none;">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path>
+              </svg>
+              Back
+            </button>
+            <button class="step-nav-btn primary-nav-btn" id="next-step-btn">
+              Next
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Right Sidebar (Progress Overview) -->
+      <section class="card progress-sidebar-card">
+        <h2 class="sidebar-heading">Progress Overview</h2>
+        
+        <div class="checklist-container">
+          <div class="checklist-item active" data-sidebar-step="1">
+            <div class="checklist-circle">1</div>
+            <span class="checklist-text">Input Claim</span>
+          </div>
+          <div class="checklist-item" data-sidebar-step="2">
+            <div class="checklist-circle">2</div>
+            <span class="checklist-text">Extract Text</span>
+          </div>
+          <div class="checklist-item" data-sidebar-step="3">
+            <div class="checklist-circle">3</div>
+            <span class="checklist-text">NLP Analysis</span>
+          </div>
+          <div class="checklist-item" data-sidebar-step="4">
+            <div class="checklist-circle">4</div>
+            <span class="checklist-text">Search Evidence</span>
+          </div>
+          <div class="checklist-item" data-sidebar-step="5">
+            <div class="checklist-circle">5</div>
+            <span class="checklist-text">Verify Sources</span>
+          </div>
+          <div class="checklist-item" data-sidebar-step="6">
+            <div class="checklist-circle">6</div>
+            <span class="checklist-text">Compare & Evaluate</span>
+          </div>
+          <div class="checklist-item" data-sidebar-step="7">
+            <div class="checklist-circle">7</div>
+            <span class="checklist-text">Final Verdict</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Panel (Verdict Results) -->
+      <section class="card results-card">
+        <div class="results-header-container">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
+          </svg>
+          <h2>Final Result (Available after Step 7)</h2>
+        </div>
+
+        <div class="results-grid">
+          <!-- Widget 1: Verdict -->
+          <div class="result-widget locked verdict-widget" id="widget-verdict">
+            <span class="result-widget-title">Verdict</span>
+            <div class="result-widget-content verdict-text">-</div>
+            <span class="result-widget-subtext">Will be shown at the end</span>
+            <div class="widget-lock-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Widget 2: Confidence Score -->
+          <div class="result-widget locked" id="widget-confidence">
+            <span class="result-widget-title">Confidence Score</span>
+            <div class="result-widget-content">
+              <svg class="confidence-chart-svg" viewBox="0 0 44 44">
+                <circle class="confidence-chart-bg" cx="22" cy="22" r="20" />
+                <circle class="confidence-chart-fg" id="confidence-circle" cx="22" cy="22" r="20" />
+                <text class="confidence-text" id="confidence-text" x="50%" y="55%" dominant-baseline="middle" text-anchor="middle">-%</text>
+              </svg>
+            </div>
+            <span class="result-widget-subtext">Will be shown at the end</span>
+            <div class="widget-lock-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Widget 3: Claim Type -->
+          <div class="result-widget locked" id="widget-type">
+            <span class="result-widget-title">Claim Type</span>
+            <div class="result-widget-content" id="type-text">-</div>
+            <span class="result-widget-subtext">Will be shown at the end</span>
+            <div class="widget-lock-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Widget 4: Overall Reliability -->
+          <div class="result-widget locked" id="widget-reliability">
+            <span class="result-widget-title">Overall Reliability</span>
+            <div class="result-widget-content">
+              <div class="reliability-stars" id="reliability-stars">
+                <!-- Stars will be highlighted active via JS -->
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </div>
+            </div>
+            <span class="result-widget-subtext">Will be shown at the end</span>
+            <div class="widget-lock-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Widget 5: Explanation -->
+          <div class="result-widget locked" id="widget-explanation">
+            <span class="result-widget-title">Explanation (Why?)</span>
+            <div class="result-widget-content" id="explanation-text" style="font-size: 0.76rem; font-weight: 500;">-</div>
+            <span class="result-widget-subtext">Will be shown at the end</span>
+            <div class="widget-lock-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Widget 6: Top Sources -->
+          <div class="result-widget locked" id="widget-sources">
+            <span class="result-widget-title">Top Sources</span>
+            <div class="result-widget-content" id="sources-text" style="font-size: 0.76rem; font-weight: 500;">-</div>
+            <span class="result-widget-subtext">Will be shown at the end</span>
+            <div class="widget-lock-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Widget 7: Evidence Summary -->
+          <div class="result-widget locked" id="widget-summary">
+            <span class="result-widget-title">Evidence Summary</span>
+            <div class="result-widget-content" id="summary-text" style="font-size: 0.76rem; font-weight: 500;">-</div>
+            <span class="result-widget-subtext">Will be shown at the end</span>
+            <div class="widget-lock-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Widget 8: NLP Insights -->
+          <div class="result-widget locked" id="widget-insights">
+            <span class="result-widget-title">NLP Insights</span>
+            <div class="result-widget-content" id="insights-text" style="font-size: 0.76rem; font-weight: 500;">-</div>
+            <span class="result-widget-subtext">Will be shown at the end</span>
+            <div class="widget-lock-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+              </svg>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="results-alert-banner" id="results-banner">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <span>Please go through all 7 steps. The complete analysis and final verdict will be displayed at the end.</span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- History View -->
+    <section class="view-section card" id="history-view" style="display: none;">
+      <div class="view-header">
+        <h2>Claim Verification History</h2>
+        <p>A history of verified claims processed by this workspace.</p>
+      </div>
+      <div class="history-table-container">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>Claim Statement</th>
+              <th>Verdict</th>
+              <th>Confidence</th>
+              <th>Category</th>
+              <th>Timestamp</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body">
+            <tr>
+              <td><span class="claim-text-col">ISRO successfully sent humans to Mars in 2025.</span></td>
+              <td><span class="verdict-badge-history tag-false">FALSE</span></td>
+              <td>98%</td>
+              <td>Space & Tech</td>
+              <td>Today, 12:15 PM</td>
+              <td><button class="re-verify-btn" data-claim="ISRO successfully sent humans to Mars in 2025.">Re-verify</button></td>
+            </tr>
+            <tr>
+              <td><span class="claim-text-col">Water boiling point decreases at higher altitudes.</span></td>
+              <td><span class="verdict-badge-history tag-true">TRUE</span></td>
+              <td>92%</td>
+              <td>Science</td>
+              <td>Yesterday, 4:30 PM</td>
+              <td><button class="re-verify-btn" data-claim="Water boiling point decreases at higher altitudes.">Re-verify</button></td>
+            </tr>
+            <tr>
+              <td><span class="claim-text-col">New COVID variant is resistant to all current immunity options.</span></td>
+              <td><span class="verdict-badge-history tag-misleading">MISLEADING</span></td>
+              <td>81%</td>
+              <td>Medicine</td>
+              <td>Aug 5, 2026</td>
+              <td><button class="re-verify-btn" data-claim="New COVID variant is resistant to all current immunity options.">Re-verify</button></td>
+            </tr>
+            <tr>
+              <td><span class="claim-text-col">NASA confirmed discovery of alien cities on Jupiter.</span></td>
+              <td><span class="verdict-badge-history tag-false">FALSE</span></td>
+              <td>99%</td>
+              <td>Science</td>
+              <td>Jul 28, 2026</td>
+              <td><button class="re-verify-btn" data-claim="NASA confirmed discovery of alien cities on Jupiter.">Re-verify</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- How it Works View -->
+    <section class="view-section card" id="how-view" style="display: none;">
+      <div class="view-header">
+        <h2>How it Works</h2>
+        <p>Understanding the automated 7-step claim verification engine.</p>
+      </div>
+      
+      <div class="how-it-works-grid">
+        <div class="how-step-card">
+          <div class="how-step-num" style="background-color: var(--step-1);">1</div>
+          <h3>Input Claim</h3>
+          <p>Submit claims through manual text entry, OCR image parsing, or PDF document reading.</p>
+        </div>
+        <div class="how-step-card">
+          <div class="how-step-num" style="background-color: var(--step-2);">2</div>
+          <h3>Extract Text</h3>
+          <p>System automatically normalizes spacing, strips formatting, and reads character sets via OCR scanner.</p>
+        </div>
+        <div class="how-step-card">
+          <div class="how-step-num" style="background-color: var(--step-3);">3</div>
+          <h3>NLP Analysis</h3>
+          <p>Natural Language Processing evaluates stance (alarmist/speculative), sentiment (neutral/toxic), and maps named entities.</p>
+        </div>
+        <div class="how-step-card">
+          <div class="how-step-num" style="background-color: var(--step-4);">4</div>
+          <h3>Search Evidence</h3>
+          <p>Engine compiles queries to search news indexes, global APIs, and established verification registries in real time.</p>
+        </div>
+        <div class="how-step-card">
+          <div class="how-step-num" style="background-color: var(--step-5);">5</div>
+          <h3>Verify Sources</h3>
+          <p>Cross-references target domains against credibility weights (e.g. government registers vs self-published blogs).</p>
+        </div>
+        <div class="how-step-card">
+          <div class="how-step-num" style="background-color: var(--step-6);">6</div>
+          <h3>Compare & Evaluate</h3>
+          <p>Conducts alignment analysis comparing statement claims directly with evidence quotes to check contradiction levels.</p>
+        </div>
+        <div class="how-step-card">
+          <div class="how-step-num" style="background-color: var(--step-7);">7</div>
+          <h3>Final Verdict</h3>
+          <p>Calculates confidence percentages, maps reliability stars, outlines final verdicts (True/False/Misleading), and writes explanations.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Us View -->
+    <section class="view-section card" id="about-view" style="display: none;">
+      <div class="view-header">
+        <h2>About Us</h2>
+        <p>Fake News Detection & Claim Verification System.</p>
+      </div>
+      
+      <div class="about-content-layout">
+        <div class="about-main-text">
+          <h3>Our Mission</h3>
+          <p>Misinformation weakens democratic institutions and compromises collective action on health, science, and policy. Our mission is to engineer transparent, explainable machine-checking interfaces that cross-reference claims against authoritative sources, providing public confidence audits for information consumed online.</p>
+          
+          <h3>Core Technology Stack</h3>
+          <p>The system leverages semantic similarity indices, named entity tokenizers, custom search API crawlers, and a curated source reputation directory. The interface is optimized to deliver comprehensive explainable evidence rather than arbitrary boolean verdicts.</p>
+        </div>
+        
+        <div class="about-sidebar-principles">
+          <div class="principle-item">
+            <h4>Objectivity</h4>
+            <p>Decisions are weighted strictly based on evidence citations from authoritative domains, minimizing indexing bias.</p>
+          </div>
+          <div class="principle-item">
+            <h4>Transparency</h4>
+            <p>All source citations, trust metrics, and matching quotes are exposed to the user for direct verification.</p>
+          </div>
+          <div class="principle-item">
+            <h4>Speed & Precision</h4>
+            <p>Multi-threaded NLP pipelines scan, evaluate, and formulate results within seconds of query trigger.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-left">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+      </svg>
+      <span>&copy; 2025 Fake News Detection & Claim Verification System. All rights reserved.</span>
+    </div>
+    <div class="footer-right">
+      <span>Built with</span>
+      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
+      </svg>
+      <span>for a better informed world.</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
