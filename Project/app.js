@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- STATE MANAGEMENT ---
   const state = {
     activeTab: 'text',
-    claimText: 'ISRO successfully sent humans to Mars in 2025.',
+    claimText: '',
     uploadedFile: null,
     currentStep: 1,
     isVerifying: false,
@@ -113,9 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
       // Update UI feedback based on tabs
       if (tabType === 'text') {
         textarea.placeholder = "Type your claim statement here...";
-        if (state.claimText === 'Extracted text from uploaded image.' || state.claimText === 'Extracted text from uploaded PDF document.') {
-          textarea.value = "ISRO successfully sent humans to Mars in 2025.";
-          state.claimText = textarea.value;
+        if (state.claimText.startsWith('Extracted text from')) {
+          textarea.value = "";
+          state.claimText = "";
           updateCharCounter();
         }
       } else if (tabType === 'image') {
@@ -146,9 +146,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Mock OCR text extraction into textarea
         if (isImage) {
-          textarea.value = `Extracted text from image "${file.name}": ISRO successfully sent humans to Mars in 2025.`;
+          textarea.value = `Extracted text from image "${file.name}": Verifying file assets scan.`;
         } else {
-          textarea.value = `Extracted text from document "${file.name}": ISRO successfully sent humans to Mars in 2025.`;
+          textarea.value = `Extracted text from document "${file.name}": Verifying file assets scan.`;
         }
         state.claimText = textarea.value;
         updateCharCounter();
