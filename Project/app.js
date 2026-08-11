@@ -102,6 +102,35 @@ const translations = {
     time_aug5: "Aug 5, 2026",
     time_jul28: "Jul 28, 2026",
 
+    // Interactive steps translations
+    s2_header: "EXTRACTION PROCESS",
+    s2_status_1: "Analyzing structures...",
+    s2_status_2: "Parsing sentences...",
+    s2_status_3: "Extraction Complete!",
+    s3_header: "NLP DIAGNOSTICS",
+    s3_stance: "Stance",
+    s3_sentiment: "Sentiment",
+    s3_lang: "Language",
+    s3_complexity: "Complexity",
+    s3_entities: "Entities",
+    s3_scanning: "Scanning...",
+    s3_mapped: "Entities mapped.",
+    s4_header: "SIMULATED WEB QUERIES",
+    s5_header: "CREDIBILITY RATINGS",
+    s5_trust: "Trust",
+    s6_header: "FACT ALIGNMENT",
+    s6_claim_side: "Statement Claims",
+    s6_fact_side: "Evidence Base",
+    s6_computing: "Computing comparative matrices...",
+    s7_header: "Summary Statement",
+    s7_desc: 'Click "Verify & Reveal" below to populate the full diagnostic grid and review sources, reliability star indices, confidence scopes, and detailed explanation text.',
+
+    // Stepper diagnostics values
+    v_assertive: "Assertive",
+    v_neutral: "Neutral",
+    v_english: "English",
+    v_moderate: "Moderate",
+
     // Verdict dynamic objects
     res_mars: {
       verdict: 'FALSE',
@@ -215,7 +244,7 @@ const translations = {
     about_mission_h3: "మా లక్ష్యం",
     about_mission_p: "నకిలీ సమాచారం మరియు తప్పుడు ప్రచారాల వల్ల సమాజంలో కలిగే నష్టాలను నివారించడం మా లక్ష్యం. మూలాల నుండి సమాచారాన్ని సేకరించి, అత్యంత పారదర్శకమైన సాక్ష్యాలతో వాస్తవాలను ధృవీకరించే సాంకేతికతను మేము అందిస్తున్నాము.",
     about_tech_h3: "ఉపయోగించిన సాంకేతికత",
-    about_tech_p: "ఈ వ్యవస్థ నిజసమయ వెబ్ క్రాలర్లు, సిమాంటిక్ పోలిక సూచికలు మరియు క్యూరేటెడ్ సోర్స్ డేటాబేస్ ద్వారా పనిచేస్తుంది. ఇది కేవలం నిజం/అబద్ధం అని మాత్రమే కాకుండా స్పష్టమైన వివరణాత్మక నివేదికను ఇస్తుంది.",
+    about_tech_p: "ఈ వ్యవస్థ నిజసమయ వెబ్ క్రాలర్లు, సిమాంటిక్ పోలిక సూచికలు మరియు క్యూరేటెడ్ సోర్స్ డేటాబేస్ ద్వారా పనిచేస్తుంది. ఇది కేవలం నిజం/అబద్ధం అని మాత్రమే కాకుండా స్పష్టమైన వివరణాत्मक నివేదికను ఇస్తుంది.",
     p_obj_h4: "నిష్పాక్షికత",
     p_obj_p: "విశ్వసనీయమైన మూలాల ఆధారంగా మాత్రమే వాస్తవాలను నిర్ణయిస్తాము, పక్షపాతాలకు తావులేదు.",
     p_trans_h4: "పారదర్శకత",
@@ -240,6 +269,35 @@ const translations = {
     time_yesterday: "నిన్న, 4:30 PM",
     time_aug5: "ఆగస్టు 5, 2026",
     time_jul28: "జూలై 28, 2026",
+
+    // Interactive steps translations
+    s2_header: "సంగ్రహణ ప్రక్రియ",
+    s2_status_1: "నిర్మాణాన్ని విశ్లేషిస్తోంది...",
+    s2_status_2: "టెక్స్ట్‌ని సంగ్రహిస్తోంది...",
+    s2_status_3: "విజయవంతంగా పూర్తయింది!",
+    s3_header: "NLP విశ్లేషణలు",
+    s3_stance: "వైఖరి",
+    s3_sentiment: "భావోద్వేగం",
+    s3_lang: "భాష",
+    s3_complexity: "క్లిష్టత",
+    s3_entities: "ఎంటిటీలు",
+    s3_scanning: "స్కాన్ చేస్తోంది...",
+    s3_mapped: "ఎంటిటీలు గుర్తించబడ్డాయి.",
+    s4_header: "వెబ్ శోధనలు",
+    s5_header: "విశ్వసనీయత రేటింగ్స్",
+    s5_trust: "విశ్వసనీయత",
+    s6_header: "వాస్తవాల పోలిక ప్యానెల్",
+    s6_claim_side: "ప్రకటన క్లెయిమ్‌లు",
+    s6_fact_side: "ఆధారాల మూలం",
+    s6_computing: "పోలిక నివేదికను లెక్కిస్తోంది...",
+    s7_header: "సారాంశ ప్రకటన",
+    s7_desc: 'వెరిఫికేషన్ వివరాలు మరియు పూర్తి విశ్లేషణను కింద ఉన్న నివేదికలో అన్‌లాక్ చేయడానికి "ధృవీకరించి చూపించు" బటన్ నొక్కండి.',
+
+    // Stepper diagnostics values
+    v_assertive: "రూఢీ అయినది",
+    v_neutral: "తటస్థం",
+    v_english: "ఇంగ్లీష్",
+    v_moderate: "మధ్యస్థం",
 
     // Verdict objects
     res_mars: {
@@ -312,7 +370,7 @@ const translations = {
     step6_title: "तुलना और मूल्यांकन",
     step7_title: "अंतिम निर्णय",
     step1_desc: "हमें आपका दावा मिल गया है। आगे बढ़ने के लिए \"नेक्स्ट\" पर क्लिक करें।",
-    step2_desc: "हमारी प्रणाली फ़ाइल संरचना को स्कैन करती है और आवश्यकतानुसार OCR पाठ निष्कर्षण करती है।",
+    step2_desc: "हमारी प्रणाली फ़ाइल संरचना को स्कैन करती है और आवश्यकतानुसार OCR पाठ निष्कर्षण करती. है।",
     step3_desc: "प्राकृतिक भाषा प्रसंस्करण हमें दावे के रुख और भावनाओं को समझने में मदद करता है।",
     step4_desc: "हम समाचारों, खोज इंजनों और आधिकारिक एजेंसी रिकॉर्ड्स में साक्ष्य खोजते हैं।",
     step5_desc: "हमारे मॉडल स्रोत डोमेन की प्रतिष्ठा और विश्वसनीयता का मूल्यांकन करते हैं।",
@@ -380,6 +438,35 @@ const translations = {
     time_aug5: "5 अगस्त, 2026",
     time_jul28: "28 जुलाई, 2026",
 
+    // Interactive steps translations
+    s2_header: "निष्कर्षण प्रक्रिया",
+    s2_status_1: "संरचना का विश्लेषण...",
+    s2_status_2: "वाक्यों का विश्लेषण...",
+    s2_status_3: "निष्कर्षण पूरा हुआ!",
+    s3_header: "NLP नैदानिकी",
+    s3_stance: "पक्ष",
+    s3_sentiment: "भावना",
+    s3_lang: "भाषा",
+    s3_complexity: "जटिलता",
+    s3_entities: "संस्थाएं",
+    s3_scanning: "स्कैनिंग...",
+    s3_mapped: "संस्थाएं मैप की गईं।",
+    s4_header: "सिम्युलेटेड वेब क्वेरी",
+    s5_header: "विश्वसनीयता रेटिंग",
+    s5_trust: "विश्वास",
+    s6_header: "तथ्य संरेखण",
+    s6_claim_side: "कथन दावे",
+    s6_fact_side: "साक्ष्य आधार",
+    s6_computing: "तुलनात्मक मैट्रिक्स की गणना...",
+    s7_header: "सारांश विवरण",
+    s7_desc: 'नीचे दिए गए सत्यापन विवरण और संपूर्ण विश्लेषण को रिपोर्ट में अनलॉक करने के लिए "सत्यापित करें और दिखाएं" बटन दबाएं।',
+
+    // Stepper diagnostics values
+    v_assertive: "मुखर",
+    v_neutral: "तटस्थ",
+    v_english: "अंग्रेज़ी",
+    v_moderate: "मध्यम",
+
     // Verdict objects
     res_mars: {
       verdict: 'असत्य',
@@ -402,7 +489,7 @@ const translations = {
       type: 'चिकित्सीय गलत जानकारी',
       explanation: 'टीकों में केवल रोग प्रतिरोधक क्षमता बढ़ाने वाले जैविक सूत्र होते हैं, कोई ट्रैकिंग हार्डवेयर या चिप नहीं होती। सभी सामग्री स्वास्थ्य नियामकों द्वारा स्वीकृत हैं।',
       sources: 'who.int (विश्व स्वास्थ्य संगठन), cdc.gov (रोग नियंत्रण), fda.gov (औषध प्रशासन)',
-      summary: 'नियामक विश्लेषण and वैज्ञानिक रिपोर्ट पुष्टि करते हैं कि कोविड-19 टीकों में कोई माइक्रोचिप नहीं है। ऐसे दावे पूरी तरह काल्पनिक हैं।',
+      summary: 'नियामक विश्लेषण और वैज्ञानिक रिपोर्ट पुष्टि करते हैं कि कोविड-19 टीकों में कोई माइक्रोचिप नहीं है। ऐसे दावे पूरी तरह काल्पनिक हैं।',
       insights: 'भावना: नकारात्मक\nविषाक्तता: 4%\nरुख: भयभीत करने वाला\nसच्चाई दर: 0%'
     },
     res_boil: {
@@ -614,9 +701,9 @@ document.addEventListener('DOMContentLoaded', () => {
           updateCharCounter();
         }
       } else if (tabType === 'image') {
-        textarea.placeholder = t.tab_image === "Image" ? "Upload an image using the buttons below to extract claim text..." : "చిత్రం నుండి టెక్స్ట్ సేకరించడానికి కింద బಟన్ క్లిక్ చేసి అప్‌లోడ్ చేయండి...";
+        textarea.placeholder = t.currentLang === 'te' ? "చిత్రం నుండి టెక్స్ట్ సేకరించడానికి కింద బటన్ క్లిక్ చేసి అప్‌లోడ్ చేయండి..." : (t.currentLang === 'hi' ? "इमेज से टेक्स्ट निकालने के लिए नीचे अपलोड करें..." : "Upload an image using the buttons below to extract claim text...");
       } else if (tabType === 'pdf') {
-        textarea.placeholder = t.tab_pdf === "PDF" ? "Upload a PDF using the buttons below to extract claim text..." : "PDF నుండి టెక్స్ట్ సేకరించడానికి కింద బಟన్ క్లిక్ చేసి అప్‌లోడ్ చేయండి...";
+        textarea.placeholder = t.currentLang === 'te' ? "PDF నుండి టెక్స్ట్ సేకరించడానికి కింద బటన్ క్లిక్ చేసి అప్‌లోడ్ చేయండి..." : (t.currentLang === 'hi' ? "PDF से टेक्स्ट निकालने के लिए नीचे अपलोड करें..." : "Upload a PDF using the buttons below to extract claim text...");
       }
     });
   });
@@ -677,7 +764,7 @@ document.addEventListener('DOMContentLoaded', () => {
   startBtn.addEventListener('click', () => {
     const claim = textarea.value.trim();
     if (!claim) {
-      alert(state.currentLang === 'te' ? "దయచేసి ఒక క్లెయిమ్ నమోదు చేయండి లేదా ఫైల్ అప్‌లోడ్ చేయండి." : "Please enter a claim statement or upload a file first.");
+      alert(state.currentLang === 'te' ? "దయచేసి ఒక క్లెయిమ్ నమోదు చేయండి లేదా ఫైల్ అప్‌లోడ్ చేయండి." : (state.currentLang === 'hi' ? "कृपया पहले दावा दर्ज करें या फ़ाइल अपलोड करें।" : "Please enter a claim statement or upload a file first."));
       return;
     }
     
@@ -1011,7 +1098,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 2:
         return {
           title: t.step2_title,
-          summaryText: t.activeTab === 'text' ? (t.currentLang === 'te' ? 'టెక్స్ట్ ఆకృతి ధృవీకరించబడుతోంది.' : 'Validating textual patterns.') : (t.currentLang === 'te' ? 'ఫైల్ నుండి టెక్స్ట్‌ని OCR సహాయంతో సంగ్రహిస్తోంది.' : 'Extracting key textual claims and structural statements.'),
+          summaryText: t.activeTab === 'text' ? (t.currentLang === 'te' ? 'టెక్స్ట్ ఆకృతి ధృవీకరించబడుతోంది.' : (t.currentLang === 'hi' ? 'पाठ पैटर्न सत्यापित किया जा रहा है।' : 'Validating textual patterns.')) : (t.currentLang === 'te' ? 'ఫైల్ నుండి టెక్స్ట్‌ని OCR సహాయంతో సంగ్రహిస్తోంది.' : (t.currentLang === 'hi' ? 'फ़ाइल से पाठ निकाल रहा है।' : 'Extracting key textual claims and structural statements.')),
           desc: t.step2_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>`,
           illustration: `
@@ -1030,8 +1117,8 @@ document.addEventListener('DOMContentLoaded', () => {
             </svg>`,
           detailsHTML: `
             <div class="your-claim-box">
-              <h4 style="color: var(--success);">${t.currentLang === 'te' ? 'సంగ్రహణ ప్రక్రియ' : 'Extraction Process'}</h4>
-              <div id="ocr-status" style="font-size: 0.85rem; color: #065f46; font-weight: 500; margin-bottom: 6px;">${t.currentLang === 'te' ? 'ప్రక్రియ ప్రారంభమవుతోంది...' : 'Initializing extraction...'}</div>
+              <h4 style="color: var(--success);">${t.s2_header}</h4>
+              <div id="ocr-status" style="font-size: 0.85rem; color: #065f46; font-weight: 500; margin-bottom: 6px;">${t.currentLang === 'te' ? 'ప్రక్రియ ప్రారంభమవుతోంది...' : (t.currentLang === 'hi' ? 'निष्कर्षण शुरू हो रहा है...' : 'Initializing extraction...')}</div>
               <div class="ocr-text-preview" id="ocr-preview">Processing...</div>
             </div>`
         };
@@ -1039,7 +1126,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 3:
         return {
           title: t.step3_title,
-          summaryText: t.currentLang === 'te' ? 'సిమాంటిక్ వ్యాకరణం మరియు ఎంటిటీలను విశ్లేషిస్తోంది.' : 'Analyzing semantic syntax, claim stance, and entity mapping.',
+          summaryText: t.currentLang === 'te' ? 'సిమాంటిక్ వ్యాకరణం మరియు ఎంటిటీలను విశ్లేషిస్తోంది.' : (t.currentLang === 'hi' ? 'सिमेंटिक सिंटैक्स और इकाई मैपिंग का विश्लेषण।' : 'Analyzing semantic syntax, claim stance, and entity mapping.'),
           desc: t.step3_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>`,
           illustration: `
@@ -1060,15 +1147,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </svg>`,
           detailsHTML: `
             <div class="your-claim-box">
-              <h4 style="color: #7c3aed;">NLP Diagnostics</h4>
+              <h4 style="color: #7c3aed;">${t.s3_header}</h4>
               <div id="nlp-diagnostics" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem; color: #4c1d95;">
-                <div>Stance: <span style="font-weight: 700;">Assertive</span></div>
-                <div>Sentiment: <span style="font-weight: 700;">Neutral</span></div>
-                <div>Language: <span style="font-weight: 700;">English</span></div>
-                <div>Complexity: <span style="font-weight: 700;">Moderate</span></div>
+                <div>${t.s3_stance}: <span style="font-weight: 700;">${t.v_assertive}</span></div>
+                <div>${t.s3_sentiment}: <span style="font-weight: 700;">${t.v_neutral}</span></div>
+                <div>${t.s3_lang}: <span style="font-weight: 700;">${t.v_english}</span></div>
+                <div>${t.s3_complexity}: <span style="font-weight: 700;">${t.v_moderate}</span></div>
               </div>
               <div style="font-size: 0.75rem; border-top: 1px solid #ddd6fe; padding-top: 6px; margin-top: 6px; color: #6d28d9;">
-                Entities: <span style="font-weight: 600; font-family: monospace;" id="nlp-entities">Scanning...</span>
+                ${t.s3_entities}: <span style="font-weight: 600; font-family: monospace;" id="nlp-entities">${t.s3_scanning}</span>
               </div>
             </div>`
         };
@@ -1076,7 +1163,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 4:
         return {
           title: t.step4_title,
-          summaryText: t.currentLang === 'te' ? 'వివిధ వెబ్ క్రాలర్లు మరియు రిజిస్ట్రీలలో శోధిస్తోంది.' : 'Generating query keywords and searching fact-checking APIs.',
+          summaryText: t.currentLang === 'te' ? 'వివిధ వెబ్ క్రాలర్లు మరియు రిజిస్ట్రీలలో శోధిస్తోంది.' : (t.currentLang === 'hi' ? 'खोज क्वेरी बनाना और तथ्य-जांच प्रणालियों में खोजना।' : 'Generating query keywords and searching fact-checking APIs.'),
           desc: t.step4_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>`,
           illustration: `
@@ -1094,7 +1181,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </svg>`,
           detailsHTML: `
             <div class="your-claim-box">
-              <h4 style="color: #ea580c;">${t.currentLang === 'te' ? 'వెబ్ క్వెరీ శోధనలు' : 'Simulated Web Queries'}</h4>
+              <h4 style="color: #ea580c;">${t.s4_header}</h4>
               <div class="queries-box" id="queries-container">
                 <!-- Loaded via simulation script -->
               </div>
@@ -1104,7 +1191,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 5:
         return {
           title: t.step5_title,
-          summaryText: t.currentLang === 'te' ? 'లభించిన ఆధారాల విశ్వసనీయత అంచనా వేస్తోంది.' : 'Evaluating credibility and authority weights of sources.',
+          summaryText: t.currentLang === 'te' ? 'లభించిన ఆధారాల విశ్వసనీయత అంచనా వేస్తోంది.' : (t.currentLang === 'hi' ? 'स्रोतों की विश्वसनीयता और उनके अधिकार भार का मूल्यांकन।' : 'Evaluating credibility and authority weights of sources.'),
           desc: t.step5_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>`,
           illustration: `
@@ -1117,7 +1204,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </svg>`,
           detailsHTML: `
             <div class="your-claim-box">
-              <h4 style="color: #db2777;">${t.currentLang === 'te' ? 'విశ్వసనీయత రేటింగ్స్' : 'Credibility Ratings'}</h4>
+              <h4 style="color: #db2777;">${t.s5_header}</h4>
               <div class="sources-list" id="sources-list-container">
                 <!-- Sources items updated by simulations -->
               </div>
@@ -1127,7 +1214,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 6:
         return {
           title: t.step6_title,
-          summaryText: t.currentLang === 'te' ? 'క్లెయిమ్ మరియు సాక్ష్యాల పోలిక నివేదిక.' : 'Checking claims assertions against evidence records.',
+          summaryText: t.currentLang === 'te' ? 'క్లెయిమ్ మరియు సాక్ష్యాల పోలిక నివేదిక.' : (t.currentLang === 'hi' ? 'तथ्यों के रिकॉर्ड के खिलाफ दावे की जांच।' : 'Checking claims assertions against evidence records.'),
           desc: t.step6_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
           illustration: `
@@ -1149,7 +1236,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </svg>`,
           detailsHTML: `
             <div class="your-claim-box">
-              <h4 style="color: #047857;">${t.currentLang === 'te' ? 'వాస్తవాల పోలిక ప్యానెల్' : 'Fact Alignment'}</h4>
+              <h4 style="color: #047857;">${t.s6_header}</h4>
               <div class="comparison-grid" id="comparison-container">
                 <!-- Dynamic comparison sides -->
               </div>
@@ -1159,7 +1246,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 7:
         return {
           title: t.step7_title,
-          summaryText: t.currentLang === 'te' ? 'ధృవీకరణ విశ్లేషణలు పూర్తయ్యాయి. నివేదికను అన్‌లాక్ చేయండి.' : 'Consolidating verdicts, reliability index, and explanation parameters.',
+          summaryText: t.currentLang === 'te' ? 'ధృవీకరణ విశ్లేషణలు పూర్తయ్యాయి. నివేదికను అన్‌లాక్ చేయండి.' : (t.currentLang === 'hi' ? 'दावे के निष्कर्ष, विश्वसनीयता और व्याख्या मापदंडों का एकत्रीकरण।' : 'Consolidating verdicts, reliability index, and explanation parameters.'),
           desc: t.step7_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>`,
           illustration: `
@@ -1176,9 +1263,9 @@ document.addEventListener('DOMContentLoaded', () => {
             </svg>`,
           detailsHTML: `
             <div class="your-claim-box">
-              <h4 style="color: var(--primary);">${t.currentLang === 'te' ? 'సారాంశ ప్రకటన' : 'Summary Statement'}</h4>
+              <h4 style="color: var(--primary);">${t.s7_header}</h4>
               <p style="font-size: 0.85rem; color: #1e40af; font-weight: 500;">
-                ${t.currentLang === 'te' ? 'వెరిఫికేషన్ వివరాలు మరియు పూర్తి విశ్లేషణను కింద ఉన్న నివేదికలో అన్‌లాక్ చేయడానికి "ధృవీకరించి చూపించు" బటన్ నొక్కండి.' : 'Click "Verify & Reveal" below to populate the full diagnostic grid and review sources, reliability star indices, confidence scopes, and detailed explanation text.'}
+                ${t.s7_desc}
               </p>
             </div>`
         };
@@ -1199,14 +1286,14 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Step 2 OCR Scanner animation loop simulation
       setTimeout(() => {
-        if (statusText) statusText.textContent = t.currentLang === 'te' ? 'నిర్మాణాన్ని విశ్లేషిస్తోంది...' : 'Analyzing structures...';
+        if (statusText) statusText.textContent = t.s2_status_1;
         
         setTimeout(() => {
-          if (statusText) statusText.textContent = t.currentLang === 'te' ? 'టెక్స్ట్‌ని సంగ్రహిస్తోంది...' : 'Parsing sentences...';
+          if (statusText) statusText.textContent = t.s2_status_2;
           
           setTimeout(() => {
             if (statusText) {
-              statusText.textContent = t.currentLang === 'te' ? 'విజయవంతంగా పూర్తయింది!' : 'Extraction Complete!';
+              statusText.textContent = t.s2_status_3;
               statusText.style.color = '#047857';
             }
             if (previewText) {
@@ -1220,6 +1307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     else if (stepNum === 3) {
       const entitiesSpan = document.getElementById('nlp-entities');
+      const t = translations[state.currentLang] || translations.en;
       setTimeout(() => {
         if (state.claimText.toLowerCase().includes('isro')) {
           entitiesSpan.textContent = "ISRO [ORG], Mars [LOC], 2025 [DATE]";
@@ -1228,7 +1316,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (state.claimText.toLowerCase().includes('vaccine') || state.claimText.toLowerCase().includes('covid')) {
           entitiesSpan.textContent = "COVID-19 [VIRUS], Vaccines [MED], Microchip [TECH]";
         } else {
-          entitiesSpan.textContent = "Text [STRING], Entities mapped.";
+          entitiesSpan.textContent = t.s3_mapped;
         }
       }, 700);
     }
@@ -1276,6 +1364,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const sourcesContainer = document.getElementById('sources-list-container');
       const sources = [];
       const cleanText = state.claimText.toLowerCase();
+      const t = translations[state.currentLang] || translations.en;
 
       if (cleanText.includes('isro')) {
         sources.push({ name: 'isro.gov.in', score: 100, class: 'high' });
@@ -1295,7 +1384,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sources.push({ name: 'unverified-claims-post.net', score: 18, class: 'low' });
       }
 
-      if (sourcesContainer) sourcesContainer.innerHTML = 'Analyzing database reputability...';
+      if (sourcesContainer) sourcesContainer.innerHTML = t.currentLang === 'te' ? 'డేటాబేస్ రేటింగ్‌లను విశ్లేషిస్తోంది...' : (t.currentLang === 'hi' ? 'डेटाबेस रेटिंग का विश्लेषण...' : 'Analyzing database reputability...');
       
       setTimeout(() => {
         if (sourcesContainer) {
@@ -1306,7 +1395,7 @@ document.addEventListener('DOMContentLoaded', () => {
               item.className = 'source-item';
               item.innerHTML = `
                 <span class="source-name">${src.name}</span>
-                <span class="source-trust ${src.class}">${src.score}% Trust</span>`;
+                <span class="source-trust ${src.class}">${src.score}% ${t.s5_trust}</span>`;
               sourcesContainer.appendChild(item);
             }, idx * 250);
           });
@@ -1317,37 +1406,40 @@ document.addEventListener('DOMContentLoaded', () => {
     else if (stepNum === 6) {
       const comparisonContainer = document.getElementById('comparison-container');
       const cleanText = state.claimText.toLowerCase();
+      const t = translations[state.currentLang] || translations.en;
+      const resData = t[d.verdictKey] || translations.en[d.verdictKey];
+      
       let claimSummary = "";
       let factSummary = "";
 
       if (cleanText.includes('isro')) {
-        claimSummary = "ISRO landed astronauts on Mars in 2025.";
-        factSummary = "Gaganyaan (manned orbital) is active. No human Mars mission planned for 2025.";
+        claimSummary = t.claim_h1 || "ISRO landed astronauts on Mars in 2025.";
+        factSummary = resData.summary;
       } else if (cleanText.includes('earth')) {
-        claimSummary = "The Earth is static, flat, and circular.";
-        factSummary = "Physical measurements, satellites, and orbit metrics show Earth is an oblate spheroid.";
+        claimSummary = t.currentLang === 'te' ? "భూమి నిశ్చలంగా, సమతలంగా మరియు వృత్తాకారంగా ఉంది." : (t.currentLang === 'hi' ? "पृथ्वी स्थिर, सपाट और गोलाकार है।" : "The Earth is static, flat, and circular.");
+        factSummary = resData.summary;
       } else if (cleanText.includes('vaccine')) {
-        claimSummary = "COVID vaccines contain hardware microchips.";
-        factSummary = "Audited components contain biochemical immunity solutions. Chips do not exist in doses.";
+        claimSummary = t.currentLang === 'te' ? "కోవిడ్ వ్యాక్సిన్లలో మైక్రోచిప్స్ ఉన్నాయి." : (t.currentLang === 'hi' ? "कोविड टीकों में माइक्रोचिप हैं।" : "COVID vaccines contain hardware microchips.");
+        factSummary = resData.summary;
       } else if (cleanText.includes('boil') || cleanText.includes('water')) {
-        claimSummary = "Water boils at 100 degrees Celsius.";
-        factSummary = "Thermodynamic standards confirm boiling point is 100°C under normal sea level pressures.";
+        claimSummary = t.claim_h2 || "Water boils at 100 degrees Celsius.";
+        factSummary = resData.summary;
       } else {
         claimSummary = state.claimText.substring(0, 45) + "...";
-        factSummary = d.summary;
+        factSummary = resData.summary;
       }
 
-      if (comparisonContainer) comparisonContainer.innerHTML = 'Computing comparative matrices...';
+      if (comparisonContainer) comparisonContainer.innerHTML = t.s6_computing;
       
       setTimeout(() => {
         if (comparisonContainer) {
           comparisonContainer.innerHTML = `
             <div class="comparison-box claim-side">
-              <h5>Statement Claims</h5>
+              <h5>${t.s6_claim_side}</h5>
               <p>${claimSummary}</p>
             </div>
             <div class="comparison-box fact-side">
-              <h5>Evidence Base</h5>
+              <h5>${t.s6_fact_side}</h5>
               <p>${factSummary}</p>
             </div>
           `;
