@@ -875,4 +875,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }, 1000);
 
+  // --- LANGUAGE SELECTOR DROPDOWN ---
+  const langContainer = document.querySelector('.lang-selector-container');
+  const langBtn = document.getElementById('lang-btn');
+  const langDropdown = document.getElementById('lang-dropdown');
+  const currentLangSpan = document.getElementById('current-lang');
+  const langOptions = document.querySelectorAll('.lang-option');
+
+  if (langBtn && langDropdown) {
+    // Toggle dropdown
+    langBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langContainer.classList.toggle('open');
+    });
+
+    // Close dropdown on click outside
+    document.addEventListener('click', () => {
+      if (langContainer) langContainer.classList.remove('open');
+    });
+
+    // Select language option
+    langOptions.forEach(opt => {
+      opt.addEventListener('click', () => {
+        const langName = opt.textContent.split(' ')[0]; // E.g., "English" or "తెలుగు"
+        currentLangSpan.textContent = langName;
+        
+        langOptions.forEach(o => o.classList.remove('active'));
+        opt.classList.add('active');
+        
+        // Hide dropdown
+        langContainer.classList.remove('open');
+      });
+    });
+  }
+
 });
+
