@@ -82,7 +82,67 @@ const translations = {
     p_trans_h4: "Transparency",
     p_trans_p: "All source citations, trust metrics, and matching quotes are exposed to the user for direct verification.",
     p_speed_h4: "Speed & Precision",
-    p_speed_p: "Multi-threaded NLP pipelines scan, evaluate, and formulate results within seconds of query trigger."
+    p_speed_p: "Multi-threaded NLP pipelines scan, evaluate, and formulate results within seconds of query trigger.",
+
+    // History claims
+    claim_h1: "ISRO successfully sent humans to Mars in 2025.",
+    claim_h2: "Water boiling point decreases at higher altitudes.",
+    claim_h3: "New COVID variant is resistant to all current immunity options.",
+    claim_h4: "NASA confirmed discovery of alien cities on Jupiter.",
+
+    // Global tags
+    v_true: "TRUE",
+    v_false: "FALSE",
+    v_misleading: "MISLEADING",
+    cat_space: "Space & Tech",
+    cat_science: "Science",
+    cat_medicine: "Medicine",
+    time_today: "Today, 12:15 PM",
+    time_yesterday: "Yesterday, 4:30 PM",
+    time_aug5: "Aug 5, 2026",
+    time_jul28: "Jul 28, 2026",
+
+    // Verdict dynamic objects
+    res_mars: {
+      verdict: 'FALSE',
+      type: 'Space & Tech',
+      explanation: 'No human Mars mission has been conducted by ISRO as of 2025. ISRO\'s current human spaceflight program is Gaganyaan, aimed only at Earth orbit.',
+      sources: 'isro.gov.in (Official Space Agency), pib.gov.in (Fact Check), space.com',
+      summary: 'Official statements confirm ISRO has no manned Mars landing scheduled. Current missions are focused on low Earth orbit and unmanned lunar/solar probes.',
+      insights: 'Sentiment: Neutral\nToxicity: 0%\nStance: Assertive\nConfidence: Extremely High'
+    },
+    res_flat: {
+      verdict: 'FALSE',
+      type: 'Conspiracy',
+      explanation: 'Satellite imaging and physics prove Earth is an oblate spheroid. Flat Earth claims violate fundamental physics laws and astronomical observations.',
+      sources: 'nasa.gov (Space Agency), britannica.com, physics.org',
+      summary: 'All scientific, geodetic, and satellite records confirm Earth is spherical. Claims of a flat disk are debunked by centuries of gravity and physics evidence.',
+      insights: 'Sentiment: Subjective\nToxicity: 2%\nStance: Dogmatic\nFactual Match: 0%'
+    },
+    res_vaccine: {
+      verdict: 'FALSE',
+      type: 'Medical Misinfo',
+      explanation: 'Vaccines contain biological formulas for immunity, not electronics. Ingredients list is publicly reviewed and audited by health regulators.',
+      sources: 'who.int (World Health Org), cdc.gov (Health agency), fda.gov',
+      summary: 'Rigorous regulatory analyses and audits confirm COVID-19 vaccines contain no microchips or tracking hardware. Claims are biologically and technically impossible.',
+      insights: 'Sentiment: Negative\nToxicity: 4%\nStance: Alarmist\nTruthfulness: 0%'
+    },
+    res_boil: {
+      verdict: 'TRUE',
+      type: 'General Science',
+      explanation: 'This statement is scientifically accurate and corresponds to established facts regarding thermodynamics and physics.',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: 'Evidence perfectly supports this claim under standard environments. The statements are verifiable in classroom settings and peer-reviewed material.',
+      insights: 'Sentiment: Objective\nToxicity: 0%\nStance: Informative\nEvidence Score: 95%'
+    },
+    res_fallback: {
+      verdict: 'MISLEADING',
+      type: 'General News',
+      explanation: 'The statement contains some verifiable elements but is packaged with unverified assumptions or out-of-context details.',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: 'Independent news bureaus report mixed evidence regarding this specific combination of facts. Recommend caution before sharing.',
+      insights: 'Sentiment: Speculative\nToxicity: 1%\nStance: Suggestive\nVerify Rate: Medium'
+    }
   },
   te: {
     logo_title: "నకిలీ వార్తల గుర్తింపు <span>&</span><br>క్లెయిమ్ వెరిఫికేషన్ సిస్టమ్",
@@ -102,7 +162,7 @@ const translations = {
     upload_sub: "JPG, PNG, PDF సపోర్ట్ చేస్తుంది (గరిష్టంగా 10MB)",
     tips_title: "చిట్కాలు",
     tips_1: "మెరుగైన ఫలితాల కోసం నిర్దిష్ట క్లెయిమ్‌లను నమోదు చేయండి.",
-    tips_2: "మా సిస్టమ్ నమ్మదగిన మూలాలను శోధిస్తుంది మరియు వివరణాत्मक తీర్పును ఇస్తుంది.",
+    tips_2: "మా సిస్టమ్ నమ్మదగిన మూలాలను శోధిస్తుంది మరియు వివరణాత్మక తీర్పును ఇస్తుంది.",
     btn_verify: "ధృవీకరణ ప్రారంభించు",
     steps_banner: "మేము మీ క్లెయిమ్‌ను 7 సులువైన దశల్లో ధృవీకరిస్తాము. ఇది ఎలా పనిచేస్తుందో చూడటానికి \"నెక్స్ట్\" క్లిక్ చేయండి.",
     step1_title: "క్లెయిమ్ నమోదు",
@@ -149,7 +209,7 @@ const translations = {
     th_actions: "చర్యలు",
     btn_reverify: "మళ్లీ ధృవీకరించు",
     view_how_title: "పనితీరు ఎలా ఉంటుంది",
-    view_how_sub: "7-దశల ఆటోమేటెడ్ క్లెయిమ్ వెరిఫికేషన్ సిస్టమ్ పనితీరును అర్థం చేసుకోండి.",
+    view_how_sub: "7-దశల ఆటోమేటెడ్ క్లెయిమ్ వెరిఫಿಕேషన్ సిస్టమ్ పనితీరును అర్థం చేసుకోండి.",
     view_about_title: "మా గురించి",
     view_about_sub: "నకిలీ వార్తల గుర్తింపు & క్లెయిమ్ వెరిఫికేషన్ సిస్టమ్.",
     about_mission_h3: "మా లక్ష్యం",
@@ -161,7 +221,67 @@ const translations = {
     p_trans_h4: "పారదర్శకత",
     p_trans_p: "వినియోగదారుల నమ్మకం కోసం సాక్ష్యాలు, మూలాలు మరియు వాటి రేటింగ్‌లు అన్నీ స్పష్టంగా చూపిస్తాము.",
     p_speed_h4: "వేగం & ఖచ్చితత్వం",
-    p_speed_p: "NLP సాంకేతికత ద్వారా సెకన్లలో సమాచారాన్ని స్కాన్ చేసి ఫలితాలను అందిస్తాము."
+    p_speed_p: "NLP సాంకేతికత ద్వారా సెకన్లలో సమాచారాన్ని స్కాన్ చేసి ఫలితాలను అందిస్తాము.",
+
+    // History claims
+    claim_h1: "ఇస్రో 2025 లో విజయవంతంగా మానవులను అంగారకుడిపైకి పంపింది.",
+    claim_h2: "ఎత్తైన ప్రదేశాలలో నీటి మరిగే స్థానం తగ్గుతుంది.",
+    claim_h3: "కొత్త కోవిడ్ వేరియంట్ అన్ని ప్రస్తుత రోగనిరోధక శక్తి ఎంపికలకు నిరోధకతను కలిగి ఉంది.",
+    claim_h4: "బృహస్పతిపై గ్రహాంతర నగరాల ఆవిష్కరణను నాసా ధృవీకరించింది.",
+
+    // Global tags
+    v_true: "నిజం",
+    v_false: "అబద్ధం",
+    v_misleading: "తప్పుదోవ పట్టించేది",
+    cat_space: "అంతరిక్షం & టెక్",
+    cat_science: "సైన్స్",
+    cat_medicine: "వైద్యం",
+    time_today: "ఈరోజు, 12:15 PM",
+    time_yesterday: "నిన్న, 4:30 PM",
+    time_aug5: "ఆగస్టు 5, 2026",
+    time_jul28: "జూలై 28, 2026",
+
+    // Verdict objects
+    res_mars: {
+      verdict: 'అబద్ధం',
+      type: 'అంతరిక్షం & టెక్',
+      explanation: 'ఇప్పటి వరకు ఇస్రో ద్వారా ఎలాంటి మానవసహిత అంగారక యాత్ర ప్రణాళిక చేయబడలేదు. ఇస్రో ప్రస్తుతం గగన్‌యాన్ అంతరిక్ష యాత్రపై మాత్రమే దృష్టి పెట్టింది.',
+      sources: 'isro.gov.in (అధికారిక అంతరిక్ష సంస్థ), pib.gov.in (ఫాక్ట్ చెక్), space.com',
+      summary: '2025 లో ఇస్రో అంగారకుడిపైకి మనుషులను పంపడం లేదని అధికారిక వర్గాలు ధృవీకరించాయి. ప్రస్తుతం తక్కువ భూకక్ష్య ప్రయోగాలపై మాత్రమే దృష్టి పెట్టారు.',
+      insights: 'సెంటిమెంట్: తటస్థం\nటాక్సిసిటీ: 0%\nస్టాన్స్: రూఢీ అయినది\nనమ్మకం: అత్యధికం'
+    },
+    res_flat: {
+      verdict: 'అబద్ధం',
+      type: 'కుట్ర సిద్ధాంతం',
+      explanation: 'ఉపग्रह చిత్రాలు మరియు భౌతిక శాస్త్ర సూత్రాలు భూమి ఒక గోళాకార రూపం (Oblate Spheroid) అని రుజువు చేస్తున్నాయి. ఫ్లాట్ ఎర్త్ వాదనలు నిరాధారమైనవి.',
+      sources: 'nasa.gov (అంతరిక్ష సంస్థ), britannica.com, physics.org',
+      summary: 'అన్ని శాస్తรีย మరియు ఉపగ్రహ రికార్డులు భూమి గుండ్రంగా ఉందని ధృవీకరించాయి. ఫ్లాట్ ఎర్త్ సిద్ధాంతం పూర్తిగా అబద్ధం అని రుజువైంది.',
+      insights: 'సెంటిమెంట్: ఆత్మాశ్రయం\nటాక్సిసిటీ: 2%\nస్టాన్స్: కఠినమైనది\nసత్య శాతం: 0%'
+    },
+    res_vaccine: {
+      verdict: 'అబద్ధం',
+      type: 'వైద్య వక్రీకరణ',
+      explanation: 'కోవిడ్ వ్యాక్సిన్లలో కేవలం రోగనిరోధక శక్తిని పెంచే జీవ రసాయనాలు మాత్రమే ఉంటాయి, ఎలక్ట్రానిక్ చిప్స్ ఉండవు. వీటి తయారీ ఫార్ములాను ప్రభుత్వాలు ధృవీకరించాయి.',
+      sources: 'who.int (ప్రపంచ ఆరోగ్య సంస్థ), cdc.gov, fda.gov',
+      summary: 'కోవిడ్-19 టీకాలలో ఎలాంటి మైక్రోచిప్స్ లేవని అంతర్జాతీయ ఆరోగ్య సంస్థల పరిశోధనల్లో తేలింది. ఇవి కేవలం అపోహలు మాత్రమే.',
+      insights: 'సెంటిమెంట్: ప్రతికూలం\nటాక్సిసిటీ: 4%\nస్టాన్స్: భయాందోళన\nసత్య శాతం: 0%'
+    },
+    res_boil: {
+      verdict: 'నిజం',
+      type: 'సాధారణ సైన్స్',
+      explanation: 'భౌతిక మరియు ఉష్ణగతిక శాస్త్రాల ప్రకారం సాధారణ వాతావరణ పీడనం వద్ద నీరు 100 డిగ్రీల సెల్సియస్ వద్ద మరుగుతుంది.',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: 'ఈ నివేదిక భౌతిక శాస్త్ర ప్రమాణాలకు అనుగుణంగా ఉంది. ప్రయోగశాలల పరిశోధనల్లో ఇది నిరూపితమైన సత్యం.',
+      insights: 'సెంటిమెంట్: లక్ష్యాత్మకం\nటాక్సిసిటీ: 0%\nస్టాన్స్: సమాచారపూరితం\nఆధారాల శాతం: 95%'
+    },
+    res_fallback: {
+      verdict: 'తప్పుదోవ పట్టించేది',
+      type: 'సాధారణ వార్తలు',
+      explanation: 'ఈ ప్రకటనలో కొన్ని నిజాలు ఉన్నప్పటికీ, అవి సందర్భం లేకుండా మరియు తప్పుడు ఊహలతో కూడి ఉన్నాయి.',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: 'స్వతంత్ర వార్తా ఏజెన్సీల ప్రకారం ఈ వార్తకు మిశ్రమ ఆధారాలు లభించాయి. దీనిని షేర్ చేసేటప్పుడు జాగ్రత్త వహించండి.',
+      insights: 'సెంటిమెంట్: ఊహాజనితం\nటాక్సిసిటీ: 1%\nస్టాన్స్: సలహాత్మకం\nధృవీకరణ శాతం: మధ్యస్థం'
+    }
   },
   hi: {
     logo_title: "फेक न्यूज़ डिटेक्शन <span>&</span><br>दावा सत्यापन प्रणाली",
@@ -205,7 +325,7 @@ const translations = {
     btn_verify_reveal: "सत्यापित करें और दिखाएं",
     results_title: "अंतिम परिणाम (चरण 7 के बाद उपलब्ध होगा)",
     results_title_verified: "अंतिम परिणाम (सत्यापित)",
-    results_banner_default: "कृपया सभी 7 चरणों को पूरा करें। अंतिम विश्लेषण और निर्णय अंत मेंं प्रदर्शित किया जाएगा।",
+    results_banner_default: "कृपया सभी 7 चरणों को पूरा करें। अंतिम विश्लेषण और निर्णय अंत में प्रदर्शित किया जाएगा।",
     results_banner_complete: "सत्यापन पूरा हुआ। दावा मूल्यांकन रिपोर्ट अनलॉक कर दी गई है।",
     w_verdict: "निर्णय",
     w_confidence: "आत्मविश्वास स्कोर",
@@ -240,7 +360,67 @@ const translations = {
     p_trans_h4: "पारदर्शिता",
     p_trans_p: "सभी स्रोत उद्धरण, विश्वसनीयता रेटिंग और मिलान कथन उपयोगकर्ता के सत्यापन के लिए प्रदर्शित किए जाते हैं।",
     p_speed_h4: "गति और सटीकता",
-    p_speed_p: "NLP तकनीक के माध्यम से कुछ ही सेकंड में दावों को स्कैन और सत्यापित किया जाता है।"
+    p_speed_p: "NLP तकनीक के माध्यम से कुछ ही सेकंड में दावों को स्कैन और सत्यापित किया जाता है।",
+
+    // History claims
+    claim_h1: "इसरो ने 2025 में सफलतापूर्वक मनुष्यों को मंगल पर भेजा।",
+    claim_h2: "अधिक ऊंचाई पर पानी का क्वथनांक कम हो जाता है।",
+    claim_h3: "नया कोविड संस्करण सभी मौजूदा प्रतिरक्षा विकल्पों के प्रति प्रतिरोधी है।",
+    claim_h4: "नासा ने बृहस्पति पर एलियन शहरों की खोज की पुष्टि की।",
+
+    // Global tags
+    v_true: "सत्य",
+    v_false: "असत्य",
+    v_misleading: "भ्रामक",
+    cat_space: "अंतरिक्ष और तकनीक",
+    cat_science: "विज्ञान",
+    cat_medicine: "चिकित्सा",
+    time_today: "आज, 12:15 PM",
+    time_yesterday: "कल, 4:30 PM",
+    time_aug5: "5 अगस्त, 2026",
+    time_jul28: "28 जुलाई, 2026",
+
+    // Verdict objects
+    res_mars: {
+      verdict: 'असत्य',
+      type: 'अंतरिक्ष और तकनीक',
+      explanation: 'इसरो द्वारा 2025 तक कोई मानव मंगल मिशन संचालित नहीं किया गया है। इसरो का वर्तमान मानव अंतरिक्ष उड़ान कार्यक्रम गगनयान है, जो केवल पृथ्वी की निचली कक्षा तक सीमित है।',
+      sources: 'isro.gov.in (आधिकारिक अंतरिक्ष एजेंसी), pib.gov.in (तथ्य जांच), space.com',
+      summary: 'आधिकारिक बयान पुष्टि करते हैं कि इसरो का कोई मानव मंगल मिशन निर्धारित नहीं है। वर्तमान ध्यान गगनयान और चंद्र/सौर रोबोटिक प्रोब पर है।',
+      insights: 'भावना: तटस्थ\nविषाक्तता: 0%\nरुख: मुखर\nविश्वास स्तर: अत्यधिक उच्च'
+    },
+    res_flat: {
+      verdict: 'असत्य',
+      type: 'साजिश का सिद्धांत',
+      explanation: 'सैटेलाइट इमेजरी और भौतिकी साबित करते हैं कि पृथ्वी एक गोलाकार आकृति (Oblate Spheroid) है। फ्लैट अर्थ के दावे भौतिकी के बुनियादी नियमों का उल्लंघन करते हैं।',
+      sources: 'nasa.gov (अंतरिक्ष एजेंसी), britannica.com, physics.org',
+      summary: 'सभी वैज्ञानिक और उपग्रह रिकॉर्ड पुष्टि करते हैं कि पृथ्वी गोल है। सपाट डिस्क होने के दावे सदियों पुराने वैज्ञानिक प्रमाणों द्वारा खारिज किए जा चुके हैं।',
+      insights: 'भावना: व्यक्तिपरक\nविषाक्तता: 2%\nरुख: हठधर्मी\nसत्यता दर: 0%'
+    },
+    res_vaccine: {
+      verdict: 'असत्य',
+      type: 'चिकित्सीय गलत जानकारी',
+      explanation: 'टीकों में केवल रोग प्रतिरोधक क्षमता बढ़ाने वाले जैविक सूत्र होते हैं, कोई ट्रैकिंग हार्डवेयर या चिप नहीं होती। सभी सामग्री स्वास्थ्य नियामकों द्वारा स्वीकृत हैं।',
+      sources: 'who.int (विश्व स्वास्थ्य संगठन), cdc.gov, fda.gov',
+      summary: 'नियामक विश्लेषण और वैज्ञानिक रिपोर्ट पुष्टि करते हैं कि कोविड-19 टीकों में कोई माइक्रोचिप नहीं है। ऐसे दावे पूरी तरह काल्पनिक हैं।',
+      insights: 'भावना: नकारात्मक\nविषाक्तता: 4%\nरुख: भयभीत करने वाला\nसच्चाई दर: 0%'
+    },
+    res_boil: {
+      verdict: 'सत्य',
+      type: 'सामान्य विज्ञान',
+      explanation: 'यह कथन वैज्ञानिक रूप से सही है। मानक वायुमंडलीय दबाव पर पानी 100 डिग्री सेल्सियस पर उबलता है।',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: 'साक्ष्य इस दावे का पूरी तरह समर्थन करते हैं। यह कथन प्रयोगशाला और दैनिक जीवन में सत्यापित तथ्य है।',
+      insights: 'भावना: निष्पक्ष\nविषाक्तता: 0%\nरुख: सूचनात्मक\nसाक्ष्य स्कोर: 95%'
+    },
+    res_fallback: {
+      verdict: 'भ्रामक',
+      type: 'सामान्य समाचार',
+      explanation: 'कथन में कुछ तथ्य सही हैं लेकिन उन्हें बिना संदर्भ या काल्पनिक अनुमानों के साथ प्रस्तुत किया गया है।',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: 'स्वतंत्र समाचार ब्यूरो इस दावे पर मिश्रित रिपोर्ट देते हैं। इसे साझा करने से पहले सावधानी बरतने की सलाह दी जाती है।',
+      insights: 'भावना: सट्टा\nविषाक्तता: 1%\nरुख: विचारोत्तेजक\nसत्यापन दर: मध्यम'
+    }
   },
   kn: {
     logo_title: "ನಕಲಿ ಸುದ್ದಿ ಪತ್ತೆ <span>&</span><br>ಹಕ್ಕು ಪರಿಶೀಲನಾ ವ್ಯವಸ್ಥೆ",
@@ -319,13 +499,73 @@ const translations = {
     p_trans_h4: "ಪಾರದರ್ಶಕತೆ",
     p_trans_p: "ಬಳಕೆದಾರರ ನಂಬಿಕೆಗಾಗಿ ಎಲ್ಲಾ ಸಾಕ್ಷ್ಯಗಳು, ಮೂಲಗಳು ಮತ್ತು ಅವುಗಳ ವಿಶ್ವಾಸಾರ್ಹತೆಯ ರೇಟಿಂಗ್‌ಗಳನ್ನು ಪ್ರದರ್ಶಿಸಲಾಗುತ್ತದೆ.",
     p_speed_h4: "ವೇಗ ಮತ್ತು ನಿಖರತೆ",
-    p_speed_p: "NLP ತಂತ್ರಜ್ಞಾನದ ಸಹಾಯದಿಂದ ಕೆಲವೇ ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಮಾಹಿತಿಯನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ ಫಲಿತಾಂಶ ನೀಡಲಾಗುತ್ತದೆ."
+    p_speed_p: "NLP ತಂತ್ರಜ್ಞಾನದ ಸಹಾಯದಿಂದ ಕೆಲವೇ ಸೆಕೆಂಡುಗಳಲ್ಲಿ ಮಾಹಿತಿಯನ್ನು ಸ್ಕ್ಯಾನ್ ಮಾಡಿ ಫಲಿತಾಂಶ ನೀಡಲಾಗುತ್ತದೆ.",
+
+    // History claims
+    claim_h1: "ಇಸ್ರೋ 2025 ರಲ್ಲಿ ಯಶಸ್ವಿಯಾಗಿ ಮಾನವರನ್ನು ಮಂಗಳನಿಗೆ ಕಳುಹಿಸಿತು.",
+    claim_h2: "ಹೆಚ್ಚಿನ ಎತ್ತರದಲ್ಲಿ ನೀರಿನ ಕುದಿಯುವ ಬಿಂದು ಕಡಿಮೆಯಾಗುತ್ತದೆ.",
+    claim_h3: "ಹೊಸ ಕೋವಿಡ್ ರೂಪಾಂತರವು ಪ್ರಸ್ತುತ ಎಲ್ಲಾ ರೋಗನಿರೋಧಕ ಶಕ್ತಿಗಿಂತ ನಿರೋಧಕವಾಗಿದೆ.",
+    claim_h4: "ಗುರು ಗ್ರಹದಲ್ಲಿ ಅನ್ಯಗ್ರಹ ಜೀವಿಗಳ ನಗರಗಳ ಪತ್ತೆಯನ್ನು ನಾಸಾ ಖಚಿತಪಡಿಸಿದೆ.",
+
+    // Global tags
+    v_true: "ಸತ್ಯ",
+    v_false: "ಸುಳ್ಳು",
+    v_misleading: "ದಾರಿ ತಪ್ಪಿಸುವ",
+    cat_space: "ಬಾಹ್ಯಾಕಾಶ & ತಂತ್ರಜ್ಞಾನ",
+    cat_science: "ವಿಜ್ಞಾನ",
+    cat_medicine: "ವೈದ್ಯಕೀಯ",
+    time_today: "ಇಂದು, 12:15 PM",
+    time_yesterday: "ನಿನ್ನೆ, 4:30 PM",
+    time_aug5: "ಆಗಸ್ಟ್ 5, 2026",
+    time_jul28: "ಜುಲೈ 28, 2026",
+
+    // Verdict objects
+    res_mars: {
+      verdict: 'ಸುಳ್ಳು',
+      type: 'ಬಾಹ್ಯಾಕಾಶ & ತಂತ್ರಜ್ಞಾನ',
+      explanation: 'ಇಸ್ರೋದಿಂದ 2025 ರವರೆಗೆ ಯಾವುದೇ ಮಾನವ ಮಂಗಳ ಮಿಷನ್ ನಡೆದಿಲ್ಲ. ಇಸ್ರೋ ಅವರ ಪ್ರಸ್ತುತ ಮಾನವಸಹಿತ ಗಗನಯಾನ ಯೋಜನೆಯು ಭೂಮಿಯ ಕಕ್ಷೆಗೆ ಮಾತ್ರ ಸೀಮಿತವಾಗಿದೆ.',
+      sources: 'isro.gov.in (ಅಧಿಕೃತ ಬಾಹ್ಯಾಕಾಶ ಸಂಸ್ಥ), pib.gov.in (ಫ್ಯಾಕ್ಟ್ ಚೆಕ್), space.com',
+      summary: 'ಇಸ್ರೋ ಯಾವುದೇ ಮಾನವ ಮಂಗಳ ಮಿಷನ್ ಯೋಜಿಸಿಲ್ಲ ಎಂದು ಅಧಿಕೃತ ಹೇಳಿಕೆಗಳು ಖಚಿತಪಡಿಸಿವೆ. ಸದ್ಯದ ಗಮನ ಗಗನಯಾನ ಮತ್ತು ರೋಬೋಟಿಕ್ ಪ್ರೋಬ್‌ಗಳ ಮೇಲಿದೆ.',
+      insights: 'ಭಾವನೆ: ತಟಸ್ಥ\nಟಾಕ್ಸಿಸಿಟಿ: 0%\nನಿಲ್ಲುವಿಕೆ: ದೃಢ\nನಂಬಿಕೆಯ ಮಟ್ಟ: ಅತ್ಯಂತ ಹೆಚ್ಚು'
+    },
+    res_flat: {
+      verdict: 'ಸುಳ್ಳು',
+      type: 'ಪಿತೂರಿ ಸಿದ್ಧಾಂತ',
+      explanation: 'ಉಪಗ್ರಹ ಚಿತ್ರಗಳು ಮತ್ತು ಭೌತಶಾಸ್ತ್ರದ ನಿಯಮಗಳು ಭೂಮಿ ಗೋಳಾಕಾರದಲ್ಲಿದೆ (Oblate Spheroid) ಎಂದು ಸಾಬೀತುಪಡಿಸುತ್ತವೆ. ಫ್ಲಾಟ್ ಅರ್ಥ್ ವಾದಗಳು ಭೌತಶಾಸ್ತ್ರಕ್ಕೆ ವಿರುದ್ಧವಾಗಿವೆ.',
+      sources: 'nasa.gov (ಬಾಹ್ಯಾಕಾಶ ಸಂಸ್ಥ), britannica.com, physics.org',
+      summary: 'ಎಲ್ಲಾ ವೈಜ್ಞಾನಿಕ ಮತ್ತು ಉಪಗ್ರಹ ದಾಖಲೆಗಳು ಭೂಮಿ ಗೋಳಾಕಾರದಲ್ಲಿದೆ ಎಂದು ಖಚಿತಪಡಿಸುತ್ತವೆ. ಭೂಮಿ ಚಪ್ಪಟೆಯಾಗಿದೆ ಎಂಬ ವಾದವನ್ನು ವಿಜ್ಞಾನ ಸಂಪೂರ್ಣವಾಗಿ ತಿರಸ್ಕರಿಸಿದೆ.',
+      insights: 'ಭಾವನೆ: ವ್ಯಕ್ತಿನಿಷ್ಠ\nಟಾಕ್ಸಿಸಿಟಿ: 2%\nನಿಲ್ಲುವಿಕೆ: ಹಠಮಾರಿ\nಸತ್ಯದ ದರ: 0%'
+    },
+    res_vaccine: {
+      verdict: 'ಸುಳ್ಳು',
+      type: 'ವೈದ್ಯಕೀಯ ತಪ್ಪು ಮಾಹಿತಿ',
+      explanation: 'ಲಸಿಕೆಗಳು ರೋಗನಿರೋಧಕ ಶಕ್ತಿಯನ್ನು ಹೆಚ್ಚಿಸುವ ಜೈವಿಕ ಅಂಶಗಳನ್ನು ಹೊಂದಿವೆಯೇ ಹೊರತು ಯಾವುದೇ ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಚಿಪ್ ಅಥವಾ ಟ್ರ್ಯಾಕಿಂಗ್ ಹಾರ್ಡ್‌ವೇರ್ ಹೊಂದಿಲ್ಲ.',
+      sources: 'who.int (ವಿಶ್ವ ಆರೋಗ್ಯ ಸಂಸ್ಥೆ), cdc.gov, fda.gov',
+      summary: 'ಕೋವಿಡ್ ಲಸಿಕೆಗಳಲ್ಲಿ ಯಾವುದೇ ಮೈಕ್ರೋಚಿಪ್‌ಗಳಿಲ್ಲ ಎಂದು ಜಾಗತಿಕ ಆರೋಗ್ಯ ಸಂಸ್ಥೆಗಳ ವರದಿಗಳು ಸ್ಪಷ್ಟಪಡಿಸಿವೆ. ಇಂತಹ ವದಂತಿಗಳು ಕಾಲ್ಪನಿಕ ಮಾತ್ರ.',
+      insights: 'ಭಾವನೆ: ನಕಾರಾತ್ಮಕ\nಟಾಕ್ಸಿಸಿಟಿ: 4%\nನಿಲ್ಲುವಿಕೆ: ಆತಂಕಕಾರಿ\nಸತ್ಯದ ದರ: 0%'
+    },
+    res_boil: {
+      verdict: 'ಸತ್ಯ',
+      type: 'ಸಾಮಾನ್ಯ ವಿಜ್ಞಾನ',
+      explanation: 'ಈ ಹೇಳಿಕೆ ವೈಜ್ಞಾನಿಕವಾಗಿ ಸರಿಯಾಗಿದೆ. ಸಾಮಾನ್ಯ ವಾತಾವರಣದ ಒತ್ತಡದಲ್ಲಿ ನೀರು 100 ಡಿಗ್ರಿ ಸೆಲ್ಸಿಯಸ್‌ನಲ್ಲಿ ಕುದಿಯುತ್ತದೆ.',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: 'ಸಾಕ್ಷ್ಯಗಳು ಈ ಹಕ್ಕನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ಬೆಂಬಲಿಸುತ್ತವೆ. ಇದು ಶಾಲೆ ಮತ್ತು ದೈನಂದಿನ ಪ್ರಯೋಗಗಳಲ್ಲಿ ಸಾಬೀತಾಗಿರುವ ಸತ್ಯವಾಗಿದೆ.',
+      insights: 'ಭಾವನೆ: ನಿಷ್ಪಕ್ಷಪಾತ\nಟಾಕ್ಸಿಸಿಟಿ: 0%\nನಿಲ್ಲುವಿಕೆ: ಮಾಹಿತಿ ನೀಡುವ\nಸಾಕ್ಷ್ಯ ಸ್ಕೋರ್: 95%'
+    },
+    res_fallback: {
+      verdict: 'ದಾರಿ ತಪ್ಪಿಸುವ',
+      type: 'ಸಾಮಾನ್ಯ ಸುದ್ದಿ',
+      explanation: 'ಈ ಹೇಳಿಕೆಯಲ್ಲಿ ಕೆಲವು ಸತ್ಯಾಂಶಗಳಿದ್ದರೂ ಸಹ, ಅವುಗಳನ್ನು ಸೂಕ್ತ ಸಂದರ್ಭ ಅಥವಾ ಪುರಾವೆಯಿಲ್ಲದೆ ಕಾಲ್ಪನಿಕವಾಗಿ ಜೋಡಿಸಲಾಗಿದೆ.',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: 'ಸ್ವತಂತ್ರ ಸುದ್ದಿ ಸಂಸ್ಥೆಗಳು ಈ ಹಕ್ಕಿನ ಮೇಲೆ ಮಿಶ್ರ ವರದಿ ನೀಡುತ್ತವೆ. ಇದನ್ನು ಶೇರ್ ಮಾಡುವ ಮುನ್ನ ಎಚ್ಚರ ವಹಿಸಲು ಸೂಚಿಸಲಾಗುತ್ತದೆ.',
+      insights: 'ಭಾವನೆ: ಊಹಾತ್ಮಕ\nಟಾಕ್ಸಿಸಿಟಿ: 1%\nನಿಲ್ಲುವಿಕೆ: ಸೂಚ್ಯ\nಪರಿಶೀಲನಾ ದರ: ಮಧ್ಯಮ'
+    }
   },
   ml: {
-    logo_title: "വ്യാജ വാർത്ത കണ്ടെത്തൽ <span>&</span><br>അവകാശ പരിശോധന സംവിധാനം",
+    logo_title: "வ്യാஜ வார்த்தை கண்டறிதல் <span>&</span><br>உரிமை சரிபார்ப்பு அமைப்பு",
     nav_home: "ഹോം",
     nav_history: "ചരിത്രം",
-    nav_how: "പ്രവർത്തനം",
+    nav_how: "പ്രവർത്തന രീതി",
     nav_about: "ഞങ്ങളെക്കുറിച്ച്",
     input_title: "1. നിങ്ങളുടെ അവകാശവാദം നൽകുക",
     input_sub: "ടെക്സ്റ്റ് ടൈപ്പ് ചെയ്യുക അല്ലെങ്കിൽ ഇമേജ് / PDF അപ്‌ലോഡ് ചെയ്യുക",
@@ -340,7 +580,7 @@ const translations = {
     tips_title: "നുറുങ്ങുകൾ",
     tips_1: "മികച്ച ഫലങ്ങൾക്കായി കൃത്യമായ അവകാശവാദങ്ങൾ നൽകുക.",
     tips_2: "ഞങ്ങളുടെ സിസ്റ്റം വിശ്വസനീയമായ ഉറവിടങ്ങൾ തിരയുകയും വിശദമായ വിധി നൽകുകയും ചെയ്യുന്നു.",
-    btn_verify: "പരിശോധന ആരംഭിക്കുക",
+    btn_verify: "പരിशोधന ആരംഭിക്കുക",
     steps_banner: 'ഞങ്ങൾ 7 ലളിതമായ ഘട്ടങ്ങളിലൂടെ നിങ്ങളുടെ അവകാശവാദം പരിശോധിക്കുന്നു. ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നുവെന്ന് കാണാൻ "നെക്സ്റ്റ്" ക്ലിക്ക് ചെയ്യുക.',
     step1_title: "അവകാശവാദം നൽകുക",
     step2_title: "ടെക്സ്റ്റ് എക്സ്ട്രാക്ഷൻ",
@@ -353,7 +593,7 @@ const translations = {
     step2_desc: "ഞങ്ങളുടെ സിസ്റ്റം ഫയൽ ഘടന സ്കാൻ ചെയ്യുകയും ആവശ്യമെങ്കിൽ OCR വഴി ടെക്സ്റ്റ് വേർതിരിക്കുകയും ചെയ്യുന്നു.",
     step3_desc: "Natural Language Processing വഴി അവകാശവാദത്തിന്റെ ശൈലിയും വികാരവും വിലയിരുത്തപ്പെടുന്നു.",
     step4_desc: "ഞങ്ങൾ ആഗോള വാർത്താ സൂചികകളിലും ഔദ്യോഗിക റെക്കോർഡുകളിലും തെളിവുകൾ തിരയുന്നു.",
-    step5_desc: "ലഭ്യമായ ഉറവിടങ്ങളുടെ വിശ്വാസ്യതയും യോഗ്യതയും സിസ്റ്റം വിലയിరుത്തുന്നു.",
+    step5_desc: "ലഭ്യമായ ഉറവിടങ്ങളുടെ വിശ്വാസ്യതയും യോഗ്യതയും സിസ്റ്റം വിലയിരുത്തുന്നു.",
     step6_desc: "സത്യാവസ്ഥ പരിശോധിക്കാൻ അവകാശവാദങ്ങളെ തെളിവുകളുമായി താരതമ്യം ചെയ്യുന്നു.",
     step7_desc: "എല്ലാ പരിശോധനകളും വിജയകരമായി പൂർത്തിയായി. അന്തിമ റിപ്പോർട്ടുകൾ താഴെ ലഭ്യമാണ്.",
     step_pill: "ഘട്ടം {step}/7",
@@ -388,7 +628,7 @@ const translations = {
     view_how_title: "പ്രവർത്തന രീതി",
     view_how_sub: "സ്വയമേവയുള്ള 7-ഘട്ട അവകാശ പരിശോധന പ്രക്രിയ മനസ്സിലാക്കുക.",
     view_about_title: "ഞങ്ങളെക്കുറിച്ച്",
-    view_about_sub: "വ്യാജ വാർത്ത കണ്ടെത്തലും അവകാശ പരിശോധന സംവിധാനവും.",
+    view_about_sub: "വ્યાജ വാർത്ത കണ്ടെത്തലും അവകാശ പരിശോധന സംവിധാനവും.",
     about_mission_h3: "ഞങ്ങളുടെ ദൗത്യം",
     about_mission_p: "തെറ്റായ വിവരങ്ങൾ സമൂഹത്തെ ദോഷകരമായി ബാധിക്കുന്നു. ഔദ്യോഗിക ഉറവിടങ്ങളുമായി വിവരങ്ങൾ താരതമ്യം ചെയ്ത് സുതാര്യമായ പരിശോധനാ ഫലം നൽകുകയാണ് ഞങ്ങളുടെ ലക്ഷ്യം.",
     about_tech_h3: "ഉപയോഗിച്ച സാങ്കേതികവിദ്യ",
@@ -398,7 +638,67 @@ const translations = {
     p_trans_h4: "സുതാര്യത",
     p_trans_p: "ഉപയോക്താക്കളുടെ വിശ്വാസ്യതയ്ക്കായി എല്ലാ തെളിവുകളും ഉറവിടങ്ങളും അവയുടെ റേറ്റിംഗും പ്രദർശിപ്പിക്കുന്നു.",
     p_speed_h4: "വേഗതയും കൃത്യതയും",
-    p_speed_p: "NLP സാങ്കേതികവിദ്യയുടെ സഹായത്തോടെ സെക്കൻഡുകൾക്കുള്ളിൽ വിവരങ്ങൾ സ്കാൻ ചെയ്ത് ഫലം നൽകുന്നു."
+    p_speed_p: "NLP സാങ്കേതികവിദ്യയുടെ സഹായത്തോടെ സെക്കൻഡുകൾക്കുള്ളിൽ വിവരങ്ങൾ സ്കാൻ ചെയ്ത് ഫലം നൽകുന്നു.",
+
+    // History claims
+    claim_h1: "ഐഎസ്ആർഒ 2025-ൽ മനുഷ്യനെ വിജയകരമായി ചൊവ്വയിലേക്ക് അയച്ചു.",
+    claim_h2: "ഉയർന്ന പ്രദേശങ്ങളിൽ വെള്ളം തിളയ്ക്കുന്ന താപനില കുറയുന്നു.",
+    claim_h3: "പുതിയ കോവിഡ് വകഭേദം നിലവിലുള്ള എല്ലാ പ്രതിരോധശേഷിയെയും പ്രതിരോധിക്കുന്നു.",
+    claim_h4: "വ്യാഴത്തിൽ അന്യഗ്രഹ നഗരങ്ങൾ കണ്ടെത്തിയതായി നാസ സ്ഥിരീകരിച്ചു.",
+
+    // Global tags
+    v_true: "ശരി",
+    v_false: "വ്യാജം",
+    v_misleading: "തെറ്റിദ്ധരിപ്പിക്കുന്നത്",
+    cat_space: "ബഹിരാകാശം & ടെക്",
+    cat_science: "ശാസ്ത്രം",
+    cat_medicine: "വൈദ്യശാസ്ത്രം",
+    time_today: "ഇന്ന്, 12:15 PM",
+    time_yesterday: "ഇന്നലെ, 4:30 PM",
+    time_aug5: "ഓഗസ്റ്റ് 5, 2026",
+    time_jul28: "ജൂലൈ 28, 2026",
+
+    // Verdict objects
+    res_mars: {
+      verdict: 'വ്യാജം',
+      type: 'ബഹിരാകാശം & ടെക്',
+      explanation: '2025 വരെ ഐഎസ്ആർഒ മനുഷ്യ ചൊവ്വാ ദൗത്യങ്ങൾ നടത്തിയിട്ടില്ല. ഐഎസ്ആർഒയുടെ നിലവിലെ മനുഷ്യ ബഹിരാകാശ ദൗത്യമായ ഗഗൻയാൻ ഭൂമിയുടെ ഭ്രമണപഥത്തിലേക്ക് മാത്രമുള്ളതാണ്.',
+      sources: 'isro.gov.in (ഔദ്യോഗിക സ്പേസ് ഏജൻസി), pib.gov.in (ഫാക്റ്റ് ചെക്ക്), space.com',
+      summary: 'ഐഎസ്ആർഒ ചൊവ്വയിലേക്ക് മനുഷ്യനെ അയക്കുന്ന യാതൊരു ദൗത്യവും പദ്ധതിയിട്ടിട്ടില്ലെന്ന് വ്യക്തമാക്കുന്നു. നിലവിലത്തെ ശ്രദ്ധ മനുഷ്യനെ ഭ്രമണപഥത്തിൽ എത്തിക്കുന്നതിലാണ്.',
+      insights: 'വികാരം: നിഷ്പക്ഷം\nവിഷാംശം: 0%\nനിലപാട്: ശക്തം\nവിശ്വാസ്യത: വളരെ ഉയർന്നത്'
+    },
+    res_flat: {
+      verdict: 'വ്യാജം',
+      type: 'ഗൂഢാലോചന സിദ്ധാന്തം',
+      explanation: 'ഭൂമി വൃത്താകൃതിയിലുള്ള പന്തിന്റെ ആകൃതിയിലാണ് (Oblate Spheroid) എന്ന് ഉപഗ്രഹ ചിത്രങ്ങളും ഭൗതികശാസ്ത്രവും തെളിയിക്കുന്നു. ഫ്ലാറ്റ് എർത്ത് വാദങ്ങൾ ഭൗതികശാസ്ത്ര നിയമങ്ങൾക്ക് എതിരാണ്.',
+      sources: 'nasa.gov (സ്പേസ് ഏജൻസി), britannica.com, physics.org',
+      summary: 'ശാസ്ത്രീയമായ തെളിവുകളും ഉപഗ്രഹ റെക്കോർഡുകളും ഭൂമി ഉരുണ്ടതാണെന്ന് സാക്ഷ്യപ്പെടുത്തുന്നു. ഭൂമി പരന്നതാണ് എന്ന വാദം ശാസ്ത്രം തള്ളിക്കളഞ്ഞിട്ടുള്ളതാണ്.',
+      insights: 'വികാരം: ആത്മനിഷ്ഠം\nവിഷാംശം: 2%\nനിലപാട്: പിടിവാശി\nസത്യാവസ്ഥ: 0%'
+    },
+    res_vaccine: {
+      verdict: 'വ്യാജം',
+      type: 'മെഡിക്കൽ തെറ്റായ വിവരം',
+      explanation: 'വാക്സിനുകളിൽ പ്രതിരോധശേഷിക്കുള്ള ഘടകങ്ങൾ മാത്രമേയുള്ളൂ, യാതൊരുവിധ ചിപ്പുകളോ ട്രാക്കിംഗ് ഘടകങ്ങളോ ഇല്ല. ചേരുവകൾ ഔദ്യോഗികമായി സാക്ഷ്യപ്പെടുത്തിയതാണ്.',
+      sources: 'who.int (ലോകാരോഗ്യ സംഘടന), cdc.gov, fda.gov',
+      summary: 'കോവിഡ് വാക്സിനുകളിൽ മൈക്രോചിപ്പുകൾ ഇല്ലെന്ന് റെഗുലേറ്ററി പരിശോധനകളിലൂടെ തെളിഞ്ഞിട്ടുള്ളതാണ്. ഇത്തരം വാദങ്ങൾ വെറും കിംവദന്തികൾ മാത്രമാണ്.',
+      insights: 'വികാരം: നെഗറ്റീവ്\nവിഷാംശം: 4%\nനിലപാട്: പരിഭ്രാന്തി ജനിപ്പിക്കുന്നത്\nസത്യാവസ്ഥ: 0%'
+    },
+    res_boil: {
+      verdict: 'ശരി',
+      type: 'ജനറൽ സയൻസ്',
+      explanation: 'ഈ പ്രസ്താവന ശാസ്ത്രീയമായി ശരിയാണ്. സാധാരണ അന്തരീക്ഷ മർദ്ദത്തിൽ ജലം 100 ഡിഗ്രി സെൽഷ്യസിൽ തിളയ്ക്കുന്നു.',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: 'തെളിവുകൾ ഈ വാദത്തെ പൂർണ്ണമായി പിന്തുണയ്ക്കുന്നു. ഇത് സ്കൂളുകളിലും പരീക്ഷണശാലകളിലും തെളിയിക്കപ്പെട്ട വസ്തുതയാണ്.',
+      insights: 'വികാരം: നിഷ്പക്ഷം\nവിഷാംശം: 0%\nനിലപാട്: വിവരദായകം\nതെളിവ് സ്കോർ: 95%'
+    },
+    res_fallback: {
+      verdict: 'തെറ്റിദ്ധരിപ്പിക്കുന്നത്',
+      type: 'ജനറൽ വാർത്ത',
+      explanation: 'പ്രസ്താവനയിൽ ചില വിവരങ്ങൾ ശരിയാണെങ്കിലും, അവ യഥാർത്ഥ സാഹചര്യത്തിൽ നിന്നും മാറ്റി തെറ്റിദ്ധരിപ്പിക്കുന്ന രീതിയിൽ ചേർത്തതാണ്.',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: 'സ്വതന്ത്ര വാർത്താ ഏജൻസികൾ ഈ അവകാശവാദത്തെക്കുറിച്ച് സമ്മിശ്ര റിപ്പോർട്ട് നൽകുന്നു. ഷെയർ ചെയ്യും മുൻപ് ജാഗ്രത പാലിക്കുക.',
+      insights: 'വികാരം: അനുമാനപരമായത്\nവിഷാംശം: 1%\nനിലപാട്: നിർദ്ദേശിക്കുന്ന\nപരിശോധന നിരക്ക്: ഇടത്തരം'
+    }
   },
   es: {
     logo_title: "Detección de Noticias Falsas <span>&</span><br>Sistema de Verificación",
@@ -477,7 +777,67 @@ const translations = {
     p_trans_h4: "Transparencia",
     p_trans_p: "Todas las citas de origen, métricas de confianza y frases coincidentes se exponen al usuario.",
     p_speed_h4: "Velocidad y Precisión",
-    p_speed_p: "Los flujos de PNL escanean, evalúan y formulan resultados en cuestión de segundos."
+    p_speed_p: "Los flujos de PNL escanean, evalúan y formulan resultados en cuestión de segundos.",
+
+    // History claims
+    claim_h1: "ISRO envió con éxito humanos a Marte en 2025.",
+    claim_h2: "El punto de ebullición del agua disminuye a mayor altitud.",
+    claim_h3: "La nueva variante de COVID es resistente a todas las opciones de inmunidad actuales.",
+    claim_h4: "La NASA confirmó el descubrimiento de ciudades extraterrestres en Júpiter.",
+
+    // Global tags
+    v_true: "VERDADERO",
+    v_false: "FALSO",
+    v_misleading: "ENGAÑOSO",
+    cat_space: "Espacio y Tec",
+    cat_science: "Ciencia",
+    cat_medicine: "Medicina",
+    time_today: "Hoy, 12:15 PM",
+    time_yesterday: "Ayer, 4:30 PM",
+    time_aug5: "5 de ago de 2026",
+    time_jul28: "28 de jul de 2026",
+
+    // Verdict objects
+    res_mars: {
+      verdict: 'FALSO',
+      type: 'Espacio y Tec',
+      explanation: 'Ninguna misión tripulada a Marte ha sido realizada por la ISRO en 2025. El programa tripulado actual de la ISRO es Gaganyaan, centrado solo en órbita terrestre.',
+      sources: 'isro.gov.in (Agencia Espacial), pib.gov.in (Fact Check), space.com',
+      summary: 'Declaraciones oficiales confirman que la ISRO no tiene misiones tripuladas a Marte planeadas. El enfoque actual es la órbita baja de la Tierra.',
+      insights: 'Sentimiento: Neutro\nToxicidad: 0%\nPostura: Asertiva\nConfianza: Muy Alta'
+    },
+    res_flat: {
+      verdict: 'FALSO',
+      type: 'Conspiración',
+      explanation: 'Las imágenes satelitales y las leyes de la física demuestran que la Tierra es un esferoide oblato. Las reclamaciones de la Tierra plana son falsas.',
+      sources: 'nasa.gov (Agencia Espacial), britannica.com, physics.org',
+      summary: 'Todos los registros científicos demuestran que la Tierra es redonda. Las afirmaciones sobre un disco plano están refutadas científicamente.',
+      insights: 'Sentimiento: Subjetivo\nToxicidad: 2%\nPostura: Dogmática\nSinceridad: 0%'
+    },
+    res_vaccine: {
+      verdict: 'FALSO',
+      type: 'Medicina Falsa',
+      explanation: 'Las vacunas contienen sustancias biológicas para la inmunidad, no dispositivos de rastreo o chips. Todos los ingredientes están regulados oficialmente.',
+      sources: 'who.int (Organización Mundial de la Salud), cdc.gov, fda.gov',
+      summary: 'Los análisis regulatorios confirman que las vacunas de COVID-19 no contienen microchips. Tales afirmaciones son imposibles biológica y técnicamente.',
+      insights: 'Sentimiento: Negativo\nToxicidad: 4%\nPostura: Alarmista\nVeracidad: 0%'
+    },
+    res_boil: {
+      verdict: 'VERDADERO',
+      type: 'Ciencia General',
+      explanation: 'Esta declaración es correcta según la termodinámica. A presión atmosférica estándar, el agua hierve a 100 grados Celsius.',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: 'La evidencia científica respalda completamente esta afirmación, la cual es un hecho probado.',
+      insights: 'Sentimiento: Objetivo\nToxicidad: 0%\nPostura: Informativa\nEvidencia: 95%'
+    },
+    res_fallback: {
+      verdict: 'ENGAÑOSO',
+      type: 'Noticias Generales',
+      explanation: 'La declaración contiene verdades parciales pero descontextualizadas o mezcladas con suposiciones no verificadas.',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: 'Las agencias de noticias independientes reportan evidencias mixtas sobre esta combinación de hechos. Se recomienda precaución.',
+      insights: 'Sentimiento: Especulativo\nToxicidad: 1%\nPostura: Sugestiva\nVerificación: Media'
+    }
   },
   fr: {
     logo_title: "Détection de Fausses Nouvelles <span>&</span><br>Système de Vérification",
@@ -499,9 +859,9 @@ const translations = {
     tips_1: "Saisissez des réclamations spécifiques pour de meilleurs résultats.",
     tips_2: "Notre système recherche des sources fiables et fournit un verdict explicable.",
     btn_verify: "Démarrer la Vérification",
-    steps_banner: 'Nous vérifions votre réclamation en 7 étapes simples. Cliquez sur "Suivant" pour voir comment cela fonctionne.',
+    steps_banner: 'We verify your claim in 7 simple steps. Click "Next" to see how it works.',
     step1_title: "Saisir Réclamation",
-    step2_title: "Extraire Texte",
+    step2_title: "Extraer Texte",
     step3_title: "Analyse NLP",
     step4_title: "Rechercher des Preuves",
     step5_title: "Vérifier les Sources",
@@ -512,7 +872,7 @@ const translations = {
     step3_desc: "Le traitement du langage naturel nous aide à comprendre la position et le sentiment du texte.",
     step4_desc: "Nous recherchons des preuves dans les index d'actualités mondiaux, les moteurs de recherche et les registres officiels.",
     step5_desc: "Nos modèles évaluent la réputation du domaine d'origine et le poids de confiance.",
-    step6_desc: "Nous comparons les réclamations aux preuves factuelles pour identifier les contradictions.",
+    step6_desc: "We map subject-verb-object relationships to identify factual contradictions.",
     step7_desc: "Tous les modules de vérification ont réussi. Les rapports finaux sont prêts à être révélés.",
     step_pill: "Étape {step} sur 7",
     your_claim: "Votre Réclamation",
@@ -548,15 +908,75 @@ const translations = {
     view_about_title: "À Propos",
     view_about_sub: "Système de détection des fausses nouvelles et de vérification des réclamations.",
     about_mission_h3: "Notre Mission",
-    about_mission_p: "La désinformation affaiblit les institutions démocratiques. Notre mission est de concevoir des interfaces de vérification transparentes qui croisent les réclamations avec des sources faisant autorité, fournissant des audits de confiance publique.",
+    about_mission_p: "La désinformation affaiblit les institutions démocratiques. Notre mission est de concevoir des interfaces de vérification transparentes qui croisent les réclamations avec des sources faisant autorité.",
     about_tech_h3: "Technologies Utilisées",
-    about_tech_p: "Le système exploite des robots d'indexation en temps réel, des indices de similarité sémantique et un répertoire réputationnel des sources. Il est optimisiert pour fournir des preuves explicatives complètes.",
+    about_tech_p: "Le système exploite des robots d'indexation en temps réel, des indices de similarité sémantique et un répertoire réputationnel des sources.",
     p_obj_h4: "Objectivité",
     p_obj_p: "Les décisions sont pondérées strictement sur la base de citations de preuves provenant de domaines faisant autorité.",
     p_trans_h4: "Transparence",
     p_trans_p: "Toutes les citations de sources, les mesures de confiance et les correspondances textuelles sont exposées.",
     p_speed_h4: "Rapidité & Précision",
-    p_speed_p: "Les flux NLP analysent, évaluent et formulent les résultats en quelques secondes."
+    p_speed_p: "Les flux NLP analysent, évaluent et formulent les résultats en quelques secondes.",
+
+    // History claims
+    claim_h1: "L'ISRO a envoyé avec succès des humains sur Mars en 2025.",
+    claim_h2: "Le point d'ébullition de l'eau diminue à des altitudes plus élevées.",
+    claim_h3: "Le nouveau variant du COVID est résistant à toutes les options d'immunité actuelles.",
+    claim_h4: "La NASA a confirmé la découverte de villes extraterrestres sur Jupiter.",
+
+    // Global tags
+    v_true: "VRAI",
+    v_false: "FAUX",
+    v_misleading: "TROMPEUR",
+    cat_space: "Espace & Tech",
+    cat_science: "Science",
+    cat_medicine: "Médecine",
+    time_today: "Aujourd'hui, 12:15 PM",
+    time_yesterday: "Hier, 4:30 PM",
+    time_aug5: "5 août 2026",
+    time_jul28: "28 juil. 2026",
+
+    // Verdict objects
+    res_mars: {
+      verdict: 'FAUX',
+      type: 'Espace & Tech',
+      explanation: 'Aucune mission habitée vers Mars n\'a été menée par l\'ISRO en 2025. Le programme actuel de l\'ISRO est Gaganyaan, uniquement en orbite terrestre.',
+      sources: 'isro.gov.in (Agence Spatiale), pib.gov.in (Fact Check), space.com',
+      summary: 'Les déclarations officielles confirment que l\'ISRO n\'a pas de vol habité prévu vers Mars. L\'attention est portée sur l\'orbite basse.',
+      insights: 'Sentiment: Neutre\nToxicité: 0%\nPosition: Assertive\nConfiance: Très Haute'
+    },
+    res_flat: {
+      verdict: 'FAUX',
+      type: 'Complot',
+      explanation: 'L\'imagerie satellite et la physique prouvent que la Terre est un sphéroïde oblat. Les affirmations sur la Terre plate sont fausses.',
+      sources: 'nasa.gov (Agence Spatiale), britannica.com, physics.org',
+      summary: 'Tous les relevés scientifiques démontrent que la Terre est ronde. Les affirmations de disque plat sont réfutées scientifiquement.',
+      insights: 'Sentiment: Subjectif\nToxicité: 2%\nPosition: Dogmatique\nSincérité: 0%'
+    },
+    res_vaccine: {
+      verdict: 'FAUX',
+      type: 'Médecine fausse',
+      explanation: 'Les vaccins contiennent des solutions d\'immunité biologique et non du matériel électronique ou des puces. Ingrédients audités par l\'OMS.',
+      sources: 'who.int (Organisation Mondiale de la Santé), cdc.gov, fda.gov',
+      summary: 'Les analyses confirment que les vaccins COVID-19 ne contiennent aucun composant électronique. C\'est scientifiquement impossible.',
+      insights: 'Sentiment: Négatif\nToxicité: 4%\nPosition: Alarmiste\nVéracité: 0%'
+    },
+    res_boil: {
+      verdict: 'VRAI',
+      type: 'Science générale',
+      explanation: 'Cette déclaration est scientifiquement exacte. À pression standard, l\'eau bout à 100 degrés Celsius.',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: 'Les preuves scientifiques soutiennent cette affirmation qui constitue un fait avéré.',
+      insights: 'Sentiment: Objectif\nToxicité: 0%\nPosition: Informative\nPreuve: 95%'
+    },
+    res_fallback: {
+      verdict: 'TROMPEUR',
+      type: 'Actualités générales',
+      explanation: 'La déclaration contient des éléments de vérité, mais sortis de leur contexte ou emballés avec des hypothèses erronées.',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: 'Les agences de presse rapportent des preuves mitigées sur cette déclaration. Prudence avant de partager.',
+      insights: 'Sentiment: Spéculatif\nToxicity: 1%\nPosition: Suggestive\nVérification: Moyenne'
+    }
   },
   de: {
     logo_title: "Falschnachrichtenerkennung <span>&</span><br>Faktenprüfungssystem",
@@ -570,7 +990,7 @@ const translations = {
     tab_image: "Bild",
     tab_pdf: "PDF",
     textarea_placeholder: "Geben Sie Ihre Behauptung hier ein...",
-    upload_title: "Oder Dateien hochladen",
+    upload_title: "Or oder Dateien hochladen",
     upload_img: "Bild hochladen",
     upload_pdf: "PDF hochladen",
     upload_sub: "Unterstützt JPG, PNG, PDF (Max. 10 MB)",
@@ -635,7 +1055,67 @@ const translations = {
     p_trans_h4: "Transparenz",
     p_trans_p: "Alle Quellennachweise, Vertrauenswerte und Texttreffer werden dem Nutzer offengelegt.",
     p_speed_h4: "Schnelligkeit & Präzision",
-    p_speed_p: "NLP-Pipelines scannen, bewerten und formulieren Ergebnisse innerhalb weniger Sekunden."
+    p_speed_p: "NLP-Pipelines scannen, bewerten und formulieren Ergebnisse innerhalb weniger Sekunden.",
+
+    // History claims
+    claim_h1: "ISRO hat 2025 erfolgreich Menschen zum Mars geschickt.",
+    claim_h2: "Der Siedepunkt von Wasser sinkt in größeren Höhen.",
+    claim_h3: "Die neue COVID-Variante ist gegen alle aktuellen Immunisierungsoptionen resistent.",
+    claim_h4: "Die NASA hat die Entdeckung außerirdischer Städte auf dem Jupiter bestätigt.",
+
+    // Global tags
+    v_true: "WAHR",
+    v_false: "FALSCH",
+    v_misleading: "IRREFÜHREND",
+    cat_space: "Weltraum & Tech",
+    cat_science: "Wissenschaft",
+    cat_medicine: "Medizin",
+    time_today: "Heute, 12:15",
+    time_yesterday: "Gestern, 16:30",
+    time_aug5: "5. Aug 2026",
+    time_jul28: "28. Juli 2026",
+
+    // Verdict objects
+    res_mars: {
+      verdict: 'FALSCH',
+      type: 'Weltraum & Tech',
+      explanation: 'Es wurde bis 2025 keine bemannte Mars-Mission der ISRO durchgeführt. Das aktuelle Programm ist Gaganyaan, das auf die Erdumlaufbahn beschränkt ist.',
+      sources: 'isro.gov.in (Raumfahrtbehörde), pib.gov.in (Fact Check), space.com',
+      summary: 'Offizielle Erklärungen bestätigen, dass die ISRO keine bemannte Marslandung geplant hat. Der Fokus liegt derzeit auf erdnahen Umlaufbahnen.',
+      insights: 'Stimmung: Neutral\nToxizität: 0%\nHaltung: Bestimmt\nVertrauen: Extrem Hoch'
+    },
+    res_flat: {
+      verdict: 'FALSCH',
+      type: 'Verschwörung',
+      explanation: 'Satellitenbilder und die Gesetze der Physik beweisen, dass die Erde ein Rotationsellipsoid ist. Flat Earth Behauptungen sind naturwissenschaftlich falsch.',
+      sources: 'nasa.gov (Raumfahrtbehörde), britannica.com, physics.org',
+      summary: 'Alle Aufzeichnungen zeigen, dass die Erde rund ist. Behauptungen über eine flache Scheibe sind wissenschaftlich widerlegt.',
+      insights: 'Stimmung: Subjektiv\nToxizität: 2%\nHaltung: Dogmatisch\nWahrheitsgehalt: 0%'
+    },
+    res_vaccine: {
+      verdict: 'FALSCH',
+      type: 'Medizinische Falschinfo',
+      explanation: 'Impfstoffe enthalten rein biologische Lösungen zur Immunisierung und keine Ortungstechnologie oder Chips. Die Inhaltsstoffe sind offiziell registriert.',
+      sources: 'who.int (Weltgesundheitsorganisation), cdc.gov, fda.gov',
+      summary: 'Wissenschaftliche Berichte bestätigen, dass COVID-19-Impfstoffe keine Mikrochips enthalten. Solche Behauptungen sind technisch unmöglich.',
+      insights: 'Stimmung: Negativ\nToxizität: 4%\nHaltung: Alarmierend\nWahrheitsgehalt: 0%'
+    },
+    res_boil: {
+      verdict: 'WAHR',
+      type: 'Allgemeine Wissenschaft',
+      explanation: 'Diese Aussage ist thermodynamisch korrekt. Unter Standard-Luftdruck siedet Wasser bei 100 Grad Celsius.',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: 'Die Beweislage stützt diese Behauptung vollständig. Es ist eine experimentell verifizierte Tatsache.',
+      insights: 'Stimmung: Objektiv\nToxizität: 0%\nHaltung: Informativ\nBeweiswert: 95%'
+    },
+    res_fallback: {
+      verdict: 'IRREFÜHREND',
+      type: 'Allgemeine Nachrichten',
+      explanation: 'Die Aussage enthält einige wahre Aspekte, ist jedoch ohne Kontext dargestellt und mit ungeprüften Annahmen vermischt.',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: 'Unabhängige Presseagenturen liefern gemischte Berichte über diese Kombination von Fakten. Vorsicht beim Teilen.',
+      insights: 'Stimmung: Spekulativ\nToxizität: 1%\nHaltung: Suggestiv\nÜberprüfungsrate: Mittel'
+    }
   },
   ta: {
     logo_title: "போலி செய்தி கண்டறிதல் <span>&</span><br>கூற்று சரிபார்ப்பு அமைப்பு",
@@ -714,7 +1194,67 @@ const translations = {
     p_trans_h4: "வெளிப்படைத்தன்மை",
     p_trans_p: "பயனர்களின் நம்பிக்கைக்காக அனைத்து சான்றுகளும் ஆதாரங்களும் அவற்றின் மதிப்பீடுகளும் காட்டப்படுகின்றன.",
     p_speed_h4: "வேகம் & துல்லியம்",
-    p_speed_p: "NLP தொழில்நுட்பம் மூலம் சில நொடிகளில் தகவல்கள் ஸ்கேன் செய்யப்பட்டு முடிவுகள் வழங்கப்படுகின்றன."
+    p_speed_p: "NLP தொழில்நுட்பம் மூலம் சில நொடிகளில் தகவல்கள் ஸ்கேன் செய்யப்பட்டு முடிவுகள் வழங்கப்படுகின்றன.",
+
+    // History claims
+    claim_h1: "இஸ்ரோ 2025 ஆம் ஆண்டில் மனிதர்களை செவ்வாய் கிரகத்திற்கு வெற்றிகரமாக அனுப்பியது.",
+    claim_h2: "அதிக உயரத்தில் நீரின் கொதிநிலை குறைகிறது.",
+    claim_h3: "புதிய கோவிட் மாறுபாடு தற்போதைய அனைத்து நோய் எதிர்ப்பு சக்திக்கும் எதிர்ப்புத் திறன் கொண்டது.",
+    claim_h4: "வியாழனில் வேற்றுக்கிரக நகரங்கள் கண்டுபிடிக்கப்பட்டதை நாசா உறுதிப்படுத்தியது.",
+
+    // Global tags
+    v_true: "உண்மை",
+    v_false: "பொய்",
+    v_misleading: "தவறானது",
+    cat_space: "விண்வெளி & தொழில்",
+    cat_science: "அறிவியல்",
+    cat_medicine: "மருத்துவம்",
+    time_today: "இன்று, 12:15 PM",
+    time_yesterday: "நேற்று, 4:30 PM",
+    time_aug5: "ஆகஸ்ட் 5, 2026",
+    time_jul28: "ஜூலை 28, 2026",
+
+    // Verdict objects
+    res_mars: {
+      verdict: 'பொய்',
+      type: 'விண்வெளி & தொழில்',
+      explanation: '2025 வரை இஸ்ரோவால் மனித செவ்வாய் பயணம் எதுவும் மேற்கொள்ளப்படவில்லை. இஸ்ரோவின் தற்போதைய மனித விண்வெளித் திட்டம் ககன்யான் ஆகும், இது புவி வட்டப்பாதையுடன் மட்டுமே தொடர்புடையது.',
+      sources: 'isro.gov.in (அதிகாரப்பூர்வ விண்வெளி நிறுவனம்), pib.gov.in (Fact Check), space.com',
+      summary: 'இஸ்ரோ செவ்வாய் கிரகத்திற்கு மனிதர்களை அனுப்பும் திட்டம் எதுவும் இல்லை என்று அதிகாரப்பூர்வ அறிக்கைகள் உறுதிப்படுத்துகின்றன. தற்போதைய கவனம் புவி வட்டப்பாதை மற்றும் ரோபோடிக் திட்டங்கள் ஆகும்.',
+      insights: 'உணர்வு: நடுநிலை\nநச்சுத்தன்மை: 0%\nநிலைப்பாடு: உறுதியானது\nநம்பகத்தன்மை: மிக அதிகம்'
+    },
+    res_flat: {
+      verdict: 'பொய்',
+      type: 'சதி கோட்பாடு',
+      explanation: 'செயற்கைக்கோள் படங்கள் மற்றும் இயற்பியல் விதிகள் பூமி ஒரு கோள வடிவத்தில் (Oblate Spheroid) உள்ளது என்பதை நிரூபிக்கின்றன. பிளாட் எர்த் வாதங்கள் இயற்பியலுக்கு எதிரானவை.',
+      sources: 'nasa.gov (விண்வெளி நிறுவனம்), britannica.com, physics.org',
+      summary: 'பூமி உருண்டையானது என்பதை அனைத்து அறிவியல் மற்றும் செயற்கைக்கோள் பதிவுகளும் உறுதிப்படுத்துகின்றன. பூமி தட்டையானது என்ற கூற்றை அறிவியல் முற்றிலும் நிராகரிக்கிறது.',
+      insights: 'உணர்வு: அகநிலை\nநச்சுத்தன்மை: 2%\nநிலைப்பாடு: பிடிவாதமானது\nஉண்மை விகிதம்: 0%'
+    },
+    res_vaccine: {
+      verdict: 'பொய்',
+      type: 'மருத்துவ தவறான தகவல்',
+      explanation: 'தடுப்பூசிகளில் நோய் எதிர்ப்பு சக்தியை அதிகரிக்கும் உயிரியல் கூறுகள் மட்டுமே உள்ளன, எலக்ட்ரானிக் சிப் அல்லது டிராக்கிங் கருவிகள் எதுவும் இல்லை.',
+      sources: 'who.int (உலக சுகாதார அமைப்பு), cdc.gov, fda.gov',
+      summary: 'கோவிட் தடுப்பூசிகளில் மைக்ரோசிப்கள் இல்லை என்று உலகளாவிய சுகாதார அமைப்புகளின் அறிக்கைகள் தெளிவுபடுத்துகின்றன. இத்தகைய வதந்திகள் கற்பனையானவை மட்டுமே.',
+      insights: 'உணர்வு: எதிர்மறை\nநச்சுத்தன்மை: 4%\nநிலைப்பாடு: பயமுறுத்துவது\nஉண்மை விகிதம்: 0%'
+    },
+    res_boil: {
+      verdict: 'உண்மை',
+      type: 'பொது அறிவியல்',
+      explanation: 'இந்த கூற்று அறிவியல் பூர்வமாக சரியானது. சாதாரண வளிமண்டல அழுத்தத்தில் நீர் 100 டிகிரி செல்சியஸில் கொதிக்கிறது.',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: 'ஆதாரங்கள் இந்த கூற்றை முழுமையாக ஆதரிக்கின்றன. இது பள்ளி மற்றும் தினசரி சோதனைகளில் நிரூபிக்கப்பட்ட உண்மையாகும்.',
+      insights: 'உணர்வு: நடுநிலை\nநச்சுத்தன்மை: 0%\nநிலைப்பாடு: தகவல் அளிப்பது\nஆதார மதிப்பெண்: 95%'
+    },
+    res_fallback: {
+      verdict: 'தவறானது',
+      type: 'பொதுவான செய்திகள்',
+      explanation: 'இந்த கூற்றில் சில உண்மைகள் இருந்தாலும், அவை சரியான பின்னணி அல்லது ஆதாரங்கள் இல்லாமல் கற்பனையாக இணைக்கப்பட்டுள்ளன.',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: 'சுயாதீன செய்தி நிறுவனங்கள் இந்த கூற்றின் மீது கலவையான அறிக்கைகளை வழங்குகின்றன. இதை பகிரும் முன் எச்சரிக்கையாக இருக்க அறிவுறுத்தப்படுகிறது.',
+      insights: 'உணர்வு: ஊகமானது\nநச்சுத்தன்மை: 1%\nநிலைப்பாடு: பரிந்துரைக்கும்\nசரிபார்ப்பு விகிதம்: நடுத்தரம்'
+    }
   },
   ja: {
     logo_title: "フェイクニュース検出 <span>&</span><br>事実検証システム",
@@ -787,13 +1327,73 @@ const translations = {
     about_mission_h3: "私たちの使命",
     about_mission_p: "誤情報は民主的な制度を弱体化させます。私たちの使命は、主張と公式のソースを対比し、情報の信頼性を公的に監査する、透明で説明可能な検証システムを開発することです。",
     about_tech_h3: "主要技術スタック",
-    about_tech_p: "システムはリアルタイムのウェブクローラー、意味的類似性分析、ソースの評判ディレクトリを活用しています。単なる「はい/いいえ」ではなく、詳細な説明付きのレポートを提供します。",
+    about_tech_p: "システムはリアルタイムのウェブクローラー、意味的類似性分析、ソースの評判ディレクトリを活用しています。",
     p_obj_h4: "客観性",
     p_obj_p: "判定は偏見を排除し、公式ソースからの証拠に基づいて厳格に行われます。",
     p_trans_h4: "透明性",
     p_trans_p: "ユーザーの検証のために、すべての証拠の引用、信頼性スコア、テキストの一致度が公開されます。",
     p_speed_h4: "迅速性と精度",
-    p_speed_p: "NLPパイプラインは情報をスキャンし、数秒以内に検証結果を作成します。"
+    p_speed_p: "NLPパイプラインは情報をスキャンし、数秒以内に検証結果を作成します。",
+
+    // History claims
+    claim_h1: "ISROは2025年に有人火星探査に成功した。",
+    claim_h2: "高地では水の沸点が下がる。",
+    claim_h3: "新しいCOVID変異株は、現在のすべての免疫効果に対して耐性がある。",
+    claim_h4: "NASAは木星でのエイリアンの都市の発見を確認した。",
+
+    // Global tags
+    v_true: "真実",
+    v_false: "虚偽",
+    v_misleading: "誤解を招く",
+    cat_space: "宇宙・技術",
+    cat_science: "科学",
+    cat_medicine: "医学",
+    time_today: "本日、12:15 PM",
+    time_yesterday: "昨日、4:30 PM",
+    time_aug5: "2026年8月5日",
+    time_jul28: "2026年7月28日",
+
+    // Verdict objects
+    res_mars: {
+      verdict: '虚偽',
+      type: '宇宙・技術',
+      explanation: 'ISROによる2025年時点での有人火星ミッションは行われていません。ISROの現在の有人宇宙飛行計画「ガガンヤーン」は、地球低軌道のみを対象としています。',
+      sources: 'isro.gov.in (公式宇宙機関), pib.gov.in (ファクトチェック), space.com',
+      summary: '公式発表により、ISROによる有人火星着陸の計画はないことが確認されています。現在の計画は、地球低軌道と無人探査機に焦点が当てられています。',
+      insights: '感情: 中立\n有害性: 0%\nスタンス: 断定的\n信頼度: 極めて高い'
+    },
+    res_flat: {
+      verdict: '虚偽',
+      type: '陰謀論',
+      explanation: '衛星写真や物理法則により、地球が扁平球体（Oblate Spheroid）であることが証明されています。地球平面説は、科学的事実に反しています。',
+      sources: 'nasa.gov (宇宙機関), britannica.com, physics.org',
+      summary: 'すべての科学的記録が、地球が丸いことを裏付けています。平面説は物理学の法則によって否定されています。',
+      insights: '感情: 主観的\n有害性: 2%\nスタンス: 教条的\n真実性: 0%'
+    },
+    res_vaccine: {
+      verdict: '虚偽',
+      type: '医学的誤情報',
+      explanation: 'ワクチンには免疫反応を促す成分が含まれていますが、マイクロチップなどの電子部品は含まれていません。成分は監査機関によって公開されています。',
+      sources: 'who.int (世界保健機関), cdc.gov, fda.gov',
+      summary: '監査報告書により、ワクチンにチップが混入していないことが証明されています。このような噂は技術的・生物学的に不可能です。',
+      insights: '感情: 否定的な偏り\n有害性: 4%\nスタンス: 煽動的\n真実性: 0%'
+    },
+    res_boil: {
+      verdict: '真実',
+      type: '一般科学',
+      explanation: 'この主張は科学的に正確です。標準気圧下で水は100℃で沸騰します。',
+      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      summary: '科学的証拠がこの主張を裏付けています。これは実証済みの事実です。',
+      insights: '感情: 客観的\n有害性: 0%\nスタンス: 情報的\n証拠スコア: 95%'
+    },
+    res_fallback: {
+      verdict: '誤解を招く',
+      type: '一般ニュース',
+      explanation: '一部の事実は正しいものの、文脈を無視した仮定や未検証の情報と組み合わせて主張されています。',
+      sources: 'reuters.com, apnews.com, factcheck.org',
+      summary: '独立した報道機関は、この情報の組み合わせに対して複合的な報告を行っています。共有する際は注意が必要です。',
+      insights: '感情: 推測的\n有害性: 1%\nスタンス: 暗示的\n検証率: 中程度'
+    }
   }
 };
 
@@ -864,26 +1464,98 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Re-verify buttons in History Table
-  const reVerifyBtns = document.querySelectorAll('.re-verify-btn');
-  reVerifyBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const claimTextVal = btn.getAttribute('data-claim');
-      textarea.value = claimTextVal;
-      state.claimText = claimTextVal;
-      updateCharCounter();
+  // --- DYNAMIC HISTORY DATABASE ---
+  const historyData = [
+    {
+      id: 'h1',
+      verdict: 'FALSE',
+      verdictClass: 'tag-false',
+      confidence: '98%',
+      categoryKey: 'cat_space',
+      timestampKey: 'time_today',
+      claimTextKey: 'claim_h1',
+      rawText: 'ISRO successfully sent humans to Mars in 2025.'
+    },
+    {
+      id: 'h2',
+      verdict: 'TRUE',
+      verdictClass: 'tag-true',
+      confidence: '92%',
+      categoryKey: 'cat_science',
+      timestampKey: 'time_yesterday',
+      claimTextKey: 'claim_h2',
+      rawText: 'Water boiling point decreases at higher altitudes.'
+    },
+    {
+      id: 'h3',
+      verdict: 'MISLEADING',
+      verdictClass: 'tag-misleading',
+      confidence: '81%',
+      categoryKey: 'cat_medicine',
+      timestampKey: 'time_aug5',
+      claimTextKey: 'claim_h3',
+      rawText: 'New COVID variant is resistant to all current immunity options.'
+    },
+    {
+      id: 'h4',
+      verdict: 'FALSE',
+      verdictClass: 'tag-false',
+      confidence: '99%',
+      categoryKey: 'cat_science',
+      timestampKey: 'time_jul28',
+      claimTextKey: 'claim_h4',
+      rawText: 'NASA confirmed discovery of alien cities on Jupiter.'
+    }
+  ];
+
+  function renderHistoryTable(lang) {
+    const t = translations[lang] || translations.en;
+    const tbody = document.getElementById('history-table-body');
+    if (!tbody) return;
+
+    tbody.innerHTML = '';
+    historyData.forEach(item => {
+      const claimText = t[item.claimTextKey] || translations.en[item.claimTextKey];
+      const categoryText = t[item.categoryKey] || translations.en[item.categoryKey];
+      const timestampText = t[item.timestampKey] || translations.en[item.timestampKey];
       
-      // Navigate to home-view
-      document.getElementById('nav-home').click();
-      
-      // Automatically trigger verification click
-      startBtn.click();
+      let verdictLabel = t.v_false;
+      if (item.verdict === 'TRUE') verdictLabel = t.v_true;
+      if (item.verdict === 'MISLEADING') verdictLabel = t.v_misleading;
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><span class="claim-text-col">${claimText}</span></td>
+        <td><span class="verdict-badge-history ${item.verdictClass}">${verdictLabel}</span></td>
+        <td>${item.confidence}</td>
+        <td>${categoryText}</td>
+        <td>${timestampText}</td>
+        <td><button class="re-verify-btn" data-claim="${item.rawText}">${t.btn_reverify}</button></td>
+      `;
+      tbody.appendChild(tr);
     });
-  });
+
+    // Rebind click listeners to dynamic buttons
+    const newReVerifyBtns = tbody.querySelectorAll('.re-verify-btn');
+    newReVerifyBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const claimTextVal = btn.getAttribute('data-claim');
+        textarea.value = claimTextVal;
+        state.claimText = claimTextVal;
+        updateCharCounter();
+        
+        // Navigate to home-view
+        document.getElementById('nav-home').click();
+        
+        // Automatically trigger verification click
+        startBtn.click();
+      });
+    });
+  }
 
   // --- INITIALIZATION ---
-  // Sync textarea character count on load
   updateCharCounter();
+  renderHistoryTable(state.currentLang);
 
   // --- CLAIM TEXTAREA & CHAR COUNT ---
   textarea.addEventListener('input', (e) => {
@@ -915,9 +1587,9 @@ document.addEventListener('DOMContentLoaded', () => {
           updateCharCounter();
         }
       } else if (tabType === 'image') {
-        textarea.placeholder = t.tab_image === "Image" ? "Upload an image using the buttons below to extract claim text..." : "చిత్రం నుండి టెక్స్ట్ సేకరించడానికి కింద బటన్ క్లిక్ చేసి అప్‌లోడ్ చేయండి...";
+        textarea.placeholder = t.tab_image === "Image" ? "Upload an image using the buttons below to extract claim text..." : "చిత్రం నుండి టెక్స్ట్ సేకరించడానికి కింద బಟన్ క్లిక్ చేసి అప్‌లోడ్ చేయండి...";
       } else if (tabType === 'pdf') {
-        textarea.placeholder = t.tab_pdf === "PDF" ? "Upload a PDF using the buttons below to extract claim text..." : "PDF నుండి టెక్స్ట్ సేకరించడానికి కింద బటన్ క్లిక్ చేసి అప్‌లోడ్ చేయండి...";
+        textarea.placeholder = t.tab_pdf === "PDF" ? "Upload a PDF using the buttons below to extract claim text..." : "PDF నుండి టెక్స్ట్ సేకరించడానికి కింద బಟన్ క్లిక్ చేసి అప్‌లోಡ್ చేయండి...";
       }
     });
   });
@@ -1003,7 +1675,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   nextBtn.addEventListener('click', () => {
-    const t = translations[state.currentLang] || translations.en;
     if (state.currentStep < 7) {
       goToStep(state.currentStep + 1);
     } else if (state.currentStep === 7) {
@@ -1029,71 +1700,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // Exact Mars prompt match
     if (cleanText.includes('isro') && cleanText.includes('mars') && cleanText.includes('2025')) {
       state.verdictData = {
-        verdict: 'FALSE',
-        verdictClass: 'unlocked-false',
+        verdictKey: 'res_mars',
         confidence: 98,
-        type: 'Space & Tech',
-        reliability: 1,
-        explanation: 'No human Mars mission has been conducted by ISRO as of 2025. ISRO\'s current human spaceflight program is Gaganyaan, aimed only at Earth orbit.',
-        sources: 'isro.gov.in (Official Space Agency), pib.gov.in (Fact Check), space.com',
-        summary: 'Official statements confirm ISRO has no manned Mars landing scheduled. Current missions are focused on low Earth orbit and unmanned lunar/solar probes.',
-        insights: 'Sentiment: Neutral\nToxicity: 0%\nStance: Assertive\nConfidence: Extremely High'
+        reliability: 1
       };
     } 
     // Flat earth match
     else if (cleanText.includes('flat') && cleanText.includes('earth')) {
       state.verdictData = {
-        verdict: 'FALSE',
-        verdictClass: 'unlocked-false',
+        verdictKey: 'res_flat',
         confidence: 99,
-        type: 'Conspiracy',
-        reliability: 1,
-        explanation: 'Satellite imaging and physics prove Earth is an oblate spheroid. Flat Earth claims violate fundamental physics laws and astronomical observations.',
-        sources: 'nasa.gov (Space Agency), britannica.com, physics.org',
-        summary: 'All scientific, geodetic, and satellite records confirm Earth is spherical. Claims of a flat disk are debunked by centuries of gravity and physics evidence.',
-        insights: 'Sentiment: Subjective\nToxicity: 2%\nStance: Dogmatic\nFactual Match: 0%'
+        reliability: 1
       };
     }
     // COVID vaccine chips match
     else if ((cleanText.includes('vaccine') || cleanText.includes('covid')) && cleanText.includes('chip')) {
       state.verdictData = {
-        verdict: 'FALSE',
-        verdictClass: 'unlocked-false',
+        verdictKey: 'res_vaccine',
         confidence: 96,
-        type: 'Medical Misinfo',
-        reliability: 1,
-        explanation: 'Vaccines contain biological formulas for immunity, not electronics. Ingredients list is publicly reviewed and audited by health regulators.',
-        sources: 'who.int (World Health Org), cdc.gov (Health agency), fda.gov',
-        summary: 'Rigorous regulatory analyses and audits confirm COVID-19 vaccines contain no microchips or tracking hardware. Claims are biologically and technically impossible.',
-        insights: 'Sentiment: Negative\nToxicity: 4%\nStance: Alarmist\nTruthfulness: 0%'
+        reliability: 1
       };
     }
     // Scientific facts that are True
     else if (cleanText.includes('boil') || cleanText.includes('water') && cleanText.includes('100') || cleanText.includes('round') && cleanText.includes('earth')) {
       state.verdictData = {
-        verdict: 'TRUE',
-        verdictClass: 'unlocked-true',
+        verdictKey: 'res_boil',
         confidence: 95,
-        type: 'General Science',
-        reliability: 5,
-        explanation: 'This statement is scientifically accurate and corresponds to established facts regarding thermodynamics and physics.',
-        sources: 'britannica.com, chem.libretexts.org, nature.com',
-        summary: 'Evidence perfectly supports this claim under standard environments. The statements are verifiable in classroom settings and peer-reviewed material.',
-        insights: 'Sentiment: Objective\nToxicity: 0%\nStance: Informative\nEvidence Score: 95%'
+        reliability: 5
       };
     }
     // Default fallback (Misleading / Debatable)
     else {
       state.verdictData = {
-        verdict: 'MISLEADING',
-        verdictClass: 'unlocked-misleading',
+        verdictKey: 'res_fallback',
         confidence: 74,
-        type: 'General News',
-        reliability: 2,
-        explanation: 'The statement contains some verifiable elements but is packaged with unverified assumptions or out-of-context details.',
-        sources: 'reuters.com, apnews.com, factcheck.org',
-        summary: 'Independent news bureaus report mixed evidence regarding this specific combination of facts. Recommend caution before sharing.',
-        insights: 'Sentiment: Speculative\nToxicity: 1%\nStance: Suggestive\nVerify Rate: Medium'
+        reliability: 2
       };
     }
   }
@@ -1152,6 +1793,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const d = state.verdictData;
     const t = translations[state.currentLang] || translations.en;
+    const resData = t[d.verdictKey] || translations.en[d.verdictKey];
     
     // Unlock results card title & banner
     resultsCardTitle.textContent = t.results_title_verified;
@@ -1174,8 +1816,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 1. Verdict Widget
     const verdictContent = verdictWidget.querySelector('.result-widget-content');
-    verdictContent.innerHTML = `<span class="verdict-text">${d.verdict}</span>`;
-    verdictWidget.classList.add(d.verdictClass);
+    verdictContent.innerHTML = `<span class="verdict-text">${resData.verdict}</span>`;
+    
+    // Dynamic verdict styling class mapping
+    verdictWidget.className = 'result-widget verdict-widget';
+    if (d.verdictKey === 'res_boil') {
+      verdictWidget.classList.add('unlocked-true');
+    } else if (d.verdictKey === 'res_fallback') {
+      verdictWidget.classList.add('unlocked-misleading');
+    } else {
+      verdictWidget.classList.add('unlocked-false');
+    }
 
     // 2. Confidence Score Widget
     confidenceText.textContent = `${d.confidence}%`;
@@ -1183,7 +1834,7 @@ document.addEventListener('DOMContentLoaded', () => {
     confidenceCircle.style.strokeDashoffset = offset;
 
     // 3. Claim Type Widget
-    typeText.textContent = d.type;
+    typeText.textContent = resData.type;
 
     // 4. Reliability Stars Widget
     starsContainer.className = 'reliability-stars active-stars';
@@ -1198,16 +1849,16 @@ document.addEventListener('DOMContentLoaded', () => {
     starsContainer.innerHTML = starsHTML;
 
     // 5. Explanation
-    explanationText.textContent = d.explanation;
+    explanationText.textContent = resData.explanation;
 
     // 6. Sources
-    sourcesText.textContent = d.sources;
+    sourcesText.textContent = resData.sources;
 
     // 7. Summary
-    summaryText.textContent = d.summary;
+    summaryText.textContent = resData.summary;
 
     // 8. Insights
-    insightsText.innerHTML = d.insights.replace(/\n/g, '<br>');
+    insightsText.innerHTML = resData.insights.replace(/\n/g, '<br>');
 
     // Smooth Scroll to Results Section
     document.querySelector('.results-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1398,7 +2049,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 4:
         return {
           title: t.step4_title,
-          summaryText: t.currentLang === 'te' ? 'వివిధ వెబ్ క్రాలర్లు మరియు రిజిస్ట్రీలలో శోధిస్తోంది.' : 'Generating query keywords and searching fact-checking APIs.',
+          summaryText: t.currentLang === 'te' ? 'వివిధ వెబ్ క్రాలర్లు మరియు రిజిస్ట్రీలలో శோధిస్తోంది.' : 'Generating query keywords and searching fact-checking APIs.',
           desc: t.step4_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>`,
           illustration: `
@@ -1448,7 +2099,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       case 6:
         return {
-          title: 'Compare & Evaluate',
+          title: t.step6_title,
           summaryText: t.currentLang === 'te' ? 'క్లెయిమ్ మరియు సాక్ష్యాల పోలిక నివేదిక.' : 'Checking claims assertions against evidence records.',
           desc: t.step6_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>`,
@@ -1803,8 +2454,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // Refresh history logs table in the new language
+    renderHistoryTable(lang);
+
     // Sub-views static contents
-    // 1. History
+    // 1. History view headers
     const historyHeaderH2 = document.querySelector('#history-view .view-header h2');
     if (historyHeaderH2) historyHeaderH2.textContent = t.view_history_title;
     const historyHeaderP = document.querySelector('#history-view .view-header p');
@@ -1819,11 +2473,6 @@ document.addEventListener('DOMContentLoaded', () => {
       historyTableThs[4].textContent = t.th_timestamp;
       historyTableThs[5].textContent = t.th_actions;
     }
-
-    const reVerifyButtons = document.querySelectorAll('.re-verify-btn');
-    reVerifyButtons.forEach(btn => {
-      btn.textContent = t.btn_reverify;
-    });
 
     // 2. How it Works
     const howHeaderH2 = document.querySelector('#how-view .view-header h2');
@@ -1867,6 +2516,11 @@ document.addEventListener('DOMContentLoaded', () => {
       
       principleItems[2].querySelector('h4').textContent = t.p_speed_h4;
       principleItems[2].querySelector('p').textContent = t.p_speed_p;
+    }
+
+    // Refresh active results card if unlocked
+    if (state.isVerifying && state.currentStep === 7 && state.verdictData) {
+      revealFinalVerdict();
     }
 
     // Refresh active step and navigation buttons in the new language
