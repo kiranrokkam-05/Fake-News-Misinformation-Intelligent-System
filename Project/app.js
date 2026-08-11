@@ -115,7 +115,7 @@ const translations = {
       verdict: 'FALSE',
       type: 'Conspiracy',
       explanation: 'Satellite imaging and physics prove Earth is an oblate spheroid. Flat Earth claims violate fundamental physics laws and astronomical observations.',
-      sources: 'nasa.gov (Space Agency), britannica.com, physics.org',
+      sources: 'nasa.gov (Space Agency), britannica.com (Encyclopedia), physics.org',
       summary: 'All scientific, geodetic, and satellite records confirm Earth is spherical. Claims of a flat disk are debunked by centuries of gravity and physics evidence.',
       insights: 'Sentiment: Subjective\nToxicity: 2%\nStance: Dogmatic\nFactual Match: 0%'
     },
@@ -123,7 +123,7 @@ const translations = {
       verdict: 'FALSE',
       type: 'Medical Misinfo',
       explanation: 'Vaccines contain biological formulas for immunity, not electronics. Ingredients list is publicly reviewed and audited by health regulators.',
-      sources: 'who.int (World Health Org), cdc.gov (Health agency), fda.gov',
+      sources: 'who.int (World Health Org), cdc.gov (Disease Control), fda.gov (Drug Administration)',
       summary: 'Rigorous regulatory analyses and audits confirm COVID-19 vaccines contain no microchips or tracking hardware. Claims are biologically and technically impossible.',
       insights: 'Sentiment: Negative\nToxicity: 4%\nStance: Alarmist\nTruthfulness: 0%'
     },
@@ -131,7 +131,7 @@ const translations = {
       verdict: 'TRUE',
       type: 'General Science',
       explanation: 'This statement is scientifically accurate and corresponds to established facts regarding thermodynamics and physics.',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      sources: 'britannica.com (Encyclopedia), chem.libretexts.org (Chemistry Lib), nature.com (Scientific Journal)',
       summary: 'Evidence perfectly supports this claim under standard environments. The statements are verifiable in classroom settings and peer-reviewed material.',
       insights: 'Sentiment: Objective\nToxicity: 0%\nStance: Informative\nEvidence Score: 95%'
     },
@@ -139,7 +139,7 @@ const translations = {
       verdict: 'MISLEADING',
       type: 'General News',
       explanation: 'The statement contains some verifiable elements but is packaged with unverified assumptions or out-of-context details.',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (News Bureau), apnews.com (Press Agency), factcheck.org (Auditor)',
       summary: 'Independent news bureaus report mixed evidence regarding this specific combination of facts. Recommend caution before sharing.',
       insights: 'Sentiment: Speculative\nToxicity: 1%\nStance: Suggestive\nVerify Rate: Medium'
     }
@@ -162,7 +162,7 @@ const translations = {
     upload_sub: "JPG, PNG, PDF సపోర్ట్ చేస్తుంది (గరిష్టంగా 10MB)",
     tips_title: "చిట్కాలు",
     tips_1: "మెరుగైన ఫలితాల కోసం నిర్దిష్ట క్లెయిమ్‌లను నమోదు చేయండి.",
-    tips_2: "మా సిస్టమ్ నమ్మదగిన మూలాలను శోధిస్తుంది మరియు వివరణాత్మక తీర్పును ఇస్తుంది.",
+    tips_2: "మా సిస్టమ్ నమ్మదగిన మూలాలను శోధిస్తుంది మరియు వివరణాत्मक తీర్పును ఇస్తుంది.",
     btn_verify: "ధృవీకరణ ప్రారంభించు",
     steps_banner: "మేము మీ క్లెయిమ్‌ను 7 సులువైన దశల్లో ధృవీకరిస్తాము. ఇది ఎలా పనిచేస్తుందో చూడటానికి \"నెక్స్ట్\" క్లిక్ చేయండి.",
     step1_title: "క్లెయిమ్ నమోదు",
@@ -178,7 +178,7 @@ const translations = {
     step4_desc: "మేము వార్తా సైట్‌లు మరియు గ్లోబల్ సాక్ష్యాల డేటాబేస్‌లలో శోధిస్తాము.",
     step5_desc: "లభించిన మూలాల యొక్క విశ్వసనీయత రేటింగ్ లెక్కించబడుతుంది.",
     step6_desc: "నిజానిజాలను అంచనా వేయడానికి క్లెయిమ్‌ను సాక్ష్యాలతో పోల్చి చూస్తాము.",
-    step7_desc: "అన్ని రకాల విశ్లేషణలు పూర్తయ్యాయి. తుది నివేదికలు కింద సిద్ధంగా ఉన్నాయి.",
+    step7_desc: "అన్ని రకాల విశ్లేషణలు పూర్తయ్యాయి. | తుది నివేదికలు కింద సిద్ధంగా ఉన్నాయి.",
     step_pill: "దశ {step}/7",
     your_claim: "మీ క్లెయిమ్",
     btn_back: "వెనుకకు",
@@ -193,7 +193,7 @@ const translations = {
     w_type: "క్లెయిమ్ రకం",
     w_reliability: "విశ్వసనీయత",
     w_explanation: "వివరణ (ఎందుకు?)",
-    w_sources: "టాప్ ఆధారాలు",
+    w_sources: "ముఖ్య ఆధారాలు",
     w_summary: "సాక్ష్యాల సారాంశం",
     w_insights: "NLP అంతర్దృష్టులు",
     sub_end: "చివరలో చూపబడుతుంది",
@@ -209,13 +209,13 @@ const translations = {
     th_actions: "చర్యలు",
     btn_reverify: "మళ్లీ ధృవీకరించు",
     view_how_title: "పనితీరు ఎలా ఉంటుంది",
-    view_how_sub: "7-దశల ఆటోమేటెడ్ క్లెయిమ్ వెరిఫಿಕேషన్ సిస్టమ్ పనితీరును అర్థం చేసుకోండి.",
+    view_how_sub: "7-దశల ఆటోమేటెడ్ క్లెయిమ్ వెరిఫికేషన్ సిస్టమ్ పనితీరును అర్థం చేసుకోండి.",
     view_about_title: "మా గురించి",
     view_about_sub: "నకిలీ వార్తల గుర్తింపు & క్లెయిమ్ వెరిఫికేషన్ సిస్టమ్.",
-    about_mission_h3: "మా లక్ష్యం",
+    about_mission_h3: "మా लक्ष्यం",
     about_mission_p: "నకిలీ సమాచారం మరియు తప్పుడు ప్రచారాల వల్ల సమాజంలో కలిగే నష్టాలను నివారించడం మా లక్ష్యం. మూలాల నుండి సమాచారాన్ని సేకరించి, అత్యంత పారదర్శకమైన సాక్ష్యాలతో వాస్తవాలను ధృవీకరించే సాంకేతికతను మేము అందిస్తున్నాము.",
     about_tech_h3: "ఉపయోగించిన సాంకేతికత",
-    about_tech_p: "ఈ వ్యవస్థ నిజసమయ వెబ్ క్రాలర్లు, సిమాంటిక్ పోలిక సూచికలు మరియు క్యూరేటెడ్ సోర్స్ డేటాబేస్ ద్వారా పనిచేస్తుంది. ఇది కేవలం నిజం/అబద్ధం అని మాత్రమే కాకుండా స్పష్టమైన వివరణాత్మక నివేదికను ఇస్తుంది.",
+    about_tech_p: "ఈ వ్యవస్థ నిజసమయ వెబ్ క్రాలర్లు, సిమాంటిక్ పోలిక సూచికలు మరియు క్యూరేటెడ్ సోర్స్ డేటాబేస్ ద్వారా పనిచేస్తుంది. ఇది కేవలం నిజం/అబద్ధం అని మాత్రమే కాకుండా స్పష్టమైన వివరణాत्मक నివేదికను ఇస్తుంది.",
     p_obj_h4: "నిష్పాక్షికత",
     p_obj_p: "విశ్వసనీయమైన మూలాల ఆధారంగా మాత్రమే వాస్తవాలను నిర్ణయిస్తాము, పక్షపాతాలకు తావులేదు.",
     p_trans_h4: "పారదర్శకత",
@@ -253,16 +253,16 @@ const translations = {
     res_flat: {
       verdict: 'అబద్ధం',
       type: 'కుట్ర సిద్ధాంతం',
-      explanation: 'ఉపग्रह చిత్రాలు మరియు భౌతిక శాస్త్ర సూత్రాలు భూమి ఒక గోళాకార రూపం (Oblate Spheroid) అని రుజువు చేస్తున్నాయి. ఫ్లాట్ ఎర్త్ వాదనలు నిరాధారమైనవి.',
-      sources: 'nasa.gov (అంతరిక్ష సంస్థ), britannica.com, physics.org',
-      summary: 'అన్ని శాస్తรีย మరియు ఉపగ్రహ రికార్డులు భూమి గుండ్రంగా ఉందని ధృవీకరించాయి. ఫ్లాట్ ఎర్త్ సిద్ధాంతం పూర్తిగా అబద్ధం అని రుజువైంది.',
+      explanation: 'ఉపగ్రహ చిత్రాలు మరియు భౌతిక శాస్త్ర సూత్రాలు భూమి ఒక గోళాకార రూపం (Oblate Spheroid) అని రుజువు చేస్తున్నాయి. ఫ్లాట్ ఎర్త్ వాదనలు నిరాధారమైనవి.',
+      sources: 'nasa.gov (అంతరిక్ష సంస్థ), britannica.com (విజ్ఞాన సర్వస్వం), physics.org',
+      summary: 'అన్ని శాస్త్రీయ మరియు ఉపగ్రహ రికార్డులు భూమి గుండ్రంగా ఉందని ధృవీకరించాయి. ఫ్లాట్ ఎర్త్ సిద్ధాంతం పూర్తిగా అబద్ధం అని రుజువైంది.',
       insights: 'సెంటిమెంట్: ఆత్మాశ్రయం\nటాక్సిసిటీ: 2%\nస్టాన్స్: కఠినమైనది\nసత్య శాతం: 0%'
     },
     res_vaccine: {
       verdict: 'అబద్ధం',
       type: 'వైద్య వక్రీకరణ',
       explanation: 'కోవిడ్ వ్యాక్సిన్లలో కేవలం రోగనిరోధక శక్తిని పెంచే జీవ రసాయనాలు మాత్రమే ఉంటాయి, ఎలక్ట్రానిక్ చిప్స్ ఉండవు. వీటి తయారీ ఫార్ములాను ప్రభుత్వాలు ధృవీకరించాయి.',
-      sources: 'who.int (ప్రపంచ ఆరోగ్య సంస్థ), cdc.gov, fda.gov',
+      sources: 'who.int (ప్రపంచ ఆరోగ్య సంస్థ), cdc.gov (వ్యాధి నియంత్రణ), fda.gov (ఔషధ నియంత్రణ)',
       summary: 'కోవిడ్-19 టీకాలలో ఎలాంటి మైక్రోచిప్స్ లేవని అంతర్జాతీయ ఆరోగ్య సంస్థల పరిశోధనల్లో తేలింది. ఇవి కేవలం అపోహలు మాత్రమే.',
       insights: 'సెంటిమెంట్: ప్రతికూలం\nటాక్సిసిటీ: 4%\nస్టాన్స్: భయాందోళన\nసత్య శాతం: 0%'
     },
@@ -270,7 +270,7 @@ const translations = {
       verdict: 'నిజం',
       type: 'సాధారణ సైన్స్',
       explanation: 'భౌతిక మరియు ఉష్ణగతిక శాస్త్రాల ప్రకారం సాధారణ వాతావరణ పీడనం వద్ద నీరు 100 డిగ్రీల సెల్సియస్ వద్ద మరుగుతుంది.',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      sources: 'britannica.com (విజ్ఞాన సర్వస్వం), chem.libretexts.org (కెమిస్ట్రీ లైబ్రరీ), nature.com (శాస్త్రీయ జర్నల్)',
       summary: 'ఈ నివేదిక భౌతిక శాస్త్ర ప్రమాణాలకు అనుగుణంగా ఉంది. ప్రయోగశాలల పరిశోధనల్లో ఇది నిరూపితమైన సత్యం.',
       insights: 'సెంటిమెంట్: లక్ష్యాత్మకం\nటాక్సిసిటీ: 0%\nస్టాన్స్: సమాచారపూరితం\nఆధారాల శాతం: 95%'
     },
@@ -278,7 +278,7 @@ const translations = {
       verdict: 'తప్పుదోవ పట్టించేది',
       type: 'సాధారణ వార్తలు',
       explanation: 'ఈ ప్రకటనలో కొన్ని నిజాలు ఉన్నప్పటికీ, అవి సందర్భం లేకుండా మరియు తప్పుడు ఊహలతో కూడి ఉన్నాయి.',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (వార్తా సంస్థ), apnews.com (ప్రెస్ ఏజెన్シー), factcheck.org (ఆడిటర్)',
       summary: 'స్వతంత్ర వార్తా ఏజెన్సీల ప్రకారం ఈ వార్తకు మిశ్రమ ఆధారాలు లభించాయి. దీనిని షేర్ చేసేటప్పుడు జాగ్రత్త వహించండి.',
       insights: 'సెంటిమెంట్: ఊహాజనితం\nటాక్సిసిటీ: 1%\nస్టాన్స్: సలహాత్మకం\nధృవీకరణ శాతం: మధ్యస్థం'
     }
@@ -393,7 +393,7 @@ const translations = {
       verdict: 'असत्य',
       type: 'साजिश का सिद्धांत',
       explanation: 'सैटेलाइट इमेजरी और भौतिकी साबित करते हैं कि पृथ्वी एक गोलाकार आकृति (Oblate Spheroid) है। फ्लैट अर्थ के दावे भौतिकी के बुनियादी नियमों का उल्लंघन करते हैं।',
-      sources: 'nasa.gov (अंतरिक्ष एजेंसी), britannica.com, physics.org',
+      sources: 'nasa.gov (अंतरिक्ष एजेंसी), britannica.com (विश्वकोश), physics.org',
       summary: 'सभी वैज्ञानिक और उपग्रह रिकॉर्ड पुष्टि करते हैं कि पृथ्वी गोल है। सपाट डिस्क होने के दावे सदियों पुराने वैज्ञानिक प्रमाणों द्वारा खारिज किए जा चुके हैं।',
       insights: 'भावना: व्यक्तिपरक\nविषाक्तता: 2%\nरुख: हठधर्मी\nसत्यता दर: 0%'
     },
@@ -401,7 +401,7 @@ const translations = {
       verdict: 'असत्य',
       type: 'चिकित्सीय गलत जानकारी',
       explanation: 'टीकों में केवल रोग प्रतिरोधक क्षमता बढ़ाने वाले जैविक सूत्र होते हैं, कोई ट्रैकिंग हार्डवेयर या चिप नहीं होती। सभी सामग्री स्वास्थ्य नियामकों द्वारा स्वीकृत हैं।',
-      sources: 'who.int (विश्व स्वास्थ्य संगठन), cdc.gov, fda.gov',
+      sources: 'who.int (विश्व स्वास्थ्य संगठन), cdc.gov (रोग नियंत्रण), fda.gov (औषध प्रशासन)',
       summary: 'नियामक विश्लेषण और वैज्ञानिक रिपोर्ट पुष्टि करते हैं कि कोविड-19 टीकों में कोई माइक्रोचिप नहीं है। ऐसे दावे पूरी तरह काल्पनिक हैं।',
       insights: 'भावना: नकारात्मक\nविषाक्तता: 4%\nरुख: भयभीत करने वाला\nसच्चाई दर: 0%'
     },
@@ -409,7 +409,7 @@ const translations = {
       verdict: 'सत्य',
       type: 'सामान्य विज्ञान',
       explanation: 'यह कथन वैज्ञानिक रूप से सही है। मानक वायुमंडलीय दबाव पर पानी 100 डिग्री सेल्सियस पर उबलता है।',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      sources: 'britannica.com (विश्वकोश), chem.libretexts.org (रसायन विज्ञान पुस्तकालय), nature.com (वैज्ञानिक पत्रिका)',
       summary: 'साक्ष्य इस दावे का पूरी तरह समर्थन करते हैं। यह कथन प्रयोगशाला और दैनिक जीवन में सत्यापित तथ्य है।',
       insights: 'भावना: निष्पक्ष\nविषाक्तता: 0%\nरुख: सूचनात्मक\nसाक्ष्य स्कोर: 95%'
     },
@@ -417,7 +417,7 @@ const translations = {
       verdict: 'भ्रामक',
       type: 'सामान्य समाचार',
       explanation: 'कथन में कुछ तथ्य सही हैं लेकिन उन्हें बिना संदर्भ या काल्पनिक अनुमानों के साथ प्रस्तुत किया गया है।',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (समाचार ब्यूरो), apnews.com (प्रेस एजेंसी), factcheck.org (ऑडिटर)',
       summary: 'स्वतंत्र समाचार ब्यूरो इस दावे पर मिश्रित रिपोर्ट देते हैं। इसे साझा करने से पहले सावधानी बरतने की सलाह दी जाती है।',
       insights: 'भावना: सट्टा\nविषाक्तता: 1%\nरुख: विचारोत्तेजक\nसत्यापन दर: मध्यम'
     }
@@ -524,7 +524,7 @@ const translations = {
       verdict: 'ಸುಳ್ಳು',
       type: 'ಬಾಹ್ಯಾಕಾಶ & ತಂತ್ರಜ್ಞಾನ',
       explanation: 'ಇಸ್ರೋದಿಂದ 2025 ರವರೆಗೆ ಯಾವುದೇ ಮಾನವ ಮಂಗಳ ಮಿಷನ್ ನಡೆದಿಲ್ಲ. ಇಸ್ರೋ ಅವರ ಪ್ರಸ್ತುತ ಮಾನವಸಹಿತ ಗಗನಯಾನ ಯೋಜನೆಯು ಭೂಮಿಯ ಕಕ್ಷೆಗೆ ಮಾತ್ರ ಸೀಮಿತವಾಗಿದೆ.',
-      sources: 'isro.gov.in (ಅಧಿಕೃತ ಬಾಹ್ಯಾಕಾಶ ಸಂಸ್ಥ), pib.gov.in (ಫ್ಯಾಕ್ಟ್ ಚೆಕ್), space.com',
+      sources: 'isro.gov.in (ಅಧಿಕೃತ ಬಾಹ್ಯಾಕಾಶ ಸಂಸ್ಥ), pib.gov.in (Fact Check), space.com',
       summary: 'ಇಸ್ರೋ ಯಾವುದೇ ಮಾನವ ಮಂಗಳ ಮಿಷನ್ ಯೋಜಿಸಿಲ್ಲ ಎಂದು ಅಧಿಕೃತ ಹೇಳಿಕೆಗಳು ಖಚಿತಪಡಿಸಿವೆ. ಸದ್ಯದ ಗಮನ ಗಗನಯಾನ ಮತ್ತು ರೋಬೋಟಿಕ್ ಪ್ರೋಬ್‌ಗಳ ಮೇಲಿದೆ.',
       insights: 'ಭಾವನೆ: ತಟಸ್ಥ\nಟಾಕ್ಸಿಸಿಟಿ: 0%\nನಿಲ್ಲುವಿಕೆ: ದೃಢ\nನಂಬಿಕೆಯ ಮಟ್ಟ: ಅತ್ಯಂತ ಹೆಚ್ಚು'
     },
@@ -532,7 +532,7 @@ const translations = {
       verdict: 'ಸುಳ್ಳು',
       type: 'ಪಿತೂರಿ ಸಿದ್ಧಾಂತ',
       explanation: 'ಉಪಗ್ರಹ ಚಿತ್ರಗಳು ಮತ್ತು ಭೌತಶಾಸ್ತ್ರದ ನಿಯಮಗಳು ಭೂಮಿ ಗೋಳಾಕಾರದಲ್ಲಿದೆ (Oblate Spheroid) ಎಂದು ಸಾಬೀತುಪಡಿಸುತ್ತವೆ. ಫ್ಲಾಟ್ ಅರ್ಥ್ ವಾದಗಳು ಭೌತಶಾಸ್ತ್ರಕ್ಕೆ ವಿರುದ್ಧವಾಗಿವೆ.',
-      sources: 'nasa.gov (ಬಾಹ್ಯಾಕಾಶ ಸಂಸ್ಥ), britannica.com, physics.org',
+      sources: 'nasa.gov (ಬಾಹ್ಯಾಕಾಶ ಸಂಸ್ಥೆ), britannica.com (ವಿಶ್ವಕೋಶ), physics.org',
       summary: 'ಎಲ್ಲಾ ವೈಜ್ಞಾನಿಕ ಮತ್ತು ಉಪಗ್ರಹ ದಾಖಲೆಗಳು ಭೂಮಿ ಗೋಳಾಕಾರದಲ್ಲಿದೆ ಎಂದು ಖಚಿತಪಡಿಸುತ್ತವೆ. ಭೂಮಿ ಚಪ್ಪಟೆಯಾಗಿದೆ ಎಂಬ ವಾದವನ್ನು ವಿಜ್ಞಾನ ಸಂಪೂರ್ಣವಾಗಿ ತಿರಸ್ಕರಿಸಿದೆ.',
       insights: 'ಭಾವನೆ: ವ್ಯಕ್ತಿನಿಷ್ಠ\nಟಾಕ್ಸಿಸಿಟಿ: 2%\nನಿಲ್ಲುವಿಕೆ: ಹಠಮಾರಿ\nಸತ್ಯದ ದರ: 0%'
     },
@@ -540,7 +540,7 @@ const translations = {
       verdict: 'ಸುಳ್ಳು',
       type: 'ವೈದ್ಯಕೀಯ ತಪ್ಪು ಮಾಹಿತಿ',
       explanation: 'ಲಸಿಕೆಗಳು ರೋಗನಿರೋಧಕ ಶಕ್ತಿಯನ್ನು ಹೆಚ್ಚಿಸುವ ಜೈವಿಕ ಅಂಶಗಳನ್ನು ಹೊಂದಿವೆಯೇ ಹೊರತು ಯಾವುದೇ ಎಲೆಕ್ಟ್ರಾನಿಕ್ ಚಿಪ್ ಅಥವಾ ಟ್ರ್ಯಾಕಿಂಗ್ ಹಾರ್ಡ್‌ವೇರ್ ಹೊಂದಿಲ್ಲ.',
-      sources: 'who.int (ವಿಶ್ವ ಆರೋಗ್ಯ ಸಂಸ್ಥೆ), cdc.gov, fda.gov',
+      sources: 'who.int (ವಿಶ್ವ ಆರೋಗ್ಯ ಸಂಸ್ಥೆ), cdc.gov (ರೋಗ ನಿಯಂತ್ರಣ), fda.gov (ಔಷಧ ಆಡಳಿತ)',
       summary: 'ಕೋವಿಡ್ ಲಸಿಕೆಗಳಲ್ಲಿ ಯಾವುದೇ ಮೈಕ್ರೋಚಿಪ್‌ಗಳಿಲ್ಲ ಎಂದು ಜಾಗತಿಕ ಆರೋಗ್ಯ ಸಂಸ್ಥೆಗಳ ವರದಿಗಳು ಸ್ಪಷ್ಟಪಡಿಸಿವೆ. ಇಂತಹ ವದಂತಿಗಳು ಕಾಲ್ಪನಿಕ ಮಾತ್ರ.',
       insights: 'ಭಾವನೆ: ನಕಾರಾತ್ಮಕ\nಟಾಕ್ಸಿಸಿಟಿ: 4%\nನಿಲ್ಲುವಿಕೆ: ಆತಂಕಕಾರಿ\nಸತ್ಯದ ದರ: 0%'
     },
@@ -548,7 +548,7 @@ const translations = {
       verdict: 'ಸತ್ಯ',
       type: 'ಸಾಮಾನ್ಯ ವಿಜ್ಞಾನ',
       explanation: 'ಈ ಹೇಳಿಕೆ ವೈಜ್ಞಾನಿಕವಾಗಿ ಸರಿಯಾಗಿದೆ. ಸಾಮಾನ್ಯ ವಾತಾವರಣದ ಒತ್ತಡದಲ್ಲಿ ನೀರು 100 ಡಿಗ್ರಿ ಸೆಲ್ಸಿಯಸ್‌ನಲ್ಲಿ ಕುದಿಯುತ್ತದೆ.',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      sources: 'britannica.com (ವಿಶ್ವಕೋಶ), chem.libretexts.org (ರಸಾಯನಶಾಸ್ತ್ರ ಗ್ರಂಥಾಲಯ), nature.com (ವೈಜ್ಞಾನಿಕ ಜರ್ನಲ್)',
       summary: 'ಸಾಕ್ಷ್ಯಗಳು ಈ ಹಕ್ಕನ್ನು ಸಂಪೂರ್ಣವಾಗಿ ಬೆಂಬಲಿಸುತ್ತವೆ. ಇದು ಶಾಲೆ ಮತ್ತು ದೈನಂದಿನ ಪ್ರಯೋಗಗಳಲ್ಲಿ ಸಾಬೀತಾಗಿರುವ ಸತ್ಯವಾಗಿದೆ.',
       insights: 'ಭಾವನೆ: ನಿಷ್ಪಕ್ಷಪಾತ\nಟಾಕ್ಸಿಸಿಟಿ: 0%\nನಿಲ್ಲುವಿಕೆ: ಮಾಹಿತಿ ನೀಡುವ\nಸಾಕ್ಷ್ಯ ಸ್ಕೋರ್: 95%'
     },
@@ -556,13 +556,13 @@ const translations = {
       verdict: 'ದಾರಿ ತಪ್ಪಿಸುವ',
       type: 'ಸಾಮಾನ್ಯ ಸುದ್ದಿ',
       explanation: 'ಈ ಹೇಳಿಕೆಯಲ್ಲಿ ಕೆಲವು ಸತ್ಯಾಂಶಗಳಿದ್ದರೂ ಸಹ, ಅವುಗಳನ್ನು ಸೂಕ್ತ ಸಂದರ್ಭ ಅಥವಾ ಪುರಾವೆಯಿಲ್ಲದೆ ಕಾಲ್ಪನಿಕವಾಗಿ ಜೋಡಿಸಲಾಗಿದೆ.',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (ಸುದ್ದಿ ಸಂಸ್ಥೆ), apnews.com (ಪ್ರೆಸ್ ಏಜೆನ್ಸಿ), factcheck.org (ಆಡಿಟರ್)',
       summary: 'ಸ್ವತಂತ್ರ ಸುದ್ದಿ ಸಂಸ್ಥೆಗಳು ಈ ಹಕ್ಕಿನ ಮೇಲೆ ಮಿಶ್ರ ವರದಿ ನೀಡುತ್ತವೆ. ಇದನ್ನು ಶೇರ್ ಮಾಡುವ ಮುನ್ನ ಎಚ್ಚರ ವಹಿಸಲು ಸೂಚಿಸಲಾಗುತ್ತದೆ.',
       insights: 'ಭಾವನೆ: ಊಹಾತ್ಮಕ\nಟಾಕ್ಸಿಸಿಟಿ: 1%\nನಿಲ್ಲುವಿಕೆ: ಸೂಚ್ಯ\nಪರಿಶೀಲನಾ ದರ: ಮಧ್ಯಮ'
     }
   },
   ml: {
-    logo_title: "வ്യാஜ வார்த்தை கண்டறிதல் <span>&</span><br>உரிமை சரிபார்ப்பு அமைப்பு",
+    logo_title: "വ്യാജ വാർത്ത കണ്ടെത്തൽ <span>&</span><br>അവകാശ പരിശോധന സംവിധാനം",
     nav_home: "ഹോം",
     nav_history: "ചരിത്രം",
     nav_how: "പ്രവർത്തന രീതി",
@@ -580,7 +580,7 @@ const translations = {
     tips_title: "നുറുങ്ങുകൾ",
     tips_1: "മികച്ച ഫലങ്ങൾക്കായി കൃത്യമായ അവകാശവാദങ്ങൾ നൽകുക.",
     tips_2: "ഞങ്ങളുടെ സിസ്റ്റം വിശ്വസനീയമായ ഉറവിടങ്ങൾ തിരയുകയും വിശദമായ വിധി നൽകുകയും ചെയ്യുന്നു.",
-    btn_verify: "പരിशोधന ആരംഭിക്കുക",
+    btn_verify: "പരിശോധന ആരംഭിക്കുക",
     steps_banner: 'ഞങ്ങൾ 7 ലളിതമായ ഘട്ടങ്ങളിലൂടെ നിങ്ങളുടെ അവകാശവാദം പരിശോധിക്കുന്നു. ഇത് എങ്ങനെ പ്രവർത്തിക്കുന്നുവെന്ന് കാണാൻ "നെക്സ്റ്റ്" ക്ലിക്ക് ചെയ്യുക.',
     step1_title: "അവകാശവാദം നൽകുക",
     step2_title: "ടെക്സ്റ്റ് എക്സ്ട്രാക്ഷൻ",
@@ -628,7 +628,7 @@ const translations = {
     view_how_title: "പ്രവർത്തന രീതി",
     view_how_sub: "സ്വയമേവയുള്ള 7-ഘട്ട അവകാശ പരിശോധന പ്രക്രിയ മനസ്സിലാക്കുക.",
     view_about_title: "ഞങ്ങളെക്കുറിച്ച്",
-    view_about_sub: "വ્યાജ വാർത്ത കണ്ടെത്തലും അവകാശ പരിശോധന സംവിധാനവും.",
+    view_about_sub: "വ്യാജ വാർത്ത കണ്ടെത്തലും അവകാശ പരിശോധന സംവിധാനവും.",
     about_mission_h3: "ഞങ്ങളുടെ ദൗത്യം",
     about_mission_p: "തെറ്റായ വിവരങ്ങൾ സമൂഹത്തെ ദോഷകരമായി ബാധിക്കുന്നു. ഔദ്യോഗിക ഉറവിടങ്ങളുമായി വിവരങ്ങൾ താരതമ്യം ചെയ്ത് സുതാര്യമായ പരിശോധനാ ഫലം നൽകുകയാണ് ഞങ്ങളുടെ ലക്ഷ്യം.",
     about_tech_h3: "ഉപയോഗിച്ച സാങ്കേതികവിദ്യ",
@@ -641,7 +641,7 @@ const translations = {
     p_speed_p: "NLP സാങ്കേതികവിദ്യയുടെ സഹായത്തോടെ സെക്കൻഡുകൾക്കുള്ളിൽ വിവരങ്ങൾ സ്കാൻ ചെയ്ത് ഫലം നൽകുന്നു.",
 
     // History claims
-    claim_h1: "ഐഎസ്ആർഒ 2025-ൽ മനുഷ്യനെ വിജയകരമായി ചൊവ്വയിലേക്ക് അയച്ചു.",
+    claim_h1: "icon-isro.png ഐഎസ്ആർഒ 2025-ൽ മനുഷ്യനെ വിജയകരമായി ചൊവ്വയിലേക്ക് അയച്ചു.",
     claim_h2: "ഉയർന്ന പ്രദേശങ്ങളിൽ വെള്ളം തിളയ്ക്കുന്ന താപനില കുറയുന്നു.",
     claim_h3: "പുതിയ കോവിഡ് വകഭേദം നിലവിലുള്ള എല്ലാ പ്രതിരോധശേഷിയെയും പ്രതിരോധിക്കുന്നു.",
     claim_h4: "വ്യാഴത്തിൽ അന്യഗ്രഹ നഗരങ്ങൾ കണ്ടെത്തിയതായി നാസ സ്ഥിരീകരിച്ചു.",
@@ -663,15 +663,15 @@ const translations = {
       verdict: 'വ്യാജം',
       type: 'ബഹിരാകാശം & ടെക്',
       explanation: '2025 വരെ ഐഎസ്ആർഒ മനുഷ്യ ചൊവ്വാ ദൗത്യങ്ങൾ നടത്തിയിട്ടില്ല. ഐഎസ്ആർഒയുടെ നിലവിലെ മനുഷ്യ ബഹിരാകാശ ദൗത്യമായ ഗഗൻയാൻ ഭൂമിയുടെ ഭ്രമണപഥത്തിലേക്ക് മാത്രമുള്ളതാണ്.',
-      sources: 'isro.gov.in (ഔദ്യോഗിക സ്പേസ് ഏജൻസി), pib.gov.in (ഫാക്റ്റ് ചെക്ക്), space.com',
-      summary: 'ഐഎസ്ആർഒ ചൊവ്വയിലേക്ക് മനുഷ്യനെ അയക്കുന്ന യാതൊരു ദൗത്യവും പദ്ധതിയിട്ടിട്ടില്ലെന്ന് വ്യക്തമാക്കുന്നു. നിലവിലത്തെ ശ്രദ്ധ മനുഷ്യനെ ഭ്രമണപഥത്തിൽ എത്തിക്കുന്നതിലാണ്.',
+      sources: 'isro.gov.in (ഔദ്യോഗിക സ്പേസ് ഏജൻസി), pib.gov.in (Fact Check), space.com',
+      summary: 'AIഎസ്ആർഒ ചൊവ്വയിലേക്ക് മനുഷ്യനെ അയക്കുന്ന യാതൊരു ദൗത്യവും പദ്ധതിയിട്ടിട്ടില്ലെന്ന് വ്യക്തമാക്കുന്നു. നിലവിലത്തെ ശ്രദ്ധ മനുഷ്യനെ ഭ്രമണപഥത്തിൽ എത്തിക്കുന്നതിലാണ്.',
       insights: 'വികാരം: നിഷ്പക്ഷം\nവിഷാംശം: 0%\nനിലപാട്: ശക്തം\nവിശ്വാസ്യത: വളരെ ഉയർന്നത്'
     },
     res_flat: {
       verdict: 'വ്യാജം',
       type: 'ഗൂഢാലോചന സിദ്ധാന്തം',
       explanation: 'ഭൂമി വൃത്താകൃതിയിലുള്ള പന്തിന്റെ ആകൃതിയിലാണ് (Oblate Spheroid) എന്ന് ഉപഗ്രഹ ചിത്രങ്ങളും ഭൗതികശാസ്ത്രവും തെളിയിക്കുന്നു. ഫ്ലാറ്റ് എർത്ത് വാദങ്ങൾ ഭൗതികശാസ്ത്ര നിയമങ്ങൾക്ക് എതിരാണ്.',
-      sources: 'nasa.gov (സ്പേസ് ഏജൻസി), britannica.com, physics.org',
+      sources: 'nasa.gov (സ്പേസ് ഏജൻസി), britannica.com (വിജ്ഞാനകോശം), physics.org',
       summary: 'ശാസ്ത്രീയമായ തെളിവുകളും ഉപഗ്രഹ റെക്കോർഡുകളും ഭൂമി ഉരുണ്ടതാണെന്ന് സാക്ഷ്യപ്പെടുത്തുന്നു. ഭൂമി പരന്നതാണ് എന്ന വാദം ശാസ്ത്രം തള്ളിക്കളഞ്ഞിട്ടുള്ളതാണ്.',
       insights: 'വികാരം: ആത്മനിഷ്ഠം\nവിഷാംശം: 2%\nനിലപാട്: പിടിവാശി\nസത്യാവസ്ഥ: 0%'
     },
@@ -679,7 +679,7 @@ const translations = {
       verdict: 'വ്യാജം',
       type: 'മെഡിക്കൽ തെറ്റായ വിവരം',
       explanation: 'വാക്സിനുകളിൽ പ്രതിരോധശേഷിക്കുള്ള ഘടകങ്ങൾ മാത്രമേയുള്ളൂ, യാതൊരുവിധ ചിപ്പുകളോ ട്രാക്കിംഗ് ഘടകങ്ങളോ ഇല്ല. ചേരുവകൾ ഔദ്യോഗികമായി സാക്ഷ്യപ്പെടുത്തിയതാണ്.',
-      sources: 'who.int (ലോകാരോഗ്യ സംഘടന), cdc.gov, fda.gov',
+      sources: 'who.int (ലോകാരോഗ്യ സംഘടന), cdc.gov (രോഗ നിയന്ത്രണം), fda.gov (ഔഷധ നിയന്ത്രണം)',
       summary: 'കോവിഡ് വാക്സിനുകളിൽ മൈക്രോചിപ്പുകൾ ഇല്ലെന്ന് റെഗുലേറ്ററി പരിശോധനകളിലൂടെ തെളിഞ്ഞിട്ടുള്ളതാണ്. ഇത്തരം വാദങ്ങൾ വെറും കിംവദന്തികൾ മാത്രമാണ്.',
       insights: 'വികാരം: നെഗറ്റീവ്\nവിഷാംശം: 4%\nനിലപാട്: പരിഭ്രാന്തി ജനിപ്പിക്കുന്നത്\nസത്യാവസ്ഥ: 0%'
     },
@@ -687,7 +687,7 @@ const translations = {
       verdict: 'ശരി',
       type: 'ജനറൽ സയൻസ്',
       explanation: 'ഈ പ്രസ്താവന ശാസ്ത്രീയമായി ശരിയാണ്. സാധാരണ അന്തരീക്ഷ മർദ്ദത്തിൽ ജലം 100 ഡിഗ്രി സെൽഷ്യസിൽ തിളയ്ക്കുന്നു.',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      sources: 'britannica.com (വിജ്ഞാനകോശം), chem.libretexts.org (രസതന്ത്ര ലൈബ്രറി), nature.com (ശാസ്ത്രീയ ജേണൽ)',
       summary: 'തെളിവുകൾ ഈ വാദത്തെ പൂർണ്ണമായി പിന്തുണയ്ക്കുന്നു. ഇത് സ്കൂളുകളിലും പരീക്ഷണശാലകളിലും തെളിയിക്കപ്പെട്ട വസ്തുതയാണ്.',
       insights: 'വികാരം: നിഷ്പക്ഷം\nവിഷാംശം: 0%\nനിലപാട്: വിവരദായകം\nതെളിവ് സ്കോർ: 95%'
     },
@@ -695,7 +695,7 @@ const translations = {
       verdict: 'തെറ്റിദ്ധരിപ്പിക്കുന്നത്',
       type: 'ജനറൽ വാർത്ത',
       explanation: 'പ്രസ്താവനയിൽ ചില വിവരങ്ങൾ ശരിയാണെങ്കിലും, അവ യഥാർത്ഥ സാഹചര്യത്തിൽ നിന്നും മാറ്റി തെറ്റിദ്ധരിപ്പിക്കുന്ന രീതിയിൽ ചേർത്തതാണ്.',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (വാർത്താ ബ്യൂറോ), apnews.com (പ്രസ്സ് ഏജൻസി), factcheck.org (ഓഡിറ്റർ)',
       summary: 'സ്വതന്ത്ര വാർത്താ ഏജൻസികൾ ഈ അവകാശവാദത്തെക്കുറിച്ച് സമ്മിശ്ര റിപ്പോർട്ട് നൽകുന്നു. ഷെയർ ചെയ്യും മുൻപ് ജാഗ്രത പാലിക്കുക.',
       insights: 'വികാരം: അനുമാനപരമായത്\nവിഷാംശം: 1%\nനിലപാട്: നിർദ്ദേശിക്കുന്ന\nപരിശോധന നിരക്ക്: ഇടത്തരം'
     }
@@ -810,7 +810,7 @@ const translations = {
       verdict: 'FALSO',
       type: 'Conspiración',
       explanation: 'Las imágenes satelitales y las leyes de la física demuestran que la Tierra es un esferoide oblato. Las reclamaciones de la Tierra plana son falsas.',
-      sources: 'nasa.gov (Agencia Espacial), britannica.com, physics.org',
+      sources: 'nasa.gov (Agencia Espacial), britannica.com (Enciclopedia), physics.org',
       summary: 'Todos los registros científicos demuestran que la Tierra es redonda. Las afirmaciones sobre un disco plano están refutadas científicamente.',
       insights: 'Sentimiento: Subjetivo\nToxicidad: 2%\nPostura: Dogmática\nSinceridad: 0%'
     },
@@ -818,7 +818,7 @@ const translations = {
       verdict: 'FALSO',
       type: 'Medicina Falsa',
       explanation: 'Las vacunas contienen sustancias biológicas para la inmunidad, no dispositivos de rastreo o chips. Todos los ingredientes están regulados oficialmente.',
-      sources: 'who.int (Organización Mundial de la Salud), cdc.gov, fda.gov',
+      sources: 'who.int (Organización Mundial de la Salud), cdc.gov (Control de Enfermedades), fda.gov (Administración de Medicamentos)',
       summary: 'Los análisis regulatorios confirman que las vacunas de COVID-19 no contienen microchips. Tales afirmaciones son imposibles biológica y técnicamente.',
       insights: 'Sentimiento: Negativo\nToxicidad: 4%\nPostura: Alarmista\nVeracidad: 0%'
     },
@@ -826,7 +826,7 @@ const translations = {
       verdict: 'VERDADERO',
       type: 'Ciencia General',
       explanation: 'Esta declaración es correcta según la termodinámica. A presión atmosférica estándar, el agua hierve a 100 grados Celsius.',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      sources: 'britannica.com (Enciclopedia), chem.libretexts.org (Biblioteca Química), nature.com (Revista Científica)',
       summary: 'La evidencia científica respalda completamente esta afirmación, la cual es un hecho probado.',
       insights: 'Sentimiento: Objetivo\nToxicidad: 0%\nPostura: Informativa\nEvidencia: 95%'
     },
@@ -834,7 +834,7 @@ const translations = {
       verdict: 'ENGAÑOSO',
       type: 'Noticias Generales',
       explanation: 'La declaración contiene verdades parciales pero descontextualizadas o mezcladas con suposiciones no verificadas.',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (Agencia de Noticias), apnews.com (Prensa), factcheck.org (Auditor)',
       summary: 'Las agencias de noticias independientes reportan evidencias mixtas sobre esta combinación de hechos. Se recomienda precaución.',
       insights: 'Sentimiento: Especulativo\nToxicidad: 1%\nPostura: Sugestiva\nVerificación: Media'
     }
@@ -916,7 +916,7 @@ const translations = {
     p_trans_h4: "Transparence",
     p_trans_p: "Toutes les citations de sources, les mesures de confiance et les correspondances textuelles sont exposées.",
     p_speed_h4: "Rapidité & Précision",
-    p_speed_p: "Les flux NLP analysent, évaluent et formulent les résultats en quelques secondes.",
+    p_speed_p: "Les flujos NLP analysent, évaluent et formulent les résultats en quelques secondes.",
 
     // History claims
     claim_h1: "L'ISRO a envoyé avec succès des humains sur Mars en 2025.",
@@ -949,7 +949,7 @@ const translations = {
       verdict: 'FAUX',
       type: 'Complot',
       explanation: 'L\'imagerie satellite et la physique prouvent que la Terre est un sphéroïde oblat. Les affirmations sur la Terre plate sont fausses.',
-      sources: 'nasa.gov (Agence Spatiale), britannica.com, physics.org',
+      sources: 'nasa.gov (Agence Spatiale), britannica.com (Encyclopédie), physics.org',
       summary: 'Tous les relevés scientifiques démontrent que la Terre est ronde. Les affirmations de disque plat sont réfutées scientifiquement.',
       insights: 'Sentiment: Subjectif\nToxicité: 2%\nPosition: Dogmatique\nSincérité: 0%'
     },
@@ -957,7 +957,7 @@ const translations = {
       verdict: 'FAUX',
       type: 'Médecine fausse',
       explanation: 'Les vaccins contiennent des solutions d\'immunité biologique et non du matériel électronique ou des puces. Ingrédients audités par l\'OMS.',
-      sources: 'who.int (Organisation Mondiale de la Santé), cdc.gov, fda.gov',
+      sources: 'who.int (Organisation Mondiale de la Santé), cdc.gov (Contrôle des Maladies), fda.gov (Administration des Médicaments)',
       summary: 'Les analyses confirment que les vaccins COVID-19 ne contiennent aucun composant électronique. C\'est scientifiquement impossible.',
       insights: 'Sentiment: Négatif\nToxicité: 4%\nPosition: Alarmiste\nVéracité: 0%'
     },
@@ -965,7 +965,7 @@ const translations = {
       verdict: 'VRAI',
       type: 'Science générale',
       explanation: 'Cette déclaration est scientifiquement exacte. À pression standard, l\'eau bout à 100 degrés Celsius.',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      sources: 'britannica.com (Encyclopédie), chem.libretexts.org (Bibliothèque de Chimie), nature.com (Revue Scientifique)',
       summary: 'Les preuves scientifiques soutiennent cette affirmation qui constitue un fait avéré.',
       insights: 'Sentiment: Objectif\nToxicité: 0%\nPosition: Informative\nPreuve: 95%'
     },
@@ -973,7 +973,7 @@ const translations = {
       verdict: 'TROMPEUR',
       type: 'Actualités générales',
       explanation: 'La déclaration contient des éléments de vérité, mais sortis de leur contexte ou emballés avec des hypothèses erronées.',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (Bureau d\'information), apnews.com (Presse), factcheck.org (Auditeur)',
       summary: 'Les agences de presse rapportent des preuves mitigées sur cette déclaration. Prudence avant de partager.',
       insights: 'Sentiment: Spéculatif\nToxicity: 1%\nPosition: Suggestive\nVérification: Moyenne'
     }
@@ -1088,7 +1088,7 @@ const translations = {
       verdict: 'FALSCH',
       type: 'Verschwörung',
       explanation: 'Satellitenbilder und die Gesetze der Physik beweisen, dass die Erde ein Rotationsellipsoid ist. Flat Earth Behauptungen sind naturwissenschaftlich falsch.',
-      sources: 'nasa.gov (Raumfahrtbehörde), britannica.com, physics.org',
+      sources: 'nasa.gov (Raumfahrtbehörde), britannica.com (Enzyklopädie), physics.org',
       summary: 'Alle Aufzeichnungen zeigen, dass die Erde rund ist. Behauptungen über eine flache Scheibe sind wissenschaftlich widerlegt.',
       insights: 'Stimmung: Subjektiv\nToxizität: 2%\nHaltung: Dogmatisch\nWahrheitsgehalt: 0%'
     },
@@ -1096,7 +1096,7 @@ const translations = {
       verdict: 'FALSCH',
       type: 'Medizinische Falschinfo',
       explanation: 'Impfstoffe enthalten rein biologische Lösungen zur Immunisierung und keine Ortungstechnologie oder Chips. Die Inhaltsstoffe sind offiziell registriert.',
-      sources: 'who.int (Weltgesundheitsorganisation), cdc.gov, fda.gov',
+      sources: 'who.int (Weltgesundheitsorganisation), cdc.gov (Krankheitskontrolle), fda.gov (Arzneimittelzulassung)',
       summary: 'Wissenschaftliche Berichte bestätigen, dass COVID-19-Impfstoffe keine Mikrochips enthalten. Solche Behauptungen sind technisch unmöglich.',
       insights: 'Stimmung: Negativ\nToxizität: 4%\nHaltung: Alarmierend\nWahrheitsgehalt: 0%'
     },
@@ -1104,7 +1104,7 @@ const translations = {
       verdict: 'WAHR',
       type: 'Allgemeine Wissenschaft',
       explanation: 'Diese Aussage ist thermodynamisch korrekt. Unter Standard-Luftdruck siedet Wasser bei 100 Grad Celsius.',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      sources: 'britannica.com (Enzyklopädie), chem.libretexts.org (Chemie-Bibliothek), nature.com (Wissenschaftsjournal)',
       summary: 'Die Beweislage stützt diese Behauptung vollständig. Es ist eine experimentell verifizierte Tatsache.',
       insights: 'Stimmung: Objektiv\nToxizität: 0%\nHaltung: Informativ\nBeweiswert: 95%'
     },
@@ -1112,7 +1112,7 @@ const translations = {
       verdict: 'IRREFÜHREND',
       type: 'Allgemeine Nachrichten',
       explanation: 'Die Aussage enthält einige wahre Aspekte, ist jedoch ohne Kontext dargestellt und mit ungeprüften Annahmen vermischt.',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (Nachrichtenagentur), apnews.com (Presse), factcheck.org (Prüfer)',
       summary: 'Unabhängige Presseagenturen liefern gemischte Berichte über diese Kombination von Fakten. Vorsicht beim Teilen.',
       insights: 'Stimmung: Spekulativ\nToxizität: 1%\nHaltung: Suggestiv\nÜberprüfungsrate: Mittel'
     }
@@ -1188,7 +1188,7 @@ const translations = {
     about_mission_h3: "எங்கள் நோக்கம்",
     about_mission_p: "தவறான தகவல்கள் சமூகத்தை சீர்குலைக்கின்றன. அதிகாரப்பூர்வ ஆதாரங்களுடன் தகவல்களை ஒப்பிட்டு சரிபார்த்து பப்ளிக் தணிக்கை வழங்குவதே எங்கள் நோக்கம்.",
     about_tech_h3: "முக்கிய தொழில்நுட்பங்கள்",
-    about_tech_p: "இந்த அமைப்பு நிகழ்நேர வலை கிராலர்கள், சொற்பொருள் ஒப்பீடுகள் மற்றும் நம்பகமான ஆதாரங்களின் தரவுத்தளத்தை அடிப்படையாகக் கொண்டு செயல்படுகிறது.",
+    about_tech_p: "இந்த அமைப்பு நிகழ்நேர வலை கிராலர்கள், சொற்பொருள் ஒப்பீடுகள் এবং நம்பகமான ஆதாரங்களின் தரவுത്തளத்தை அடிப்படையாகக் கொண்டு செயல்படுகிறது.",
     p_obj_h4: "நடுநிலைமை",
     p_obj_p: "முடிவுகள் அதிகாரப்பூர்வ ஆதாரங்களின் சான்றுகளின் அடிப்படையில் மட்டுமே எடுக்கப்படுகின்றன.",
     p_trans_h4: "வெளிப்படைத்தன்மை",
@@ -1220,14 +1220,14 @@ const translations = {
       type: 'விண்வெளி & தொழில்',
       explanation: '2025 வரை இஸ்ரோவால் மனித செவ்வாய் பயணம் எதுவும் மேற்கொள்ளப்படவில்லை. இஸ்ரோவின் தற்போதைய மனித விண்வெளித் திட்டம் ககன்யான் ஆகும், இது புவி வட்டப்பாதையுடன் மட்டுமே தொடர்புடையது.',
       sources: 'isro.gov.in (அதிகாரப்பூர்வ விண்வெளி நிறுவனம்), pib.gov.in (Fact Check), space.com',
-      summary: 'இஸ்ரோ செவ்வாய் கிரகத்திற்கு மனிதர்களை அனுப்பும் திட்டம் எதுவும் இல்லை என்று அதிகாரப்பூர்வ அறிக்கைகள் உறுதிப்படுத்துகின்றன. தற்போதைய கவனம் புவி வட்டப்பாதை மற்றும் ரோபோடிக் திட்டங்கள் ஆகும்.',
+      summary: 'இஸ்ரோ செவ்வாய் கிரகத்திற்கு மனிதர்களை அனுப்பும் திட்டம் எதுவும் இல்லை என்று அதிகாரப்பூர்வ அறிக்கைகள் உறுதிப்படுத்துகின்றன. தற்போதைய கவனம் புವಿ வட்டப்பாதை மற்றும் ரோபோடிக் திட்டங்கள் ஆகும்.',
       insights: 'உணர்வு: நடுநிலை\nநச்சுத்தன்மை: 0%\nநிலைப்பாடு: உறுதியானது\nநம்பகத்தன்மை: மிக அதிகம்'
     },
     res_flat: {
       verdict: 'பொய்',
       type: 'சதி கோட்பாடு',
-      explanation: 'செயற்கைக்கோள் படங்கள் மற்றும் இயற்பியல் விதிகள் பூமி ஒரு கோள வடிவத்தில் (Oblate Spheroid) உள்ளது என்பதை நிரூபிக்கின்றன. பிளாட் எர்த் வாதங்கள் இயற்பியலுக்கு எதிரானவை.',
-      sources: 'nasa.gov (விண்வெளி நிறுவனம்), britannica.com, physics.org',
+      explanation: 'செயற்கைக்கோள் படங்கள் மற்றும் இயற்பியல் விதிகள் பூಮಿ ஒரு கோள வடிவத்தில் (Oblate Spheroid) உள்ளது என்பதை நிரூபிக்கின்றன. பிளாட் எர்த் வாதங்கள் இயற்பியலுக்கு எதிரானவை.',
+      sources: 'nasa.gov (விண்வெளி நிறுவனம்), britannica.com (கலைக்களஞ்சியம்), physics.org',
       summary: 'பூமி உருண்டையானது என்பதை அனைத்து அறிவியல் மற்றும் செயற்கைக்கோள் பதிவுகளும் உறுதிப்படுத்துகின்றன. பூமி தட்டையானது என்ற கூற்றை அறிவியல் முற்றிலும் நிராகரிக்கிறது.',
       insights: 'உணர்வு: அகநிலை\nநச்சுத்தன்மை: 2%\nநிலைப்பாடு: பிடிவாதமானது\nஉண்மை விகிதம்: 0%'
     },
@@ -1235,23 +1235,23 @@ const translations = {
       verdict: 'பொய்',
       type: 'மருத்துவ தவறான தகவல்',
       explanation: 'தடுப்பூசிகளில் நோய் எதிர்ப்பு சக்தியை அதிகரிக்கும் உயிரியல் கூறுகள் மட்டுமே உள்ளன, எலக்ட்ரானிக் சிப் அல்லது டிராக்கிங் கருவிகள் எதுவும் இல்லை.',
-      sources: 'who.int (உலக சுகாதார அமைப்பு), cdc.gov, fda.gov',
+      sources: 'who.int (உலக சுகாதார அமைப்பு), cdc.gov (நோய் கட்டுப்பாடு), fda.gov (மருந்து நிர்வாகம்)',
       summary: 'கோவிட் தடுப்பூசிகளில் மைக்ரோசிப்கள் இல்லை என்று உலகளாவிய சுகாதார அமைப்புகளின் அறிக்கைகள் தெளிவுபடுத்துகின்றன. இத்தகைய வதந்திகள் கற்பனையானவை மட்டுமே.',
       insights: 'உணர்வு: எதிர்மறை\nநச்சுத்தன்மை: 4%\nநிலைப்பாடு: பயமுறுத்துவது\nஉண்மை விகிதம்: 0%'
     },
     res_boil: {
       verdict: 'உண்மை',
       type: 'பொது அறிவியல்',
-      explanation: 'இந்த கூற்று அறிவியல் பூர்வமாக சரியானது. சாதாரண வளிமண்டல அழுத்தத்தில் நீர் 100 டிகிரி செல்சியஸில் கொதிக்கிறது.',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
-      summary: 'ஆதாரங்கள் இந்த கூற்றை முழுமையாக ஆதரிக்கின்றன. இது பள்ளி மற்றும் தினசரி சோதனைகளில் நிரூபிக்கப்பட்ட உண்மையாகும்.',
+      explanation: 'இந்த கூற்று அறிவியல் பூர்வமாக சரியானது. సాధారణ வளிமண்டல அழுத்தத்தில் நீர் 100 டிகிரி செல்சியஸில் கொதிக்கிறது.',
+      sources: 'britannica.com (கலைக்களஞ்சியம்), chem.libretexts.org (வேதியியல் நூலகம்), nature.com (அறிவியல் இதழ்)',
+      summary: 'ஆதாரங்கள் இந்த கூற்றை முழுமையாக ஆதரிக்கின்றன. ಇದು பள்ளி மற்றும் தினசரி சோதனைகளில் நிரூபிக்கப்பட்ட உண்மையாகும்.',
       insights: 'உணர்வு: நடுநிலை\nநச்சுத்தன்மை: 0%\nநிலைப்பாடு: தகவல் அளிப்பது\nஆதார மதிப்பெண்: 95%'
     },
     res_fallback: {
       verdict: 'தவறானது',
       type: 'பொதுவான செய்திகள்',
       explanation: 'இந்த கூற்றில் சில உண்மைகள் இருந்தாலும், அவை சரியான பின்னணி அல்லது ஆதாரங்கள் இல்லாமல் கற்பனையாக இணைக்கப்பட்டுள்ளன.',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (செய்தி நிறுவனம்), apnews.com (செய்தி நிறுவனம்), factcheck.org (தணிக்கையாளர்)',
       summary: 'சுயாதீன செய்தி நிறுவனங்கள் இந்த கூற்றின் மீது கலவையான அறிக்கைகளை வழங்குகின்றன. இதை பகிரும் முன் எச்சரிக்கையாக இருக்க அறிவுறுத்தப்படுகிறது.',
       insights: 'உணர்வு: ஊகமானது\nநச்சுத்தன்மை: 1%\nநிலைப்பாடு: பரிந்துரைக்கும்\nசரிபார்ப்பு விகிதம்: நடுத்தரம்'
     }
@@ -1366,7 +1366,7 @@ const translations = {
       verdict: '虚偽',
       type: '陰謀論',
       explanation: '衛星写真や物理法則により、地球が扁平球体（Oblate Spheroid）であることが証明されています。地球平面説は、科学的事実に反しています。',
-      sources: 'nasa.gov (宇宙機関), britannica.com, physics.org',
+      sources: 'nasa.gov (宇宙機関), britannica.com (百科事典), physics.org',
       summary: 'すべての科学的記録が、地球が丸いことを裏付けています。平面説は物理学の法則によって否定されています。',
       insights: '感情: 主観的\n有害性: 2%\nスタンス: 教条的\n真実性: 0%'
     },
@@ -1374,7 +1374,7 @@ const translations = {
       verdict: '虚偽',
       type: '医学的誤情報',
       explanation: 'ワクチンには免疫反応を促す成分が含まれていますが、マイクロチップなどの電子部品は含まれていません。成分は監査機関によって公開されています。',
-      sources: 'who.int (世界保健機関), cdc.gov, fda.gov',
+      sources: 'who.int (世界保健機関), cdc.gov (疾病対策センター), fda.gov (食品医薬品局)',
       summary: '監査報告書により、ワクチンにチップが混入していないことが証明されています。このような噂は技術的・生物学的に不可能です。',
       insights: '感情: 否定的な偏り\n有害性: 4%\nスタンス: 煽動的\n真実性: 0%'
     },
@@ -1382,15 +1382,15 @@ const translations = {
       verdict: '真実',
       type: '一般科学',
       explanation: 'この主張は科学的に正確です。標準気圧下で水は100℃で沸騰します。',
-      sources: 'britannica.com, chem.libretexts.org, nature.com',
+      sources: 'britannica.com (百科事典), chem.libretexts.org (化学ライブラリ), nature.com (科学ジャーナル)',
       summary: '科学的証拠がこの主張を裏付けています。これは実証済みの事実です。',
-      insights: '感情: 客観的\n有害性: 0%\nスタンス: 情報的\n証拠スコア: 95%'
+      insights: '感情: 客観的\n有害性: 0%\nスタンス: 情報的\n証跡スコア: 95%'
     },
     res_fallback: {
       verdict: '誤解を招く',
       type: '一般ニュース',
       explanation: '一部の事実は正しいものの、文脈を無視した仮定や未検証の情報と組み合わせて主張されています。',
-      sources: 'reuters.com, apnews.com, factcheck.org',
+      sources: 'reuters.com (報道機関), apnews.com (通信社), factcheck.org (検証機関)',
       summary: '独立した報道機関は、この情報の組み合わせに対して複合的な報告を行っています。共有する際は注意が必要です。',
       insights: '感情: 推測的\n有害性: 1%\nスタンス: 暗示的\n検証率: 中程度'
     }
@@ -1589,7 +1589,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (tabType === 'image') {
         textarea.placeholder = t.tab_image === "Image" ? "Upload an image using the buttons below to extract claim text..." : "చిత్రం నుండి టెక్స్ట్ సేకరించడానికి కింద బಟన్ క్లిక్ చేసి అప్‌లోడ్ చేయండి...";
       } else if (tabType === 'pdf') {
-        textarea.placeholder = t.tab_pdf === "PDF" ? "Upload a PDF using the buttons below to extract claim text..." : "PDF నుండి టెక్స్ట్ సేకరించడానికి కింద బಟన్ క్లిక్ చేసి అప్‌లోಡ್ చేయండి...";
+        textarea.placeholder = t.tab_pdf === "PDF" ? "Upload a PDF using the buttons below to extract claim text..." : "PDF నుండి టెక్സ്റ്റ് సేకరించడానికి కింద బಟన్ క్లిక్ చేసి అప్‌లోడ్ చేయండి...";
       }
     });
   });
@@ -2049,7 +2049,7 @@ document.addEventListener('DOMContentLoaded', () => {
       case 4:
         return {
           title: t.step4_title,
-          summaryText: t.currentLang === 'te' ? 'వివిధ వెబ్ క్రాలర్లు మరియు రిజిస్ట్రీలలో శோధిస్తోంది.' : 'Generating query keywords and searching fact-checking APIs.',
+          summaryText: t.currentLang === 'te' ? 'వివిధ వెబ్ క్రాలర్లు మరియు రిజిస్ట్రీలలో శోధిస్తోంది.' : 'Generating query keywords and searching fact-checking APIs.',
           desc: t.step4_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>`,
           illustration: `
@@ -2519,7 +2519,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Refresh active results card if unlocked
-    if (state.isVerifying && state.currentStep === 7 && state.verdictData) {
+    const firstWidget = document.getElementById('widget-verdict');
+    if (firstWidget && !firstWidget.classList.contains('locked') && state.verdictData) {
       revealFinalVerdict();
     }
 
