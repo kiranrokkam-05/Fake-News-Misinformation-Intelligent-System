@@ -101,18 +101,16 @@ header {
   background-color: var(--bg-card);
 }
 
-.logo-text h1 {
-  font-family: var(--font-family-title);
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #1e293b;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.logo-text {
+  max-width: 320px;
 }
 
-.logo-text h1 span {
-  color: var(--success);
+.logo-text h1 {
+  font-family: var(--font-family-title);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.25;
 }
 
 .header-nav {
@@ -1542,6 +1540,7 @@ footer {
 .lang-selector-btn {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   background-color: var(--bg-card);
   border: none;
@@ -1554,6 +1553,7 @@ footer {
   box-shadow: var(--shadow-outset-sm);
   transition: var(--transition);
   outline: none;
+  min-width: 155px;
 }
 
 .lang-selector-btn:hover {
