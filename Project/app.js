@@ -1869,8 +1869,8 @@ document.addEventListener('DOMContentLoaded', () => {
       principleItems[2].querySelector('p').textContent = t.p_speed_p;
     }
 
-    // Refresh active step render
-    renderStepBody(state.currentStep);
+    // Refresh active step and navigation buttons in the new language
+    goToStep(state.currentStep);
   }
 
   // --- LASER SCAN LINE EFFECTS FOR STEP 2 illustration ---
