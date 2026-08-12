@@ -47,17 +47,23 @@
         </svg>
         About Us
       </a>
-    </nav>
 
     <div class="header-right">
-      <div class="lang-selector">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
-        </svg>
-        <span>English</span>
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width:12px; height:12px; stroke-width:3;">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
-        </svg>
+      <div class="lang-selector-container">
+        <button class="lang-selector-btn" id="lang-btn">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="globe-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+          </svg>
+          <span id="current-lang">English</span>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="chevron-icon" style="width:12px; height:12px; stroke-width:3;">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <div class="lang-option active" data-lang="en">English</div>
+          <div class="lang-option" data-lang="te">తెలుగు (Telugu)</div>
+          <div class="lang-option" data-lang="hi">हिन्दी (Hindi)</div>
+        </div>
       </div>
     </div>
   </header>
@@ -97,8 +103,8 @@
         </div>
 
         <div class="textarea-container">
-          <textarea class="claim-textarea" id="claim-text" placeholder="Type your claim statement here..." maxlength="2000">ISRO successfully sent humans to Mars in 2025.</textarea>
-          <div class="char-counter" id="char-counter">45/2000</div>
+          <textarea class="claim-textarea" id="claim-text" placeholder="Type your claim statement here..." maxlength="2000"></textarea>
+          <div class="char-counter" id="char-counter">0/2000</div>
         </div>
 
         <div class="file-upload-section">
@@ -244,7 +250,7 @@
               
               <div class="your-claim-box">
                 <h4>Your Claim</h4>
-                <p id="claim-display-card">ISRO successfully sent humans to Mars in 2025.</p>
+                <p id="claim-display-card">No claim entered yet. Type above to start.</p>
               </div>
             </div>
           </div>
@@ -455,38 +461,7 @@
             </tr>
           </thead>
           <tbody id="history-table-body">
-            <tr>
-              <td><span class="claim-text-col">ISRO successfully sent humans to Mars in 2025.</span></td>
-              <td><span class="verdict-badge-history tag-false">FALSE</span></td>
-              <td>98%</td>
-              <td>Space & Tech</td>
-              <td>Today, 12:15 PM</td>
-              <td><button class="re-verify-btn" data-claim="ISRO successfully sent humans to Mars in 2025.">Re-verify</button></td>
-            </tr>
-            <tr>
-              <td><span class="claim-text-col">Water boiling point decreases at higher altitudes.</span></td>
-              <td><span class="verdict-badge-history tag-true">TRUE</span></td>
-              <td>92%</td>
-              <td>Science</td>
-              <td>Yesterday, 4:30 PM</td>
-              <td><button class="re-verify-btn" data-claim="Water boiling point decreases at higher altitudes.">Re-verify</button></td>
-            </tr>
-            <tr>
-              <td><span class="claim-text-col">New COVID variant is resistant to all current immunity options.</span></td>
-              <td><span class="verdict-badge-history tag-misleading">MISLEADING</span></td>
-              <td>81%</td>
-              <td>Medicine</td>
-              <td>Aug 5, 2026</td>
-              <td><button class="re-verify-btn" data-claim="New COVID variant is resistant to all current immunity options.">Re-verify</button></td>
-            </tr>
-            <tr>
-              <td><span class="claim-text-col">NASA confirmed discovery of alien cities on Jupiter.</span></td>
-              <td><span class="verdict-badge-history tag-false">FALSE</span></td>
-              <td>99%</td>
-              <td>Science</td>
-              <td>Jul 28, 2026</td>
-              <td><button class="re-verify-btn" data-claim="NASA confirmed discovery of alien cities on Jupiter.">Re-verify</button></td>
-            </tr>
+            <!-- Dynamically populated in app.js -->
           </tbody>
         </table>
       </div>
