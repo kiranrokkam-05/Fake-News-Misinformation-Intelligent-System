@@ -150,8 +150,10 @@
         </button>
       </section>
 
+      <div class="dashboard-placeholder" id="dashboard-placeholder"></div>
+
       <!-- Center Container (Steps Indicator & Step Card) -->
-      <section class="center-container">
+      <section class="center-container dashboard-hidden-on-load">
         
         <!-- Top steps bar -->
         <div class="top-steps-bar">
@@ -274,7 +276,7 @@
       </section>
 
       <!-- Right Sidebar (Progress Overview) -->
-      <section class="card progress-sidebar-card">
+      <section class="card progress-sidebar-card dashboard-hidden-on-load">
         <h2 class="sidebar-heading">Progress Overview</h2>
         
         <div class="checklist-container">
@@ -310,7 +312,7 @@
       </section>
 
       <!-- Bottom Panel (Verdict Results) -->
-      <section class="card results-card">
+      <section class="card results-card dashboard-hidden-on-load">
         <div class="results-header-container">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path>

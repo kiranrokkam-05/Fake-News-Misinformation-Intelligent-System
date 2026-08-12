@@ -530,6 +530,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const fileInputs = document.querySelectorAll('.file-input');
   const uploadLabels = document.querySelectorAll('.upload-btn-label');
   const startBtn = document.getElementById('start-btn');
+  const placeholderEl = document.getElementById('dashboard-placeholder');
+  const centerContainer = document.querySelector('.center-container');
+  const progressSidebar = document.querySelector('.progress-sidebar-card');
+  const resultsCard = document.querySelector('.results-card');
   const prevBtn = document.getElementById('prev-step-btn');
   const nextBtn = document.getElementById('next-step-btn');
   const stepCardContainer = document.getElementById('step-card-container');
@@ -777,8 +781,113 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reset results widget states to locked
     resetResultsToLocked();
 
-    // Set step to 1 and render
-    goToStep(1);
+    // Hide steps container, progress sidebar, and results card
+    centerContainer.classList.add('dashboard-hidden-on-load');
+    centerContainer.classList.remove('fade-in-revealed');
+    progressSidebar.classList.add('dashboard-hidden-on-load');
+    progressSidebar.classList.remove('fade-in-revealed');
+    resultsCard.classList.add('dashboard-hidden-on-load');
+    resultsCard.classList.remove('fade-in-revealed');
+
+    // Show placeholder and inject premium loader markup
+    placeholderEl.style.display = 'flex';
+    placeholderEl.innerHTML = `
+      <div class="premium-loader-card">
+        <div class="loader-orbit-wrapper">
+          <div class="loader-orbit-ring ring-1"></div>
+          <div class="loader-orbit-ring ring-2"></div>
+          <svg class="loader-center-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+          </svg>
+        </div>
+        <div class="loader-info">
+          <h3 class="loader-status-title" id="loader-status-text">...</h3>
+          <div class="loader-progress-bar-container">
+            <div class="loader-progress-bar-fill" id="loader-progress-fill"></div>
+          </div>
+          <div class="loader-percent" id="loader-percent-text">0%</div>
+        </div>
+      </div>
+    `;
+
+    const statusTitleEl = document.getElementById('loader-status-text');
+    const progressBarFillEl = document.getElementById('loader-progress-fill');
+    const percentTextEl = document.getElementById('loader-percent-text');
+
+    let currentProgress = 0;
+    const totalDuration = 2500; // 2.5 seconds
+    const intervalTime = 50; 
+    const totalSteps = totalDuration / intervalTime;
+    const progressIncrement = 100 / totalSteps;
+
+    // Translation arrays for progress statuses
+    const statusPhrases = {
+      en: [
+        "Analyzing text claim structural patterns...",
+        "Searching global fact-checking indices...",
+        "Crawling trusted media archives...",
+        "Evaluating source credibility weights...",
+        "Consolidating final verification reports..."
+      ],
+      te: [
+        "క్లెయిమ్ ప్రకటనను విశ్లేషిస్తోంది...",
+        "గ్లోబల్ ఫాక్ట్-చెక్ డేటాబేస్ శోధిస్తోంది...",
+        "విశ్వసనీయ మీడియా మూలాలను పరిశీలిస్తోంది...",
+        "ఆధారాల విశ్వసనీయతను లెక్కిస్తోంది...",
+        "తుది నివేదికను సిద్ధం చేస్తోంది..."
+      ],
+      hi: [
+        "दावे के पैटर्न का विश्लेषण...",
+        "वैश्विक तथ्य-जांच डेटाबेस में खोजना...",
+        "विश्वसनीय समाचार अभिलेखागार खोजना...",
+        "स्रोतों की विश्वसनीयता की जांच...",
+        "अंतिम रिपोर्ट तैयार की जा रही है..."
+      ]
+    };
+
+    const activePhrases = statusPhrases[state.currentLang] || statusPhrases.en;
+
+    const progressInterval = setInterval(() => {
+      currentProgress += progressIncrement;
+      if (currentProgress > 100) currentProgress = 100;
+
+      // Update progress bar & percentage text
+      if (progressBarFillEl) progressBarFillEl.style.width = `${currentProgress}%`;
+      if (percentTextEl) percentTextEl.textContent = `${Math.floor(currentProgress)}%`;
+
+      // Update status phrases based on percentage
+      if (statusTitleEl) {
+        if (currentProgress < 20) {
+          statusTitleEl.textContent = activePhrases[0];
+        } else if (currentProgress < 45) {
+          statusTitleEl.textContent = activePhrases[1];
+        } else if (currentProgress < 70) {
+          statusTitleEl.textContent = activePhrases[2];
+        } else if (currentProgress < 90) {
+          statusTitleEl.textContent = activePhrases[3];
+        } else {
+          statusTitleEl.textContent = activePhrases[4];
+        }
+      }
+
+      if (currentProgress >= 100) {
+        clearInterval(progressInterval);
+
+        // Hide placeholder
+        placeholderEl.style.display = 'none';
+
+        // Show steps container, sidebar and results card
+        centerContainer.classList.remove('dashboard-hidden-on-load');
+        centerContainer.classList.add('fade-in-revealed');
+        progressSidebar.classList.remove('dashboard-hidden-on-load');
+        progressSidebar.classList.add('fade-in-revealed');
+        resultsCard.classList.remove('dashboard-hidden-on-load');
+        resultsCard.classList.add('fade-in-revealed');
+
+        // Set step to 1 and render
+        goToStep(1);
+      }
+    }, intervalTime);
   });
 
   // --- NAVIGATION STEPS BUTTONS ---
