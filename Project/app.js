@@ -523,6 +523,37 @@ document.addEventListener('DOMContentLoaded', () => {
     currentLang: 'en'
   };
 
+  // Helper to translate default claim texts dynamically
+  function getLocalizedClaimText(rawText, lang) {
+    if (!rawText) return "";
+    const cleanRaw = rawText.trim().toLowerCase().replace(/\.$/, '').replace(/\"/g, '');
+    const t = translations[lang] || translations.en;
+    
+    const claimKeys = ['claim_h1', 'claim_h2', 'claim_h3', 'claim_h4'];
+    const allLanguages = ['en', 'te', 'hi'];
+
+    for (const key of claimKeys) {
+      for (const l of allLanguages) {
+        const translatedVal = translations[l][key];
+        if (translatedVal && translatedVal.trim().toLowerCase().replace(/\.$/, '').replace(/\"/g, '') === cleanRaw) {
+          return t[key] || translations.en[key];
+        }
+      }
+    }
+
+    const placeholderKeys = ['no_claim'];
+    for (const key of placeholderKeys) {
+      for (const l of allLanguages) {
+        const translatedVal = translations[l][key];
+        if (translatedVal && translatedVal.trim().toLowerCase().replace(/\.$/, '').replace(/\"/g, '') === cleanRaw) {
+          return t[key] || translations.en[key];
+        }
+      }
+    }
+
+    return rawText;
+  }
+
   // --- DOM ELEMENTS ---
   const textarea = document.getElementById('claim-text');
   const charCounter = document.getElementById('char-counter');
@@ -1164,7 +1195,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- DYNAMIC DATA STORAGE FOR EACH STEP ---
   function getStepData(stepNum) {
     const t = translations[state.currentLang] || translations.en;
-    const claimTextVal = state.claimText || t.no_claim;
+    const claimTextVal = getLocalizedClaimText(state.claimText || t.no_claim, state.currentLang);
     
     switch (stepNum) {
       case 1:
@@ -1406,7 +1437,7 @@ document.addEventListener('DOMContentLoaded', () => {
               statusText.style.color = '#047857';
             }
             if (previewText) {
-              const displayVal = state.claimText || t.no_claim;
+              const displayVal = getLocalizedClaimText(state.claimText || t.no_claim, state.currentLang);
               previewText.innerHTML = `<span style="color:#047857; font-weight:600;">"${displayVal}"</span>`;
             }
           }, 1200);
@@ -1608,7 +1639,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabPdf = document.querySelector('.tab-btn[data-tab="pdf"]');
     if (tabPdf) tabPdf.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> ` + t.tab_pdf;
 
-    if (textarea) textarea.placeholder = t.textarea_placeholder;
+    if (textarea) {
+      textarea.placeholder = t.textarea_placeholder;
+      if (textarea.value) {
+        const localizedVal = getLocalizedClaimText(textarea.value, lang);
+        if (localizedVal !== textarea.value) {
+          textarea.value = localizedVal;
+          state.claimText = localizedVal;
+          updateCharCounter();
+        }
+      }
+    }
 
     const uploadTitle = document.querySelector('.file-upload-section h3');
     if (uploadTitle) uploadTitle.textContent = t.upload_title;
