@@ -150,42 +150,11 @@
         </button>
       </section>
 
+      <div class="dashboard-placeholder" id="dashboard-placeholder"></div>
+
       <!-- Center Container (Steps Indicator & Step Card) -->
-      <section class="center-container">
+      <section class="center-container dashboard-hidden-on-load">
         
-        <!-- Top steps bar -->
-        <div class="top-steps-bar">
-          <div class="steps-connector-line"></div>
-          
-          <div class="step-node active" data-step="1">
-            <div class="step-badge">1</div>
-            <div class="step-label">Input Claim</div>
-          </div>
-          <div class="step-node" data-step="2">
-            <div class="step-badge">2</div>
-            <div class="step-label">Extract Text</div>
-          </div>
-          <div class="step-node" data-step="3">
-            <div class="step-badge">3</div>
-            <div class="step-label">NLP Analysis</div>
-          </div>
-          <div class="step-node" data-step="4">
-            <div class="step-badge">4</div>
-            <div class="step-label">Search Evidence</div>
-          </div>
-          <div class="step-node" data-step="5">
-            <div class="step-badge">5</div>
-            <div class="step-label">Verify Sources</div>
-          </div>
-          <div class="step-node" data-step="6">
-            <div class="step-badge">6</div>
-            <div class="step-label">Compare & Evaluate</div>
-          </div>
-          <div class="step-node" data-step="7">
-            <div class="step-badge">7</div>
-            <div class="step-label">Final Verdict</div>
-          </div>
-        </div>
 
         <p class="steps-desc-banner" id="steps-summary-desc">We verify your claim in 7 simple steps. Click "Next" to see how it works.</p>
 
@@ -274,7 +243,7 @@
       </section>
 
       <!-- Right Sidebar (Progress Overview) -->
-      <section class="card progress-sidebar-card">
+      <section class="card progress-sidebar-card dashboard-hidden-on-load">
         <h2 class="sidebar-heading">Progress Overview</h2>
         
         <div class="checklist-container">
@@ -310,7 +279,7 @@
       </section>
 
       <!-- Bottom Panel (Verdict Results) -->
-      <section class="card results-card">
+      <section class="card results-card dashboard-hidden-on-load">
         <div class="results-header-container">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path>

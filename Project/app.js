@@ -523,6 +523,37 @@ document.addEventListener('DOMContentLoaded', () => {
     currentLang: 'en'
   };
 
+  // Helper to translate default claim texts dynamically
+  function getLocalizedClaimText(rawText, lang) {
+    if (!rawText) return "";
+    const cleanRaw = rawText.trim().toLowerCase().replace(/\.$/, '').replace(/\"/g, '');
+    const t = translations[lang] || translations.en;
+    
+    const claimKeys = ['claim_h1', 'claim_h2', 'claim_h3', 'claim_h4'];
+    const allLanguages = ['en', 'te', 'hi'];
+
+    for (const key of claimKeys) {
+      for (const l of allLanguages) {
+        const translatedVal = translations[l][key];
+        if (translatedVal && translatedVal.trim().toLowerCase().replace(/\.$/, '').replace(/\"/g, '') === cleanRaw) {
+          return t[key] || translations.en[key];
+        }
+      }
+    }
+
+    const placeholderKeys = ['no_claim'];
+    for (const key of placeholderKeys) {
+      for (const l of allLanguages) {
+        const translatedVal = translations[l][key];
+        if (translatedVal && translatedVal.trim().toLowerCase().replace(/\.$/, '').replace(/\"/g, '') === cleanRaw) {
+          return t[key] || translations.en[key];
+        }
+      }
+    }
+
+    return rawText;
+  }
+
   // --- DOM ELEMENTS ---
   const textarea = document.getElementById('claim-text');
   const charCounter = document.getElementById('char-counter');
@@ -530,6 +561,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const fileInputs = document.querySelectorAll('.file-input');
   const uploadLabels = document.querySelectorAll('.upload-btn-label');
   const startBtn = document.getElementById('start-btn');
+  const placeholderEl = document.getElementById('dashboard-placeholder');
+  const centerContainer = document.querySelector('.center-container');
+  const progressSidebar = document.querySelector('.progress-sidebar-card');
+  const resultsCard = document.querySelector('.results-card');
   const prevBtn = document.getElementById('prev-step-btn');
   const nextBtn = document.getElementById('next-step-btn');
   const stepCardContainer = document.getElementById('step-card-container');
@@ -777,8 +812,128 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reset results widget states to locked
     resetResultsToLocked();
 
-    // Set step to 1 and render
-    goToStep(1);
+    // Hide steps container, progress sidebar, and results card
+    centerContainer.classList.add('dashboard-hidden-on-load');
+    centerContainer.classList.remove('fade-in-revealed');
+    progressSidebar.classList.add('dashboard-hidden-on-load');
+    progressSidebar.classList.remove('fade-in-revealed');
+    resultsCard.classList.add('dashboard-hidden-on-load');
+    resultsCard.classList.remove('fade-in-revealed');
+
+    // Show placeholder and inject premium loader markup
+    placeholderEl.style.display = 'flex';
+    placeholderEl.innerHTML = `
+      <div class="premium-loader-card">
+        <div class="loader-orbit-wrapper">
+          <div class="loader-orbit-ring ring-1"></div>
+          <div class="loader-orbit-ring ring-2"></div>
+          <svg class="loader-center-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path>
+          </svg>
+        </div>
+        <div class="loader-info">
+          <h3 class="loader-status-title" id="loader-status-text">...</h3>
+          <div class="loader-progress-bar-container">
+            <div class="loader-progress-bar-fill" id="loader-progress-fill"></div>
+          </div>
+          <div class="loader-percent" id="loader-percent-text">0%</div>
+        </div>
+      </div>
+    `;
+
+    const statusTitleEl = document.getElementById('loader-status-text');
+    const progressBarFillEl = document.getElementById('loader-progress-fill');
+    const percentTextEl = document.getElementById('loader-percent-text');
+
+    let currentProgress = 0;
+    const totalDuration = 2500; // 2.5 seconds
+    const intervalTime = 50; 
+    const totalSteps = totalDuration / intervalTime;
+    const progressIncrement = 100 / totalSteps;
+
+    // Translation arrays for progress statuses
+    const statusPhrases = {
+      en: [
+        "Analyzing text claim structural patterns...",
+        "Searching global fact-checking indices...",
+        "Crawling trusted media archives...",
+        "Evaluating source credibility weights...",
+        "Consolidating final verification reports..."
+      ],
+      te: [
+        "క్లెయిమ్ ప్రకటనను విశ్లేషిస్తోంది...",
+        "గ్లోబల్ ఫాక్ట్-చెక్ డేటాబేస్ శోధిస్తోంది...",
+        "విశ్వసనీయ మీడియా మూలాలను పరిశీలిస్తోంది...",
+        "ఆధారాల విశ్వసనీయతను లెక్కిస్తోంది...",
+        "తుది నివేదికను సిద్ధం చేస్తోంది..."
+      ],
+      hi: [
+        "दावे के पैटर्न का विश्लेषण...",
+        "वैश्विक तथ्य-जांच डेटाबेस में खोजना...",
+        "विश्वसनीय समाचार अभिलेखागार खोजना...",
+        "स्रोतों की विश्वसनीयता की जांच...",
+        "अंतिम रिपोर्ट तैयार की जा रही है..."
+      ]
+    };
+
+    const activePhrases = statusPhrases[state.currentLang] || statusPhrases.en;
+
+    const progressInterval = setInterval(() => {
+      currentProgress += progressIncrement;
+      if (currentProgress > 100) currentProgress = 100;
+
+      // Update progress bar & percentage text
+      if (progressBarFillEl) progressBarFillEl.style.width = `${currentProgress}%`;
+      if (percentTextEl) percentTextEl.textContent = `${Math.floor(currentProgress)}%`;
+
+      // Update status phrases based on percentage
+      if (statusTitleEl) {
+        if (currentProgress < 20) {
+          statusTitleEl.textContent = activePhrases[0];
+        } else if (currentProgress < 45) {
+          statusTitleEl.textContent = activePhrases[1];
+        } else if (currentProgress < 70) {
+          statusTitleEl.textContent = activePhrases[2];
+        } else if (currentProgress < 90) {
+          statusTitleEl.textContent = activePhrases[3];
+        } else {
+          statusTitleEl.textContent = activePhrases[4];
+        }
+      }
+
+      if (currentProgress >= 100) {
+        clearInterval(progressInterval);
+
+        // Hide placeholder
+        placeholderEl.style.display = 'none';
+
+        // Show steps container, sidebar and results card
+        centerContainer.classList.remove('dashboard-hidden-on-load');
+        centerContainer.classList.add('fade-in-revealed');
+        progressSidebar.classList.remove('dashboard-hidden-on-load');
+        progressSidebar.classList.add('fade-in-revealed');
+        resultsCard.classList.remove('dashboard-hidden-on-load');
+        resultsCard.classList.add('fade-in-revealed');
+
+        // Start automated step-through simulation timeline!
+        goToStep(1);
+
+        if (window.verificationTimelineInterval) {
+          clearInterval(window.verificationTimelineInterval);
+        }
+
+        window.verificationTimelineInterval = setInterval(() => {
+          const nextStep = state.currentStep + 1;
+          if (nextStep <= 7) {
+            goToStep(nextStep);
+          } else {
+            clearInterval(window.verificationTimelineInterval);
+            // Automatically reveal the final verdict
+            revealFinalVerdict();
+          }
+        }, 2200); // 2.2 seconds per step for a comfortable reading transition
+      }
+    }, intervalTime);
   });
 
   // --- NAVIGATION STEPS BUTTONS ---
@@ -1021,8 +1176,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Render corresponding step data
-    renderStepBody(stepNum);
+    // Render corresponding step data with smooth fade transition
+    if (stepCardContainer) {
+      stepCardContainer.style.opacity = '0';
+      stepCardContainer.style.transform = 'translateY(8px)';
+      stepCardContainer.style.transition = 'all 0.25s ease-out';
+      
+      setTimeout(() => {
+        renderStepBody(stepNum);
+        stepCardContainer.style.opacity = '1';
+        stepCardContainer.style.transform = 'translateY(0)';
+      }, 250);
+    } else {
+      renderStepBody(stepNum);
+    }
   }
 
   function renderStepBody(stepNum) {
@@ -1055,7 +1222,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- DYNAMIC DATA STORAGE FOR EACH STEP ---
   function getStepData(stepNum) {
     const t = translations[state.currentLang] || translations.en;
-    const claimTextVal = state.claimText || t.no_claim;
+    const claimTextVal = getLocalizedClaimText(state.claimText || t.no_claim, state.currentLang);
     
     switch (stepNum) {
       case 1:
@@ -1297,7 +1464,7 @@ document.addEventListener('DOMContentLoaded', () => {
               statusText.style.color = '#047857';
             }
             if (previewText) {
-              const displayVal = state.claimText || t.no_claim;
+              const displayVal = getLocalizedClaimText(state.claimText || t.no_claim, state.currentLang);
               previewText.innerHTML = `<span style="color:#047857; font-weight:600;">"${displayVal}"</span>`;
             }
           }, 1200);
@@ -1499,7 +1666,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabPdf = document.querySelector('.tab-btn[data-tab="pdf"]');
     if (tabPdf) tabPdf.innerHTML = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> ` + t.tab_pdf;
 
-    if (textarea) textarea.placeholder = t.textarea_placeholder;
+    if (textarea) {
+      textarea.placeholder = t.textarea_placeholder;
+      if (textarea.value) {
+        const localizedVal = getLocalizedClaimText(textarea.value, lang);
+        if (localizedVal !== textarea.value) {
+          textarea.value = localizedVal;
+          state.claimText = localizedVal;
+          updateCharCounter();
+        }
+      }
+    }
 
     const uploadTitle = document.querySelector('.file-upload-section h3');
     if (uploadTitle) uploadTitle.textContent = t.upload_title;
