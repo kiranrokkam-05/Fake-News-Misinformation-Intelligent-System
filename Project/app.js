@@ -122,8 +122,8 @@ const translations = {
     s6_claim_side: "Statement Claims",
     s6_fact_side: "Evidence Base",
     s6_computing: "Computing comparative matrices...",
-    s7_header: "Summary Statement",
-    s7_desc: 'Click "Verify & Reveal" below to populate the full diagnostic grid and review sources, reliability star indices, confidence scopes, and detailed explanation text.',
+    s7_header: "Analysis Complete",
+    s7_desc: "All verification modules succeeded. The full diagnostic reports, reliability index, and source reputation audit are unlocked below.",
 
     // Stepper diagnostics values
     v_assertive: "Assertive",
@@ -290,8 +290,8 @@ const translations = {
     s6_claim_side: "ప్రకటన క్లెయిమ్‌లు",
     s6_fact_side: "ఆధారాల మూలం",
     s6_computing: "పోలిక నివేదికను లెక్కిస్తోంది...",
-    s7_header: "సారాంశ ప్రకటన",
-    s7_desc: 'వెరిఫికేషన్ వివరాలు మరియు పూర్తి విశ్లేషణను కింద ఉన్న నివేదికలో అన్‌లాక్ చేయడానికి "ధృవీకరించి చూపించు" బటన్ నొక్కండి.',
+    s7_header: "విశ్లేషణ పూర్తయింది",
+    s7_desc: "అన్ని ధృవీకరణ విభాగాల పరిశీలన పూర్తయింది. పూర్తి విశ్లేషణ నివేదిక, మూలాల వివరాలు మరియు విశ్వసనీయత శాతం కింద అన్‌లాక్ చేయబడ్డాయి.",
 
     // Stepper diagnostics values
     v_assertive: "రూఢీ అయినది",
@@ -458,8 +458,8 @@ const translations = {
     s6_claim_side: "कथन दावे",
     s6_fact_side: "साक्ष्य आधार",
     s6_computing: "तुलनात्मक मैट्रिक्स की गणना...",
-    s7_header: "सारांश विवरण",
-    s7_desc: 'नीचे दिए गए सत्यापन विवरण और संपूर्ण विश्लेषण को रिपोर्ट में अनलॉक करने के लिए "सत्यापित करें और दिखाएं" बटन दबाएं।',
+    s7_header: "विश्लेषण पूरा हुआ",
+    s7_desc: "सभी सत्यापन मॉड्यूल सफल रहे। विस्तृत विश्लेषण रिपोर्ट, स्रोत विवरण और विश्वसनीयता प्रतिशत नीचे अनलॉक कर दिए गए हैं।",
 
     // Stepper diagnostics values
     v_assertive: "मुखर",
@@ -1060,6 +1060,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function revealFinalVerdict() {
     if (!state.verdictData) return;
     
+    // Mark Step 7 as completed in the checklist to turn it green
+    const step7ChecklistItem = document.querySelector(`.checklist-item[data-sidebar-step="7"]`);
+    if (step7ChecklistItem) {
+      step7ChecklistItem.classList.remove('active');
+      step7ChecklistItem.classList.add('completed');
+    }
+
     const d = state.verdictData;
     const t = translations[state.currentLang] || translations.en;
     const resData = t[d.verdictKey] || translations.en[d.verdictKey];
