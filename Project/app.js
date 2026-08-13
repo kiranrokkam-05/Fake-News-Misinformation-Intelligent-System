@@ -907,13 +907,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Hide placeholder
         placeholderEl.style.display = 'none';
 
-        // Show steps container, sidebar and results card
+        // Show steps container and sidebar (results card stays hidden until Step 7 finishes)
         centerContainer.classList.remove('dashboard-hidden-on-load');
         centerContainer.classList.add('fade-in-revealed');
         progressSidebar.classList.remove('dashboard-hidden-on-load');
         progressSidebar.classList.add('fade-in-revealed');
-        resultsCard.classList.remove('dashboard-hidden-on-load');
-        resultsCard.classList.add('fade-in-revealed');
 
         // Start automated step-through simulation timeline!
         goToStep(1);
@@ -1066,6 +1064,10 @@ document.addEventListener('DOMContentLoaded', () => {
       step7ChecklistItem.classList.remove('active');
       step7ChecklistItem.classList.add('completed');
     }
+
+    // Reveal results card
+    resultsCard.classList.remove('dashboard-hidden-on-load');
+    resultsCard.classList.add('fade-in-revealed');
 
     const d = state.verdictData;
     const t = translations[state.currentLang] || translations.en;
