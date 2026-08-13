@@ -696,11 +696,7 @@ header {
 }
 
 .step-navigation-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-  padding-top: 24px;
+  display: none !important;
 }
 
 .step-nav-btn {

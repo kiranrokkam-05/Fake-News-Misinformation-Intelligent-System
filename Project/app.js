@@ -915,8 +915,23 @@ document.addEventListener('DOMContentLoaded', () => {
         resultsCard.classList.remove('dashboard-hidden-on-load');
         resultsCard.classList.add('fade-in-revealed');
 
-        // Set step to 1 and render
+        // Start automated step-through simulation timeline!
         goToStep(1);
+
+        if (window.verificationTimelineInterval) {
+          clearInterval(window.verificationTimelineInterval);
+        }
+
+        window.verificationTimelineInterval = setInterval(() => {
+          const nextStep = state.currentStep + 1;
+          if (nextStep <= 7) {
+            goToStep(nextStep);
+          } else {
+            clearInterval(window.verificationTimelineInterval);
+            // Automatically reveal the final verdict
+            revealFinalVerdict();
+          }
+        }, 2200); // 2.2 seconds per step for a comfortable reading transition
       }
     }, intervalTime);
   });
@@ -1161,8 +1176,20 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // Render corresponding step data
-    renderStepBody(stepNum);
+    // Render corresponding step data with smooth fade transition
+    if (stepCardContainer) {
+      stepCardContainer.style.opacity = '0';
+      stepCardContainer.style.transform = 'translateY(8px)';
+      stepCardContainer.style.transition = 'all 0.25s ease-out';
+      
+      setTimeout(() => {
+        renderStepBody(stepNum);
+        stepCardContainer.style.opacity = '1';
+        stepCardContainer.style.transform = 'translateY(0)';
+      }, 250);
+    } else {
+      renderStepBody(stepNum);
+    }
   }
 
   function renderStepBody(stepNum) {
