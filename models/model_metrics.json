@@ -1,0 +1,31 @@
+{
+  "best_model": "xgboost",
+  "training_rows": 4594,
+  "classes": [
+    "FALSE",
+    "TRUE"
+  ],
+  "metrics": {
+    "logistic_regression": {
+      "accuracy": 0.9314,
+      "precision": 0.9318,
+      "recall": 0.9314,
+      "f1": 0.9314,
+      "roc_auc": 0.9842
+    },
+    "random_forest": {
+      "accuracy": 0.9151,
+      "precision": 0.9152,
+      "recall": 0.9151,
+      "f1": 0.9151,
+      "roc_auc": 0.9735
+    },
+    "xgboost": {
+      "accuracy": 0.9325,
+      "precision": 0.9327,
+      "recall": 0.9325,
+      "f1": 0.9325,
+      "roc_auc": 0.9865
+    }
+  }
+}
