@@ -704,27 +704,67 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  async function checkMLBackendStatus() {
-    const statusEl = document.getElementById('ml-backend-status');
-    if (!statusEl) return;
-    try {
-      const response = await fetch('/api/health');
-      const data = await response.json();
-      if (data.modelReady) {
-        statusEl.textContent = `NLP/ML backend ready · ${data.bestModel || 'trained model'} · ${data.trainingRows || 0} training rows`;
-        statusEl.style.background = '#ecfdf5';
-        statusEl.style.color = '#047857';
-      } else {
-        statusEl.textContent = 'NLP/ML backend connected, but models are not trained. Run: python setup_ml.py';
-        statusEl.style.background = '#fff7ed';
-        statusEl.style.color = '#c2410c';
-      }
-    } catch (error) {
-      statusEl.textContent = 'NLP/ML backend offline · start with: python backend\\app.py';
-      statusEl.style.background = '#fef2f2';
-      statusEl.style.color = '#b91c1c';
-    }
+async function checkMLBackendStatus() {
+
+  const statusEl =
+    document.getElementById(
+      'ml-backend-status'
+    );
+
+  if (!statusEl) {
+    return;
   }
+
+
+  try {
+
+    const response =
+      await fetch('/api/health');
+
+
+    const data =
+      await response.json();
+
+
+    if (data.modelReady) {
+
+      statusEl.textContent =
+        `PyTorch NLP model ready · ${
+          data.trainingRows || 0
+        } training rows`;
+
+      statusEl.style.background =
+        '#ecfdf5';
+
+      statusEl.style.color =
+        '#047857';
+
+    } else {
+
+      statusEl.textContent =
+        'PyTorch model not trained · ' +
+        'Run: python -m backend.nlp_pipeline';
+
+      statusEl.style.background =
+        '#fff7ed';
+
+      statusEl.style.color =
+        '#c2410c';
+    }
+
+  } catch (error) {
+
+    statusEl.textContent =
+      'PyTorch backend offline · ' +
+      'Start with: python backend\\app.py';
+
+    statusEl.style.background =
+      '#fef2f2';
+
+    statusEl.style.color =
+      '#b91c1c';
+  }
+}
 
   // --- INITIALIZATION ---
   updateCharCounter();
@@ -821,39 +861,73 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- REAL NLP/ML BACKEND INTEGRATION ---
-  async function analyzeWithBackend(claim) {
-    try {
-      const response = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: claim })
-      });
-      const payload = await response.json();
-      if (!response.ok) {
-        throw new Error(payload.error || 'Backend analysis failed');
-      }
-      state.analysisError = null;
-      state.verdictData = {
-        backend: true,
-        prediction: payload.prediction,
-        confidence: Number(payload.confidence || 0),
-        model: payload.model,
-        modelPredictions: payload.model_predictions || {},
-        semanticSimilarity: Number(payload.semantic_similarity || 0),
-        embeddings: payload.embeddings || {},
-        preprocessing: payload.preprocessing || {},
-        claims: payload.claims || [],
-        entities: payload.entities || [],
-        sentiment: payload.sentiment || 'Neutral',
-        stance: payload.stance || 'Informative'
-      };
-      return payload;
-    } catch (error) {
-      state.analysisError = error.message || 'Backend analysis unavailable';
-      state.verdictData = null;
-      throw error;
+async function analyzeWithBackend(claim) {
+  try {
+    const response = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        text: claim
+      })
+    });
+
+    const payload = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        payload.error || 'PyTorch model analysis failed'
+      );
     }
+
+    state.analysisError = null;
+
+    /*
+     * IMPORTANT:
+     * The prediction comes ONLY from the PyTorch backend.
+     *
+     * No frontend prediction logic is performed here.
+     */
+
+    state.verdictData = {
+      backend: true,
+
+      prediction:
+        payload.prediction,
+
+      confidence:
+        Number(payload.confidence || 0),
+
+      model:
+        payload.model,
+
+      classificationType:
+        payload.classification_type,
+
+      classProbabilities:
+        payload.class_probabilities || {},
+
+      tfidfFeatures:
+        Number(payload.tfidf_features || 0),
+
+      processedText:
+        payload.processed_text || ''
+    };
+
+    return payload;
+
+  } catch (error) {
+
+    state.analysisError =
+      error.message ||
+      'PyTorch backend unavailable';
+
+    state.verdictData = null;
+
+    throw error;
   }
+}
 
   // --- START VERIFICATION ---
   startBtn.addEventListener('click', () => {
@@ -1029,53 +1103,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- DYNAMIC RESULTS ENGINE ---
-  function generateVerdictData(text) {
-    const cleanText = text.toLowerCase();
-    
-    // Exact Mars prompt match
-    if (cleanText.includes('isro') && cleanText.includes('mars') && cleanText.includes('2025')) {
-      state.verdictData = {
-        verdictKey: 'res_mars',
-        confidence: 98,
-        reliability: 1
-      };
-    } 
-    // Flat earth match
-    else if (cleanText.includes('flat') && cleanText.includes('earth')) {
-      state.verdictData = {
-        verdictKey: 'res_flat',
-        confidence: 99,
-        reliability: 1
-      };
-    }
-    // COVID vaccine chips match
-    else if ((cleanText.includes('vaccine') || cleanText.includes('covid')) && cleanText.includes('chip')) {
-      state.verdictData = {
-        verdictKey: 'res_vaccine',
-        confidence: 96,
-        reliability: 1
-      };
-    }
-    // Scientific facts that are True
-    else if (cleanText.includes('boil') || cleanText.includes('water') && cleanText.includes('100') || cleanText.includes('round') && cleanText.includes('earth')) {
-      state.verdictData = {
-        verdictKey: 'res_boil',
-        confidence: 95,
-        reliability: 5
-      };
-    }
-    // Default fallback (Misleading / Debatable)
-    else {
-      state.verdictData = {
-        verdictKey: 'res_fallback',
-        confidence: 74,
-        reliability: 2
-      };
-    }
-  }
-
-  // Set initial verdict data on load
-  generateVerdictData(state.claimText);
+  
 
   // --- RESET RESULTS VIEW ---
   function resetResultsToLocked() {
@@ -1123,95 +1151,278 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- VERDICT REVEAL ACTION ---
-  function revealFinalVerdict() {
-    if (!state.verdictData) return;
+function revealFinalVerdict() {
 
-    const d = state.verdictData;
-    const t = translations[state.currentLang] || translations.en;
-
-    if (d.backend) {
-      const verdict = String(d.prediction || 'MISLEADING').toUpperCase();
-      const confidence = Math.max(0, Math.min(100, Number(d.confidence || 0)));
-      const normalized = verdict === 'REAL' ? 'TRUE' : verdict === 'FAKE' ? 'FALSE' : verdict;
-
-      resultsCardTitle.textContent = t.results_title_verified;
-      resultsBanner.style.backgroundColor = 'var(--success-light)';
-      resultsBanner.style.borderColor = 'var(--success-border)';
-      resultsBanner.style.color = 'var(--success)';
-      resultsBanner.querySelector('span').textContent = t.results_banner_complete;
-
-      resultWidgets.forEach(widget => {
-        widget.classList.remove('locked');
-        const lockIcon = widget.querySelector('.widget-lock-icon');
-        if (lockIcon) lockIcon.style.display = 'none';
-        const subtext = widget.querySelector('.result-widget-subtext');
-        if (subtext) subtext.textContent = t.sub_verified;
-      });
-
-      const verdictContent = verdictWidget.querySelector('.result-widget-content');
-      const verdictLabel = normalized === 'TRUE' ? t.v_true : normalized === 'FALSE' ? t.v_false : t.v_misleading;
-      verdictContent.innerHTML = `<span class="verdict-text">${verdictLabel}</span>`;
-      verdictWidget.className = 'result-widget verdict-widget';
-      verdictWidget.classList.add(normalized === 'TRUE' ? 'unlocked-true' : normalized === 'FALSE' ? 'unlocked-false' : 'unlocked-misleading');
-
-      confidenceText.textContent = `${confidence.toFixed(1)}%`;
-      confidenceCircle.style.strokeDashoffset = 125.6 * (1 - confidence / 100);
-      typeText.textContent = `ML classification · ${d.model}`;
-
-      const reliability = Math.max(1, Math.min(5, Math.round(confidence / 20)));
-      starsContainer.className = 'reliability-stars active-stars';
-      starsContainer.innerHTML = Array.from({ length: 5 }, (_, i) =>
-        `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="fill:${i < reliability ? 'var(--warning)' : 'var(--text-muted)'}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`
-      ).join('');
-
-      const p = d.preprocessing || {};
-      explanationText.textContent = `The trained ${d.model} model classified this text as ${normalized}. The result uses TF-IDF embeddings, supervised ML probabilities, claim extraction and NLP diagnostics.`;
-      sourcesText.textContent = `Trained model: ${d.model} · TF-IDF features: ${d.embeddings?.dimensions || 0} · ${Object.keys(d.modelPredictions || {}).length} classifiers evaluated`;
-      summaryText.textContent = `Extracted ${d.claims?.length || 0} claim(s), ${d.entities?.length || 0} named entities, ${p.token_count || 0} content tokens, and ${d.semanticSimilarity || 0}% semantic similarity. Final confidence: ${confidence.toFixed(1)}%.`;
-      insightsText.innerHTML = [
-        `Model: ${d.model}`,
-        `Sentiment: ${d.sentiment}`,
-        `Stance: ${d.stance}`,
-        `Semantic similarity: ${d.semanticSimilarity}%`,
-        `Embedding: ${d.embeddings?.type || 'TF-IDF'}`,
-        `Entities: ${(d.entities || []).map(e => `${e.text} [${e.label}]`).join(', ') || 'None detected'}`
-      ].join('<br>');
-
-      document.querySelector('.results-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
-    }
-
-    // Legacy/demo result path retained for UI compatibility.
-    const resData = t[d.verdictKey] || translations.en[d.verdictKey];
-    resultsCardTitle.textContent = t.results_title_verified;
-    resultsBanner.style.backgroundColor = 'var(--success-light)';
-    resultsBanner.style.borderColor = 'var(--success-border)';
-    resultsBanner.style.color = 'var(--success)';
-    resultsBanner.querySelector('span').textContent = t.results_banner_complete;
-    resultWidgets.forEach(widget => {
-      widget.classList.remove('locked');
-      const lockIcon = widget.querySelector('.widget-lock-icon');
-      if (lockIcon) lockIcon.style.display = 'none';
-      const subtext = widget.querySelector('.result-widget-subtext');
-      if (subtext) subtext.textContent = t.sub_verified;
-    });
-    const verdictContent = verdictWidget.querySelector('.result-widget-content');
-    verdictContent.innerHTML = `<span class="verdict-text">${resData.verdict}</span>`;
-    verdictWidget.className = 'result-widget verdict-widget ' + (d.verdictKey === 'res_boil' ? 'unlocked-true' : d.verdictKey === 'res_fallback' ? 'unlocked-misleading' : 'unlocked-false');
-    confidenceText.textContent = `${d.confidence}%`;
-    confidenceCircle.style.strokeDashoffset = 125.6 * (1 - d.confidence / 100);
-    typeText.textContent = resData.type;
-    starsContainer.className = 'reliability-stars active-stars';
-    starsContainer.innerHTML = '';
-    for (let i = 1; i <= 5; i++) {
-      starsContainer.innerHTML += `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="fill:${i <= d.reliability ? 'var(--warning)' : 'var(--text-muted)'}"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
-    }
-    explanationText.textContent = resData.explanation;
-    sourcesText.textContent = resData.sources;
-    summaryText.textContent = resData.summary;
-    insightsText.innerHTML = resData.insights.replace(/\n/g, '<br>');
-    document.querySelector('.results-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (!state.verdictData) {
+    return;
   }
+
+  const d = state.verdictData;
+
+  const t =
+    translations[state.currentLang] ||
+    translations.en;
+
+
+  // ==========================================================
+  // ONLY PYTORCH MODEL RESULT
+  // ==========================================================
+
+  const prediction =
+    String(
+      d.prediction || "Unknown"
+    );
+
+
+  const confidence =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Number(d.confidence || 0)
+      )
+    );
+
+
+  // ==========================================================
+  // UNLOCK RESULT WIDGETS
+  // ==========================================================
+
+  resultsCardTitle.textContent =
+    t.results_title_verified;
+
+
+  resultsBanner.style.backgroundColor =
+    'var(--success-light)';
+
+  resultsBanner.style.borderColor =
+    'var(--success-border)';
+
+  resultsBanner.style.color =
+    'var(--success)';
+
+  resultsBanner
+    .querySelector('span')
+    .textContent =
+    t.results_banner_complete;
+
+
+  resultWidgets.forEach(widget => {
+
+    widget.classList.remove('locked');
+
+    const lockIcon =
+      widget.querySelector(
+        '.widget-lock-icon'
+      );
+
+    if (lockIcon) {
+      lockIcon.style.display = 'none';
+    }
+
+    const subtext =
+      widget.querySelector(
+        '.result-widget-subtext'
+      );
+
+    if (subtext) {
+      subtext.textContent =
+        t.sub_verified;
+    }
+
+  });
+
+
+  // ==========================================================
+  // PREDICTED SUBJECT
+  // ==========================================================
+
+  const verdictContent =
+    verdictWidget.querySelector(
+      '.result-widget-content'
+    );
+
+
+  verdictContent.innerHTML = `
+    <span class="verdict-text">
+      ${prediction}
+    </span>
+  `;
+
+
+  /*
+   * We are NOT using TRUE/FALSE/MISLEADING here.
+   *
+   * The PyTorch model is a multi-class subject classifier.
+   */
+
+
+  verdictWidget.className =
+    'result-widget verdict-widget unlocked-misleading';
+
+
+  // ==========================================================
+  // CONFIDENCE
+  // ==========================================================
+
+  confidenceText.textContent =
+    `${confidence.toFixed(1)}%`;
+
+
+  confidenceCircle.style.strokeDashoffset =
+    125.6 *
+    (1 - confidence / 100);
+
+
+  // ==========================================================
+  // MODEL NAME
+  // ==========================================================
+
+  typeText.textContent =
+    `Subject Classification · ${d.model}`;
+
+
+  // ==========================================================
+  // RELIABILITY VISUAL
+  // ==========================================================
+
+  const reliability =
+    Math.max(
+      1,
+      Math.min(
+        5,
+        Math.round(confidence / 20)
+      )
+    );
+
+
+  starsContainer.className =
+    'reliability-stars active-stars';
+
+
+  starsContainer.innerHTML =
+    Array.from(
+      { length: 5 },
+      (_, i) => {
+
+        const filled =
+          i < reliability;
+
+        return `
+          <svg
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            style="
+              fill:${
+                filled
+                  ? 'var(--warning)'
+                  : 'var(--text-muted)'
+              }
+            "
+          >
+            <path
+              d="
+                M12 17.27L18.18 21l-1.64-7.03
+                L22 9.24l-7.19-.61L12 2
+                9.19 8.63 2 9.24
+                7.82 14 6.18 21z
+              "
+            />
+          </svg>
+        `;
+
+      }
+    ).join('');
+
+
+  // ==========================================================
+  // EXPLANATION
+  // ==========================================================
+
+  explanationText.textContent =
+
+    `The PyTorch NewsClassificationModel classified ` +
+    `this article under the subject "${prediction}" ` +
+    `with ${confidence.toFixed(2)}% confidence. ` +
+    `The classification uses the trained TF-IDF ` +
+    `representation and PyTorch neural network.`;
+
+
+  // ==========================================================
+  // SOURCES / MODEL INFORMATION
+  // ==========================================================
+
+  sourcesText.textContent =
+
+    `Model: ${d.model} · ` +
+    `TF-IDF features: ${d.tfidfFeatures}`;
+
+
+  // ==========================================================
+  // SUMMARY
+  // ==========================================================
+
+  summaryText.textContent =
+
+    `The model identified the article as ` +
+    `"${prediction}" with a confidence of ` +
+    `${confidence.toFixed(2)}%.`;
+
+
+  // ==========================================================
+  // CLASS PROBABILITIES
+  // ==========================================================
+
+  const probabilities =
+    d.classProbabilities || {};
+
+
+  const probabilityLines =
+    Object.entries(probabilities)
+
+      .sort(
+        (a, b) => b[1] - a[1]
+      )
+
+      .map(
+        ([label, probability]) =>
+          `${label}: ${(probability * 100).toFixed(2)}%`
+      );
+
+
+  insightsText.innerHTML = [
+
+    `Model: ${d.model}`,
+
+    `Classification type: ${
+      d.classificationType ||
+      'Multi-class subject classification'
+    }`,
+
+    `Predicted subject: ${prediction}`,
+
+    `Confidence: ${confidence.toFixed(2)}%`,
+
+    `TF-IDF features: ${d.tfidfFeatures}`,
+
+    `<strong>Class probabilities:</strong>`,
+
+    ...probabilityLines
+
+  ].join('<br>');
+
+
+  // ==========================================================
+  // SCROLL TO RESULTS
+  // ==========================================================
+
+  document
+    .querySelector('.results-card')
+    .scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+}
 
   // --- STEP TRANSITIONS / CONTENT BUILDER ---
   function goToStep(stepNum) {
@@ -1523,186 +1734,302 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- INTERACTIVE MICRO-SIMULATION ALGORITHMS ---
-  function triggerStepSimulations(stepNum) {
-    const d = state.verdictData;
-    
-    if (stepNum === 2) {
-      const statusText = document.getElementById('ocr-status');
-      const previewText = document.getElementById('ocr-preview');
-      const t = translations[state.currentLang] || translations.en;
-      
-      // Step 2 OCR Scanner animation loop simulation
+function triggerStepSimulations(stepNum) {
+
+  const d = state.verdictData;
+
+  const t =
+    translations[state.currentLang] ||
+    translations.en;
+
+
+  // ==========================================================
+  // STEP 2
+  // Text extraction
+  // ==========================================================
+
+  if (stepNum === 2) {
+
+    const statusText =
+      document.getElementById(
+        'ocr-status'
+      );
+
+    const previewText =
+      document.getElementById(
+        'ocr-preview'
+      );
+
+
+    setTimeout(() => {
+
+      if (statusText) {
+        statusText.textContent =
+          t.s2_status_1;
+      }
+
+
       setTimeout(() => {
-        if (statusText) statusText.textContent = t.s2_status_1;
-        
+
+        if (statusText) {
+          statusText.textContent =
+            t.s2_status_2;
+        }
+
+
         setTimeout(() => {
-          if (statusText) statusText.textContent = t.s2_status_2;
-          
-          setTimeout(() => {
-            if (statusText) {
-              statusText.textContent = t.s2_status_3;
-              statusText.style.color = '#047857';
-            }
-            if (previewText) {
-              const displayVal = getLocalizedClaimText(state.claimText || t.no_claim, state.currentLang);
-              previewText.innerHTML = `<span style="color:#047857; font-weight:600;">"${displayVal}"</span>`;
-            }
-          }, 1200);
-        }, 1200);
-      }, 600);
-    }
-    
-    else if (stepNum === 3) {
-      const entitiesSpan = document.getElementById('nlp-entities');
-      const diagnostics = document.getElementById('nlp-diagnostics');
-      const t = translations[state.currentLang] || translations.en;
-      setTimeout(() => {
-        if (!entitiesSpan) return;
-        if (state.verdictData && state.verdictData.backend) {
-          const entities = (state.verdictData.entities || []).map(e => `${e.text} [${e.label}]`).join(', ');
-          entitiesSpan.textContent = entities || t.s3_mapped;
-          if (diagnostics) {
-            const p = state.verdictData.preprocessing || {};
-            diagnostics.innerHTML = `
-              <div>${t.s3_stance}: <span style="font-weight:700;">${state.verdictData.stance}</span></div>
-              <div>${t.s3_sentiment}: <span style="font-weight:700;">${state.verdictData.sentiment}</span></div>
-              <div>Tokens: <span style="font-weight:700;">${p.token_count || 0}</span></div>
-              <div>Similarity: <span style="font-weight:700;">${state.verdictData.semanticSimilarity}%</span></div>`;
+
+          if (statusText) {
+
+            statusText.textContent =
+              t.s2_status_3;
+
+            statusText.style.color =
+              '#047857';
           }
-        } else {
-          entitiesSpan.textContent = t.s3_mapped;
-        }
-      }, 700);
-    }
-    
-    else if (stepNum === 4) {
-      const queriesContainer = document.getElementById('queries-container');
-      const queries = [];
-      const cleanText = state.claimText.toLowerCase();
 
-      if (cleanText.includes('isro')) {
-        queries.push("ISRO Mars landing 2025", "Gaganyaan crew launch schedules", "ISRO human planetary flight");
-      } else if (cleanText.includes('earth')) {
-        queries.push("Flat Earth physical debunking", "NASA oblate spheroid earth photos", "Curvature measurements satellite");
-      } else if (cleanText.includes('vaccine')) {
-        queries.push("COVID vaccine microchip components WHO", "FDA vaccine raw ingredients registry", "Vaccine tracking conspiracy origins");
-      } else {
-        queries.push("Claim validation cross-index search", "Factual credibility match lookup");
-      }
 
-      queriesContainer.innerHTML = '';
-      
-      // Add queries sequentially to simulate searching
-      queries.forEach((q, idx) => {
-        setTimeout(() => {
-          const tag = document.createElement('div');
-          tag.className = 'query-tag searching';
-          tag.innerHTML = `
-            <svg class="pulse-spinner-micro" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:10px; height:10px;"><circle cx="12" cy="12" r="10" stroke="currentColor" opacity="0.2"/><path d="M12 2A10 10 0 0122 12" stroke="currentColor" stroke-linecap="round"/></svg>
-            <span>"${q}"</span>`;
-          if (queriesContainer) queriesContainer.appendChild(tag);
+          if (previewText) {
 
-          // Change to "Completed" search state after a delay
-          setTimeout(() => {
-            tag.className = 'query-tag';
-            tag.innerHTML = `
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width:10px; height:10px; color:#10b981; stroke-width:3;"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-              <span>"${q}"</span>`;
-          }, 800);
-          
-        }, idx * 400);
-      });
-    }
-    
-    else if (stepNum === 5) {
-      const sourcesContainer = document.getElementById('sources-list-container');
-      const sources = [];
-      const cleanText = state.claimText.toLowerCase();
-      const t = translations[state.currentLang] || translations.en;
+            const displayVal =
+              getLocalizedClaimText(
+                state.claimText ||
+                t.no_claim,
 
-      if (cleanText.includes('isro')) {
-        sources.push({ name: 'isro.gov.in', score: 100, class: 'high' });
-        sources.push({ name: 'pib.gov.in (Fact Check)', score: 100, class: 'high' });
-        sources.push({ name: 'breakingnewsblog.xyz', score: 12, class: 'low' });
-      } else if (cleanText.includes('earth')) {
-        sources.push({ name: 'nasa.gov', score: 100, class: 'high' });
-        sources.push({ name: 'britannica.com', score: 98, class: 'high' });
-        sources.push({ name: 'flatearthsociety.org', score: 8, class: 'low' });
-      } else if (cleanText.includes('vaccine')) {
-        sources.push({ name: 'who.int', score: 100, class: 'high' });
-        sources.push({ name: 'cdc.gov', score: 100, class: 'high' });
-        sources.push({ name: 'healthblogsite.info', score: 14, class: 'low' });
-      } else {
-        sources.push({ name: 'wikipedia.org', score: 94, class: 'high' });
-        sources.push({ name: 'reuters.com', score: 96, class: 'high' });
-        sources.push({ name: 'unverified-claims-post.net', score: 18, class: 'low' });
-      }
+                state.currentLang
+              );
 
-      if (sourcesContainer) sourcesContainer.innerHTML = t.currentLang === 'te' ? 'డేటాబేస్ రేటింగ్‌లను విశ్లేషిస్తోంది...' : (t.currentLang === 'hi' ? 'डेटाबेस रेटिंग का विश्लेषण...' : 'Analyzing database reputability...');
-      
-      setTimeout(() => {
-        if (sourcesContainer) {
-          sourcesContainer.innerHTML = '';
-          sources.forEach((src, idx) => {
-            setTimeout(() => {
-              const item = document.createElement('div');
-              item.className = 'source-item';
-              item.innerHTML = `
-                <span class="source-name">${src.name}</span>
-                <span class="source-trust ${src.class}">${src.score}% ${t.s5_trust}</span>`;
-              sourcesContainer.appendChild(item);
-            }, idx * 250);
-          });
-        }
-      }, 500);
-    }
-    
-    else if (stepNum === 6) {
-      const comparisonContainer = document.getElementById('comparison-container');
-      const cleanText = state.claimText.toLowerCase();
-      const t = translations[state.currentLang] || translations.en;
-      const resData = d && d.backend
-        ? { summary: `ML model ${d.model} classified the claim as ${d.prediction} with ${d.confidence}% confidence. Semantic similarity: ${d.semanticSimilarity}%.` }
-        : (t[d.verdictKey] || translations.en[d.verdictKey]);
-      
-      let claimSummary = "";
-      let factSummary = "";
 
-      if (cleanText.includes('isro')) {
-        claimSummary = t.claim_h1 || "ISRO landed astronauts on Mars in 2025.";
-        factSummary = resData.summary;
-      } else if (cleanText.includes('earth')) {
-        claimSummary = t.currentLang === 'te' ? "భూమి నిశ్చలంగా, సమతలంగా మరియు వృత్తాకారంగా ఉంది." : (t.currentLang === 'hi' ? "पृथ्वी स्थिर, सपाट और गोलाकार है।" : "The Earth is static, flat, and circular.");
-        factSummary = resData.summary;
-      } else if (cleanText.includes('vaccine')) {
-        claimSummary = t.currentLang === 'te' ? "కోవిడ్ వ్యాక్సిన్లలో మైక్రోచిప్స్ ఉన్నాయి." : (t.currentLang === 'hi' ? "कोविड टीकों में माइक्रोचिप हैं।" : "COVID vaccines contain hardware microchips.");
-        factSummary = resData.summary;
-      } else if (cleanText.includes('boil') || cleanText.includes('water')) {
-        claimSummary = t.claim_h2 || "Water boils at 100 degrees Celsius.";
-        factSummary = resData.summary;
-      } else {
-        claimSummary = state.claimText.substring(0, 45) + "...";
-        factSummary = resData.summary;
-      }
+            previewText.innerHTML =
+              `<span style="
+                color:#047857;
+                font-weight:600;
+              ">
+                "${displayVal}"
+              </span>`;
+          }
 
-      if (comparisonContainer) comparisonContainer.innerHTML = t.s6_computing;
-      
-      setTimeout(() => {
-        if (comparisonContainer) {
-          comparisonContainer.innerHTML = `
-            <div class="comparison-box claim-side">
-              <h5>${t.s6_claim_side}</h5>
-              <p>${claimSummary}</p>
-            </div>
-            <div class="comparison-box fact-side">
-              <h5>${t.s6_fact_side}</h5>
-              <p>${factSummary}</p>
-            </div>
-          `;
-        }
-      }, 600);
-    }
+        }, 1000);
+
+      }, 1000);
+
+    }, 500);
+
   }
+
+
+  // ==========================================================
+  // STEP 3
+  // SHOW PYTORCH MODEL INFORMATION
+  // ==========================================================
+
+  else if (stepNum === 3) {
+
+    const entitiesSpan =
+      document.getElementById(
+        'nlp-entities'
+      );
+
+    const diagnostics =
+      document.getElementById(
+        'nlp-diagnostics'
+      );
+
+
+    setTimeout(() => {
+
+      if (!d) {
+        return;
+      }
+
+
+      if (entitiesSpan) {
+
+        entitiesSpan.textContent =
+          `PyTorch classification: ${
+            d.prediction
+          }`;
+
+      }
+
+
+      if (diagnostics) {
+
+        diagnostics.innerHTML = `
+
+          <div>
+            Model:
+            <span style="font-weight:700;">
+              ${d.model}
+            </span>
+          </div>
+
+          <div>
+            Classification:
+            <span style="font-weight:700;">
+              ${d.prediction}
+            </span>
+          </div>
+
+          <div>
+            Confidence:
+            <span style="font-weight:700;">
+              ${Number(
+                d.confidence
+              ).toFixed(2)}%
+            </span>
+          </div>
+
+          <div>
+            TF-IDF Features:
+            <span style="font-weight:700;">
+              ${d.tfidfFeatures}
+            </span>
+          </div>
+
+        `;
+      }
+
+    }, 700);
+
+  }
+
+
+  // ==========================================================
+  // STEP 4
+  // NO FAKE WEB SEARCH
+  // ==========================================================
+
+  else if (stepNum === 4) {
+
+    const queriesContainer =
+      document.getElementById(
+        'queries-container'
+      );
+
+
+    if (queriesContainer) {
+
+      queriesContainer.innerHTML = `
+
+        <div class="query-tag">
+
+          <span>
+            PyTorch model inference completed
+          </span>
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // STEP 5
+  // NO FAKE SOURCE CREDIBILITY
+  // ==========================================================
+
+  else if (stepNum === 5) {
+
+    const sourcesContainer =
+      document.getElementById(
+        'sources-list-container'
+      );
+
+
+    if (sourcesContainer) {
+
+      sourcesContainer.innerHTML = `
+
+        <div class="source-item">
+
+          <span class="source-name">
+            PyTorch Model
+          </span>
+
+          <span class="source-trust high">
+            ${Number(
+              d?.confidence || 0
+            ).toFixed(2)}% confidence
+          </span>
+
+        </div>
+
+      `;
+
+    }
+
+  }
+
+
+  // ==========================================================
+  // STEP 6
+  // MODEL RESULT VS INPUT
+  // ==========================================================
+
+  else if (stepNum === 6) {
+
+    const comparisonContainer =
+      document.getElementById(
+        'comparison-container'
+      );
+
+
+    if (!comparisonContainer || !d) {
+      return;
+    }
+
+
+    comparisonContainer.innerHTML = `
+
+      <div style="
+        padding:16px;
+        border-radius:12px;
+        background:var(--bg-main);
+      ">
+
+        <strong>
+          PyTorch Classification
+        </strong>
+
+        <br><br>
+
+        Input article was processed using:
+
+        <br>
+
+        <strong>
+          TF-IDF → PyTorch Neural Network
+        </strong>
+
+        <br><br>
+
+        Predicted subject:
+
+        <strong>
+          ${d.prediction}
+        </strong>
+
+        <br>
+
+        Confidence:
+
+        <strong>
+          ${Number(
+            d.confidence
+          ).toFixed(2)}%
+        </strong>
+
+      </div>
+
+    `;
+
+  }
+
+}
 
   // --- TRANSLATION TRANSLATOR ENGINE ---
   function applyTranslations(lang) {
