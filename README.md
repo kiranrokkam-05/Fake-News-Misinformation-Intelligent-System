@@ -67,3 +67,5 @@ The project uses the public Fake/Real News dataset by George McIntire. The datas
 ## Important
 
 Do not open `index.html` directly with `file://` for the ML version. Start the Flask server so the frontend can call `/api/analyze`.
+
+Runtime verification completed successfully.
