@@ -1,0 +1,96 @@
+﻿{
+    "generated_at":  "2026-09-29T11:06:21.7410730+05:30",
+    "baseline_commit":  "425ee217361af6f5a3ecb2f4b14bfbdd2886470e",
+    "artifacts":  [
+                      {
+                          "path":  "models/fake_news_model.joblib",
+                          "size_bytes":  471791,
+                          "sha256":  "6b3b337e6c07a197c3a6e81f521cfa06d63b33cd3f79adf0f466f23b371fa79e",
+                          "purpose":  "legacy/unknown artifact"
+                      },
+                      {
+                          "path":  "models/fake_news_models.joblib",
+                          "size_bytes":  23894005,
+                          "sha256":  "0614add95810449ae275415b9ea3634c5cc132d0f624d435e0640192849ed822",
+                          "purpose":  "legacy/unknown artifact"
+                      },
+                      {
+                          "path":  "models/model_metrics.json",
+                          "size_bytes":  600,
+                          "sha256":  "fd9d641e5c6d01dae48e91ce2b6891f92b9eab504efa72fe9fb0d00328fa48a6",
+                          "purpose":  "legacy/unknown artifact"
+                      },
+                      {
+                          "path":  "models/pytorch_claim_binary_label_encoder.joblib",
+                          "size_bytes":  488,
+                          "sha256":  "5b919639ffdd1bbb63056643c530787d8aa19a0324c2356bcb20d196b882f057",
+                          "purpose":  "legacy v1 label encoder"
+                      },
+                      {
+                          "path":  "models/pytorch_claim_binary_metrics.json",
+                          "size_bytes":  1748,
+                          "sha256":  "49a82aff9d856c5355977c6aba7c5eb22408de1a33abe578a1beeb873f351c32",
+                          "purpose":  "legacy v1 metrics"
+                      },
+                      {
+                          "path":  "models/pytorch_claim_binary_model.pt",
+                          "size_bytes":  2597561,
+                          "sha256":  "a831360cd54bc174bb8d53963f5bd7129194c7262b543db8847862f0f3319936",
+                          "purpose":  "legacy v1 binary model"
+                      },
+                      {
+                          "path":  "models/pytorch_claim_binary_tfidf.joblib",
+                          "size_bytes":  185090,
+                          "sha256":  "b64fb2c0a476c6b907f1c2f37f2937ab8701452d600387ac742e2b09c242884f",
+                          "purpose":  "legacy v1 vectorizer"
+                      },
+                      {
+                          "path":  "models/pytorch_claim_binary_v2_label_encoder.joblib",
+                          "size_bytes":  367,
+                          "sha256":  "36be73831469e061a8e2873726f20d7d62f9ace981dbf5538e0fa6d0f905ce33",
+                          "purpose":  "active v2 label encoder artifact"
+                      },
+                      {
+                          "path":  "models/pytorch_claim_binary_v2_metrics.json",
+                          "size_bytes":  2541,
+                          "sha256":  "47242a03eb779723ecee43baf63afcdd4b3939b96ae4457e595abe51fe4dfc75",
+                          "purpose":  "active v2 metrics"
+                      },
+                      {
+                          "path":  "models/pytorch_claim_binary_v2_model.pt",
+                          "size_bytes":  2597597,
+                          "sha256":  "443d64cf02f1c60eca7b1105d444d6805e29ec52cdff32805c1851b7115b570e",
+                          "purpose":  "active v2 model artifact"
+                      },
+                      {
+                          "path":  "models/pytorch_claim_binary_v2_tfidf.joblib",
+                          "size_bytes":  191147,
+                          "sha256":  "f86b194fc8d1fa0178dfac4dcd21f6180ba2d9a4bec0fdd1fc12f6d04c10ac48",
+                          "purpose":  "active v2 vectorizer artifact"
+                      },
+                      {
+                          "path":  "models/pytorch_label_encoder.joblib",
+                          "size_bytes":  545,
+                          "sha256":  "90e85023f41461708ecb05cdcd5238625bf1a2f3f80cec380db40b75a8f7d757",
+                          "purpose":  "legacy six-class label encoder"
+                      },
+                      {
+                          "path":  "models/pytorch_model_metrics.json",
+                          "size_bytes":  347,
+                          "sha256":  "4f90bbc3a69a5572ccd2f2b56c40be68da3b492e24528bd14a8409786f4f6e14",
+                          "purpose":  "legacy six-class metrics"
+                      },
+                      {
+                          "path":  "models/pytorch_news_model.pt",
+                          "size_bytes":  2598425,
+                          "sha256":  "96b0de315d7c6d1c696b4d56e59ad77bdb334edf9b72f5b7711bd2749f0b512a",
+                          "purpose":  "legacy six-class topic model"
+                      },
+                      {
+                          "path":  "models/pytorch_tfidf.joblib",
+                          "size_bytes":  184674,
+                          "sha256":  "8060d21996645a6365d322a5de2d1eae34bc46adf2e466d809d7df3d6160eba9",
+                          "purpose":  "legacy six-class vectorizer"
+                      }
+                  ]
+}
