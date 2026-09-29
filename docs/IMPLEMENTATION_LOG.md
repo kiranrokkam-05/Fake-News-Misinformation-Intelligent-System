@@ -75,3 +75,25 @@ python -c "from verification_module.evidence_retrieval import retrieve_evidence_
 - Adapters still return search snippets rather than full passages; passage retrieval is Phase 3.
 - The legacy lexical comparison and decision engine remain in place and are not yet allowed to make evidence-backed verdicts.
 - Provider status is currently available through the retrieval result but is not yet exposed through Flask.
+
+## Phase 2 — Domain model
+
+Date: 2026-09-29
+
+### Changed
+
+- Extended `verification_module/models.py` with explicit `SUPPORTS`, `REFUTES`, and `INSUFFICIENT` verdict values while preserving legacy verdict names.
+- Added `Passage`, `NLIScores`, `Aggregation`, and `ProviderStatus` structures.
+- Extended `EvidenceItem` with provenance, passage, relevance, weight, and NLI metadata.
+- Extended `VerificationResult.to_dict()` with provider status, evidence strength, flags, aggregation, model metadata, limitations, and timing fields.
+- Added domain serialization tests without removing or weakening legacy tests.
+
+### Real results
+
+- Tests: `23 passed, 2 warnings`
+- Legacy verification tests remained passing.
+
+### Limitations
+
+- The new fields are not yet populated by retrieval or NLI.
+- Legacy comparison and decision behavior remains active only in the standalone legacy pipeline until later phases replace it.
