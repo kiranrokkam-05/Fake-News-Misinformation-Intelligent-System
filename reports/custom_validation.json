@@ -1,0 +1,629 @@
+{
+  "note": "Report-only custom validation; claims were not used for training or tuning.",
+  "results": [
+    {
+      "id": "earth-orbit-sun",
+      "claim": "The Earth revolves around the Sun once approximately every 365.25 days.",
+      "expected_label": "SUPPORTS",
+      "prediction": "SUPPORTS",
+      "scores": {
+        "support": 0.81689453125,
+        "refute": 0.103515625
+      },
+      "seconds": 19.56875319997198,
+      "providers": [
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "newsapi",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "gnews",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_cse",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_factcheck",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        }
+      ],
+      "evidence": [
+        {
+          "title": "Sun",
+          "url": "https://en.wikipedia.org/wiki/Sun",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1376829934",
+          "revision_id": "1376829934",
+          "passage": "Sun: The Sun is the star located at the centre of the Solar System. It is a massive sphere of hot plasma, heated to incandescence by nuclear fusion reactions in its core, radiating the energy from its surface mainly as visible light and infrared radiation, with 10% at ultraviolet energies. It is the main source of energy for life on Earth."
+        },
+        {
+          "title": "Earth's rotation",
+          "url": "https://en.wikipedia.org/wiki/Earth's_rotation",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1373717750",
+          "revision_id": "1373717750",
+          "passage": "Earth's rotation: Earth's rotation or Earth's spin is the rotation of planet Earth around its own axis, as well as changes in the orientation of the rotation axis in space. Earth rotates eastward, in prograde motion. As viewed from the northern polar star Polaris, Earth turns counterclockwise."
+        },
+        {
+          "title": "Year",
+          "url": "https://en.wikipedia.org/wiki/Year",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1376658524",
+          "revision_id": "1376658524",
+          "passage": "Year: A year is a unit of time based on how long it takes the Earth to orbit the Sun. In scientific use, the tropical year (approximately 365 solar days, 5 hours, 48 minutes, 45 seconds) and the sidereal year (about 20 minutes longer) are more exact. The modern calendar year, as reckoned according to the Gregorian calendar, approximates the tropical year by using a system of leap years."
+        }
+      ]
+    },
+    {
+      "id": "moon-orbits-earth",
+      "claim": "The Moon orbits the Earth.",
+      "expected_label": "SUPPORTS",
+      "prediction": "SUPPORTS",
+      "scores": {
+        "support": 0.9970703125,
+        "refute": 0.00787353515625
+      },
+      "seconds": 19.693576199992094,
+      "providers": [
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "newsapi",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "gnews",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_cse",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_factcheck",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        }
+      ],
+      "evidence": [
+        {
+          "title": "Orbit of the Moon",
+          "url": "https://en.wikipedia.org/wiki/Orbit_of_the_Moon",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1372790933",
+          "revision_id": "1372790933",
+          "passage": "Orbit of the Moon: The orbit of the Moon is, while stable and known, highly complex, and as such still studied by lunar theory. Most models describe the Moon's orbit geocentrically since the Moon is mainly bound to Earth, but it also orbits together with Earth, as the Earth\u2013Moon system, around their shared barycenter. Furthermore from a heliocentric view its geocentric orbit is the result of Earth perturbing the Moon's orbit around the Sun."
+        },
+        {
+          "title": "High Earth orbit",
+          "url": "https://en.wikipedia.org/wiki/High_Earth_orbit",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1346704681",
+          "revision_id": "1346704681",
+          "passage": "High Earth orbit: A high Earth orbit is a geocentric orbit with an apogee farther than that of the geosynchronous orbit, which is 35,786 km (22,236 mi) away from Earth. In this article, the non-standard abbreviation of HEO is used for high Earth orbit. The development of HEO technology has had a significant impact on space exploration and has paved the way for future missions to deep space."
+        },
+        {
+          "title": "Earth's orbit",
+          "url": "https://en.wikipedia.org/wiki/Earth's_orbit",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1374306342",
+          "revision_id": "1374306342",
+          "passage": "Earth's orbit: Earth orbits the Sun at an average distance of 149.60 million km (92.96 million mi), or 8.317 light-minutes, in a counterclockwise direction as viewed from above the Northern Hemisphere. One complete orbit takes 365.256 days (1 sidereal year), during which time Earth has traveled 940 million km (584 million mi). Ignoring the influence of other Solar System bodies, Earth's orbit, also called Earth's revolution, is an ellipse with the Earth\u2013Sun barycenter as one focus with a current eccentricity of 0.0167."
+        }
+      ]
+    },
+    {
+      "id": "water-freezes-zero",
+      "claim": "Water freezes at approximately 0 degrees Celsius under standard atmospheric pressure.",
+      "expected_label": "SUPPORTS",
+      "prediction": "INSUFFICIENT",
+      "scores": {
+        "support": 0.47802734375,
+        "refute": 0.0648193359375
+      },
+      "seconds": 26.539051600004314,
+      "providers": [
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "newsapi",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "gnews",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_cse",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_factcheck",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        }
+      ],
+      "evidence": [
+        {
+          "title": "High-altitude breathing apparatus",
+          "url": "https://en.wikipedia.org/wiki/High-altitude_breathing_apparatus",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1361373838",
+          "revision_id": "1361373838",
+          "passage": "High-altitude breathing apparatus: High-altitude breathing apparatus is a breathing apparatus which allows a person to breathe more effectively at an altitude where the partial pressure of oxygen in the ambient atmospheric air is insufficient for the task or to sustain consciousness or human life over the long or short term. High-altitude breathing sets may be classified by type in several ways:\n\nby application: aviation breathing apparatus and mountaineering breathing apparatus,\nby breathing gas source: self-contained gas supply, or remotely supplied gas,\nby breathing circuit type: open, semi-closed, or closed circuit,\nby gas supply type: constant flow, supply on demand, or supplemental,\nby ventilatory driving force: the breathing effort of the user, or mechanical work from an external source,\nby gas mixture: air, oxygen-enriched, or pure oxygen. The user respiratory interface is the delivery system by which the breathing apparatus guides the breathing gas flow to and from the user."
+        },
+        {
+          "title": "Water vapor",
+          "url": "https://en.wikipedia.org/wiki/Water_vapor",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1376844214",
+          "revision_id": "1376844214",
+          "passage": "Water vapor: vapor, water vapour, or aqueous vapor is the gaseous phase of water. It is one state of water within the hydrosphere. Water vapor can be produced from the evaporation or boiling of liquid water or from the sublimation of ice."
+        },
+        {
+          "title": "Kelvin",
+          "url": "https://en.wikipedia.org/wiki/Kelvin",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1374638866",
+          "revision_id": "1374638866",
+          "passage": "Kelvin: The kelvin (symbol: K) is the base unit for temperature in the International System of Units (SI). The Kelvin scale is an absolute temperature scale that starts at the lowest possible temperature (absolute zero), taken to be 0 K. By definition, the units of the Celsius scale (symbol \u00b0C) and the Kelvin scale have the same magnitude (that is, a rise in temperature of one kelvin and a rise of 1 \u00b0C are both equal to 1 K), and any temperature in degrees Celsius can be converted to the kelvin scale by adding 273.15."
+        }
+      ]
+    },
+    {
+      "id": "sun-orbits-earth",
+      "claim": "The Sun revolves around the Earth once every 24 hours.",
+      "expected_label": "REFUTES",
+      "prediction": "REFUTES",
+      "scores": {
+        "support": 0.072265625,
+        "refute": 0.56689453125
+      },
+      "seconds": 17.12428750001709,
+      "providers": [
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "newsapi",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "gnews",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_cse",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_factcheck",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        }
+      ],
+      "evidence": [
+        {
+          "title": "Earth's rotation",
+          "url": "https://en.wikipedia.org/wiki/Earth's_rotation",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1373717750",
+          "revision_id": "1373717750",
+          "passage": "Earth's rotation: Earth's rotation or Earth's spin is the rotation of planet Earth around its own axis, as well as changes in the orientation of the rotation axis in space. Earth rotates eastward, in prograde motion. As viewed from the northern polar star Polaris, Earth turns counterclockwise."
+        },
+        {
+          "title": "Sun",
+          "url": "https://en.wikipedia.org/wiki/Sun",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1376829934",
+          "revision_id": "1376829934",
+          "passage": "Sun: The Sun is the star located at the centre of the Solar System. It is a massive sphere of hot plasma, heated to incandescence by nuclear fusion reactions in its core, radiating the energy from its surface mainly as visible light and infrared radiation, with 10% at ultraviolet energies. It is the main source of energy for life on Earth."
+        },
+        {
+          "title": "Analemma",
+          "url": "https://en.wikipedia.org/wiki/Analemma",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1369669632",
+          "revision_id": "1369669632",
+          "passage": "Analemma: In astronomy, an analemma (; from Ancient Greek  \u1f00\u03bd\u03ac\u03bb\u03b7\u03bc\u03bc\u03b1 (anal\u0113mma) 'support') is a diagram showing the position of the Sun in the sky as seen from a fixed location on Earth at the same mean solar time over the course of a year. The change of position is a result of the shifting of the angle in the sky of the path that the Sun takes in respect to the stars (the ecliptic). The diagram resembles a figure eight."
+        }
+      ]
+    },
+    {
+      "id": "water-freezes-hundred",
+      "claim": "Water normally freezes at 100 degrees Celsius under standard atmospheric pressure.",
+      "expected_label": "REFUTES",
+      "prediction": "REFUTES",
+      "scores": {
+        "support": 0.016357421875,
+        "refute": 0.90625
+      },
+      "seconds": 15.328119799989508,
+      "providers": [
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "newsapi",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "gnews",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_cse",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_factcheck",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        }
+      ],
+      "evidence": [
+        {
+          "title": "Glossary of meteorology",
+          "url": "https://en.wikipedia.org/wiki/Glossary_of_meteorology",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1356453599",
+          "revision_id": "1356453599",
+          "passage": "Glossary of meteorology: This glossary of meteorology is a list of terms and concepts relevant to meteorology and atmospheric science, their sub-disciplines, and related fields."
+        },
+        {
+          "title": "Temperature",
+          "url": "https://en.wikipedia.org/wiki/Temperature",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1374940246",
+          "revision_id": "1374940246",
+          "passage": "Temperature: In classical thermodynamics and kinetic theory, temperature reflects the average kinetic energy of the particles in a system, providing a quantitative measure of how energy is distributed among microscopic degrees of freedom. Temperature is measured with a thermometer. Thermometers are calibrated in various temperature scales that historically have relied on various reference points and thermometric substances for definition."
+        },
+        {
+          "title": "Specific heat capacity",
+          "url": "https://en.wikipedia.org/wiki/Specific_heat_capacity",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1373006509",
+          "revision_id": "1373006509",
+          "passage": "Specific heat capacity: In thermodynamics, the specific heat capacity (symbol c) of a substance is the amount of heat that must be added to one unit of mass of the substance in order to cause an increase of one unit in temperature. It is also referred to as massic heat capacity or as the specific heat. More formally it is the heat capacity of a sample of the substance divided by the mass of the sample."
+        }
+      ]
+    },
+    {
+      "id": "pacific-largest",
+      "claim": "The Pacific Ocean is the largest ocean on Earth.",
+      "expected_label": "SUPPORTS",
+      "prediction": "INSUFFICIENT",
+      "scores": {
+        "support": 0.028656005859375,
+        "refute": 0.002552032470703125
+      },
+      "seconds": 25.568918699980713,
+      "providers": [
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "newsapi",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "gnews",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_cse",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_factcheck",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        }
+      ],
+      "evidence": [
+        {
+          "title": "Pacific Ocean",
+          "url": "https://en.wikipedia.org/wiki/Pacific_Ocean",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1377216631",
+          "revision_id": "1377216631",
+          "passage": "Pacific Ocean: The Pacific Ocean is the largest and deepest of Earth's five oceanic divisions. It stretches from the Arctic Ocean in the north to the Southern Ocean, or, depending on the definition, to Antarctica in the south, and is bounded by the continents of Asia and Australia in the west and the Americas in the east. At 165,250,000 square kilometers (63,800,000 square miles) in area (as defined with a southern Antarctic border), the Pacific Ocean is the largest division of the World Ocean and the hydrosphere and covers approximately 46% of Earth's water surface and about 32% of the planet's total surface area, larger than its entire land area combined (148,940,000 square kilometers or 57,510,000 square miles)."
+        },
+        {
+          "title": "Borders of the oceans",
+          "url": "https://en.wikipedia.org/wiki/Borders_of_the_oceans",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1369192274",
+          "revision_id": "1369192274",
+          "passage": "Borders of the oceans: The borders of the oceans are the limits of Earth's oceanic waters. The definition and number of oceans can vary depending on the adopted criteria. The principal divisions (in descending order of area) of the five oceans are the Pacific Ocean, Atlantic Ocean, Indian Ocean, Southern (Antarctic) Ocean, and Arctic Ocean."
+        },
+        {
+          "title": "List of islands in the Pacific Ocean",
+          "url": "https://en.wikipedia.org/wiki/List_of_islands_in_the_Pacific_Ocean",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1364120673",
+          "revision_id": "1364120673",
+          "passage": "List of islands in the Pacific Ocean: The islands in the Pacific Ocean are categorized into three major island groups: Melanesia, Micronesia, and Polynesia. Depending on the context, the term Pacific Islands may refer to one of several concepts: (1) those Pacific islands whose people have Austronesian origins, (2) the Pacific islands once or currently colonized after 1500 CE, (3) the geographical region of Oceania, or (4) any island located in the Pacific Ocean. Inhabitants of the Pacific islands are known as Pacific Islanders."
+        }
+      ]
+    },
+    {
+      "id": "hamlet-shakespeare",
+      "claim": "Shakespeare wrote Hamlet.",
+      "expected_label": "SUPPORTS",
+      "prediction": "SUPPORTS",
+      "scores": {
+        "support": 0.99853515625,
+        "refute": 0.2034912109375
+      },
+      "seconds": 28.184145400009584,
+      "providers": [
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "newsapi",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "gnews",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_cse",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_factcheck",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        }
+      ],
+      "evidence": [
+        {
+          "title": "Hamlet",
+          "url": "https://en.wikipedia.org/wiki/Hamlet",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1373861765",
+          "revision_id": "1373861765",
+          "passage": "Hamlet: The Tragedy of Hamlet, Prince of Denmark, often shortened to Hamlet (), is a tragedy written by William Shakespeare sometime between 1599 and 1601. It is Shakespeare's longest play. Set in Denmark, the play depicts Prince Hamlet and his attempts to exact revenge against his uncle, Claudius, who has murdered Hamlet's father in order to seize his throne and marry Hamlet's mother."
+        },
+        {
+          "title": "Hamnet Shakespeare",
+          "url": "https://en.wikipedia.org/wiki/Hamnet_Shakespeare",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1370842014",
+          "revision_id": "1370842014",
+          "passage": "Hamnet Shakespeare: Hamnet Shakespeare (baptised 2 February 1585 \u2013 buried 11 August 1596) was the only son of William Shakespeare and Anne Hathaway, and the fraternal twin of Judith Shakespeare. Hamnet died at the age of 11. Some Shakespearean scholars speculate on the relationship between Hamnet and his father's later play Hamlet, as well as on possible connections between Hamnet's death and the writing of King John, Romeo and Juliet, Julius Caesar, and  Twelfth Night."
+        },
+        {
+          "title": "William Shakespeare",
+          "url": "https://en.wikipedia.org/wiki/William_Shakespeare",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1377242684",
+          "revision_id": "1377242684",
+          "passage": "William Shakespeare: William Shakespeare (c. 23 April 1564 \u2013 23 April 1616) was an English playwright, poet and actor. He is widely regarded as the greatest writer in the English language and the world's pre-eminent dramatist."
+        }
+      ]
+    },
+    {
+      "id": "obscure-claim",
+      "claim": "A previously unrecorded village on an unnamed island has exactly 17 left-handed residents.",
+      "expected_label": "INSUFFICIENT",
+      "prediction": "INSUFFICIENT",
+      "scores": {
+        "support": 0.01049041748046875,
+        "refute": 0.0114898681640625
+      },
+      "seconds": 18.282515500002773,
+      "providers": [
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 1
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "wikipedia",
+          "status": "ok",
+          "reason": "",
+          "n_results": 5
+        },
+        {
+          "name": "newsapi",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "gnews",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_cse",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        },
+        {
+          "name": "google_factcheck",
+          "status": "skipped",
+          "reason": "provider is not configured",
+          "n_results": 0
+        }
+      ],
+      "evidence": [
+        {
+          "title": "Smile (The Beach Boys album)",
+          "url": "https://en.wikipedia.org/wiki/Smile_(The_Beach_Boys_album)",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1377150604",
+          "revision_id": "1377150604",
+          "passage": "Smile (The Beach Boys album): Smile (stylized as SMiLE) is an unfinished album by the American rock band the Beach Boys, conceived as the follow-up to their 1966 album Pet Sounds. The project\u2014a concept album involving themes of Americana, humor, youth, innocence, and the natural world\u2014was planned as a twelve-track LP assembled from modular fragments, the same editing process used on their single \"Good Vibrations\". After a year of recording, the album was shelved and a downscaled version, Smiley Smile, was released in September 1967."
+        },
+        {
+          "title": "A",
+          "url": "https://en.wikipedia.org/wiki/A",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1377184305",
+          "revision_id": "1377184305",
+          "passage": "A: A (minuscule: a) is the first letter and the first vowel letter of the Latin alphabet, used in the modern English alphabet, and others worldwide. Its name in English is a (pronounced as in say), plural aes. It is similar in shape to the Ancient Greek letter alpha, from which it derives."
+        },
+        {
+          "title": "Circle-A",
+          "url": "https://en.wikipedia.org/wiki/Circle-A",
+          "permalink": "https://en.wikipedia.org/w/index.php?oldid=1366198130",
+          "revision_id": "1366198130",
+          "passage": "Circle-A: The circle-A or anarchist A, written as \u24b6, is a graphic and political symbol representing the anarchist movement and ideology. Seeking a symbol that could easily represent the entire movement, it was conceptualized in April 1964 by the Libertarian Youth group of Paris. It was made on the initiative of Tom\u00e1s Ib\u00e1\u00f1ez, and was graphically represented by Ren\u00e9 Darras."
+        }
+      ]
+    }
+  ]
+}
