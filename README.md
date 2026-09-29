@@ -2,21 +2,20 @@
 
 ## NLP & ML Developer Implementation
 
-This version connects the existing frontend to a real Python NLP/ML backend. The assigned NLP & ML Developer responsibilities are implemented as an end-to-end pipeline:
+This version connects the existing frontend to a Python NLP/ML backend that performs **binary claim classification**:
+
+- `TRUE`
+- `FALSE`
+
+The active backend pipeline is implemented in [backend/nlp_pipeline.py](./backend/nlp_pipeline.py) and provides:
 
 1. Text preprocessing and normalization
 2. Tokenization
-3. Claim extraction
-4. Named Entity Recognition (lightweight offline NER)
-5. TF-IDF semantic embeddings
-6. Semantic similarity with cosine similarity
-7. Logistic Regression classification
-8. Random Forest classification
-9. XGBoost classification
-10. Confidence calculation from model probabilities
-11. Best-model selection using validation F1 score
-12. REST API for frontend integration
-13. End-to-end prediction from user claim to final dashboard result
+3. TF-IDF feature extraction
+4. PyTorch neural-network binary classification
+5. Confidence calculation from class probabilities
+6. REST API for frontend integration
+7. End-to-end prediction from user claim to dashboard result
 
 ## Setup
 
@@ -34,7 +33,21 @@ Then open:
 http://127.0.0.1:5000
 ```
 
-`setup_ml.py` downloads the public Fake/Real News dataset and trains the models. It saves the trained bundle in `models/fake_news_models.joblib` and evaluation metrics in `models/model_metrics.json`.
+`setup_ml.py` trains the active binary classifier using:
+
+- [data/fake_and_real_news_dataset.csv](./data/fake_and_real_news_dataset.csv)
+
+Saved artifacts (separate from older models):
+
+- `models/pytorch_claim_binary_model.pt`
+- `models/pytorch_claim_binary_tfidf.joblib`
+- `models/pytorch_claim_binary_label_encoder.joblib`
+- `models/pytorch_claim_binary_metrics.json`
+
+Label handling:
+
+- `REAL` is mapped to `TRUE`
+- `FAKE` is mapped to `FALSE`
 
 ## API
 
@@ -58,14 +71,17 @@ Request:
 }
 ```
 
-Response contains the prediction, confidence, selected model, predictions from all trained models, semantic similarity, embeddings information, extracted claims, entities, sentiment, stance, and preprocessing diagnostics.
+Response includes prediction (`TRUE`/`FALSE`), confidence percentage, model metadata, and per-class probabilities.
 
 ## Dataset
 
-The project uses the public Fake/Real News dataset by George McIntire. The dataset contains real/fake news records with title/text and a REAL/FAKE label. The project does not ship a large third-party dataset inside the ZIP; `setup_ml.py` downloads it into `data/` when the user runs setup.
+The active pipeline expects a binary-labeled dataset with a `label` column containing either:
+
+- `TRUE` / `FALSE`, or
+- `REAL` / `FAKE` (normalized internally to `TRUE` / `FALSE`)
+
+The current bundled dataset already satisfies this requirement.
 
 ## Important
 
 Do not open `index.html` directly with `file://` for the ML version. Start the Flask server so the frontend can call `/api/analyze`.
-
-Runtime verification completed successfully.

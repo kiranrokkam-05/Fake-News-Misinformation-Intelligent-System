@@ -1234,7 +1234,7 @@ function revealFinalVerdict() {
 
 
   // ==========================================================
-  // PREDICTED SUBJECT
+  // BINARY VERDICT
   // ==========================================================
 
   const verdictContent =
@@ -1250,15 +1250,13 @@ function revealFinalVerdict() {
   `;
 
 
-  /*
-   * We are NOT using TRUE/FALSE/MISLEADING here.
-   *
-   * The PyTorch model is a multi-class subject classifier.
-   */
-
+  const verdictClass =
+    prediction === 'TRUE'
+      ? 'unlocked-true'
+      : 'unlocked-false';
 
   verdictWidget.className =
-    'result-widget verdict-widget unlocked-misleading';
+    `result-widget verdict-widget ${verdictClass}`;
 
 
   // ==========================================================
@@ -1279,7 +1277,7 @@ function revealFinalVerdict() {
   // ==========================================================
 
   typeText.textContent =
-    `Subject Classification · ${d.model}`;
+    `Binary Claim Classification · ${d.model}`;
 
 
   // ==========================================================
@@ -1340,12 +1338,10 @@ function revealFinalVerdict() {
   // ==========================================================
 
   explanationText.textContent =
-
-    `The PyTorch NewsClassificationModel classified ` +
-    `this article under the subject "${prediction}" ` +
-    `with ${confidence.toFixed(2)}% confidence. ` +
-    `The classification uses the trained TF-IDF ` +
-    `representation and PyTorch neural network.`;
+    `The model predicted "${prediction}" with ` +
+    `${confidence.toFixed(2)}% confidence. ` +
+    `This confidence reflects model certainty in its learned pattern, ` +
+    `not absolute factual certainty.`;
 
 
   // ==========================================================
@@ -1363,10 +1359,8 @@ function revealFinalVerdict() {
   // ==========================================================
 
   summaryText.textContent =
-
-    `The model identified the article as ` +
-    `"${prediction}" with a confidence of ` +
-    `${confidence.toFixed(2)}%.`;
+    `Final prediction: "${prediction}" with ` +
+    `${confidence.toFixed(2)}% model confidence.`;
 
 
   // ==========================================================
@@ -1396,14 +1390,16 @@ function revealFinalVerdict() {
 
     `Classification type: ${
       d.classificationType ||
-      'Multi-class subject classification'
+      'Binary claim classification (TRUE/FALSE)'
     }`,
 
-    `Predicted subject: ${prediction}`,
+    `Predicted label: ${prediction}`,
 
     `Confidence: ${confidence.toFixed(2)}%`,
 
     `TF-IDF features: ${d.tfidfFeatures}`,
+
+    `Note: Confidence is model confidence, not absolute factual certainty.`,
 
     `<strong>Class probabilities:</strong>`,
 
@@ -1846,7 +1842,7 @@ function triggerStepSimulations(stepNum) {
       if (entitiesSpan) {
 
         entitiesSpan.textContent =
-          `PyTorch classification: ${
+          `Binary claim prediction: ${
             d.prediction
           }`;
 
@@ -1865,7 +1861,7 @@ function triggerStepSimulations(stepNum) {
           </div>
 
           <div>
-            Classification:
+            Prediction:
             <span style="font-weight:700;">
               ${d.prediction}
             </span>
@@ -1953,7 +1949,7 @@ function triggerStepSimulations(stepNum) {
           <span class="source-trust high">
             ${Number(
               d?.confidence || 0
-            ).toFixed(2)}% confidence
+            ).toFixed(2)}% model confidence
           </span>
 
         </div>
@@ -2007,7 +2003,7 @@ function triggerStepSimulations(stepNum) {
 
         <br><br>
 
-        Predicted subject:
+        Predicted label:
 
         <strong>
           ${d.prediction}
@@ -2022,6 +2018,12 @@ function triggerStepSimulations(stepNum) {
             d.confidence
           ).toFixed(2)}%
         </strong>
+
+        <br><br>
+
+        <em>
+          Confidence is the model's probability estimate, not absolute factual certainty.
+        </em>
 
       </div>
 
