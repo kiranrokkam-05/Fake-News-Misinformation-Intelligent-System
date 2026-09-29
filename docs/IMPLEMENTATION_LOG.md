@@ -229,3 +229,14 @@ requests continuation.
 - 60 test subset executed: PENDING
 - Average/p95 subset latency report: PENDING
 - Phase 6 API v1: NOT STARTED
+
+## Launcher correction before continuation
+
+Date: 2026-09-29
+
+The original `start_ml_system.bat` ran `python setup_ml.py` on every launch,
+which retrained the v2 classifier and was incompatible with the instruction to
+stop training. It now installs/verifies dependencies, checks that all existing
+v2 artifacts are present, and starts `python -m backend.app` without training.
+Missing artifacts cause a visible error and instruct the operator to run
+training manually only after an explicit retraining decision.
