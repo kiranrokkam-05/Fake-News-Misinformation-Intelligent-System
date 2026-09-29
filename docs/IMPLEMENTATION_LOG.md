@@ -132,3 +132,40 @@ python -m ... retrieve_evidence_with_status(...)
 - Dense retrieval and cross-encoder reranking are interfaces with a deterministic lexical fallback; model installation/loading is a later phase.
 - Provider status is emitted once per query rather than aggregated per provider.
 - Wikipedia retrieval now has real passages, but no NLI verdict is made from them yet.
+
+## Phase 4 — Evidence reasoning
+
+Date: 2026-09-29
+
+### Changed
+
+- Added an explicit NLI model loader using `MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli`.
+- Added `ModelUnavailable`; no lexical fallback is used by the NLI boundary.
+- Added generic numeric conflict assessment as an advisory flag.
+- Added source-capped noisy-OR support/refute aggregation.
+- Added explicit `SUPPORTS`, `REFUTES`, and `INSUFFICIENT` decision logic with contested/margin handling.
+- Added reasoning unit tests.
+- Declared `transformers` in the main dependency manifest.
+
+### Commands run
+
+```text
+pytest -q
+python -c "from verification_module.reasoning.nli import load_nli_model; ..."
+python -c "retrieve real passages; score them with NLI"
+```
+
+### Real results
+
+- Tests: `30 passed, 2 warnings`
+- NLI model loaded successfully on CPU.
+- Model labels: `entailment`, `neutral`, `contradiction`.
+- Moon claim versus `Orbit of the Moon`: entailment `0.9971`.
+- Sun/Earth claim versus `Analemma`: contradiction `0.5669`; other retrieved passages were neutral.
+
+### Limitations
+
+- NLI is not yet orchestrated into `verify_pipeline.py`.
+- The NLI model is downloaded into the local Hugging Face cache, not committed to the repository.
+- The model is uncalibrated; scores are not factual probabilities.
+- The downloaded model's license and exact revision still need to be recorded in the model card/registry phase.
