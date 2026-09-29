@@ -19,6 +19,7 @@ from verification_module.adapters import ALL_ADAPTERS
 from verification_module.models import EvidenceItem, ProviderStatus, ProviderStatusValue
 from verification_module.retrieval.http_client import RetrievalHTTPError
 from verification_module.logging_setup import logger
+from verification_module.retrieval.queries import generate_claim_queries
 
 
 @dataclass
@@ -35,7 +36,7 @@ def generate_queries(claim: str) -> List[str]:
     project doc Step 14). For now we just use the raw claim -- good
     enough to exercise the full pipeline end-to-end.
     """
-    return [claim]
+    return generate_claim_queries(claim)
 
 
 def retrieve_evidence(claim: str) -> List[EvidenceItem]:

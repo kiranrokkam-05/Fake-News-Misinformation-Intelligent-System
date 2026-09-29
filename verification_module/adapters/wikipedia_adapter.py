@@ -9,12 +9,14 @@ API keys are configured.
 Docs: https://www.mediawiki.org/wiki/API:Search
 """
 
+from datetime import datetime, timezone
 from typing import List
 
 from verification_module import config
 from verification_module.adapters.base import SearchAdapter
 from verification_module.models import EvidenceItem
 from verification_module.retrieval.http_client import DEFAULT_HTTP_CLIENT
+from verification_module.retrieval.passages import sentence_windows
 
 
 class WikipediaAdapter(SearchAdapter):
@@ -49,6 +51,15 @@ class WikipediaAdapter(SearchAdapter):
                 .replace("</span>", "")
             )
             page_url = "https://en.wikipedia.org/wiki/" + title.replace(" ", "_")
+            page_data = self._fetch_page(title)
+            extract = page_data.get("extract", "")
+            passages = sentence_windows(extract, title)
+            revision_id = page_data.get("revision_id")
+            permalink = (
+                f"https://en.wikipedia.org/w/index.php?oldid={revision_id}"
+                if revision_id
+                else page_url
+            )
 
             results.append(
                 EvidenceItem(
@@ -58,6 +69,35 @@ class WikipediaAdapter(SearchAdapter):
                     url=page_url,
                     published_at=None,
                     provider=self.provider_name,
+                    permalink=permalink,
+                    revision_id=revision_id,
+                    retrieved_at=datetime.now(timezone.utc),
+                    source_type="encyclopedia",
+                    license_note="Wikipedia text is available under CC BY-SA; verify current page terms.",
+                    passage=passages[0] if passages else None,
+                    relevance=0.0,
                 )
             )
         return results
+
+    def _fetch_page(self, title: str) -> dict:
+        params = {
+            "action": "query",
+            "prop": "extracts|revisions",
+            "explaintext": "1",
+            "exintro": "0",
+            "rvprop": "ids",
+            "rvlimit": "1",
+            "titles": title,
+            "format": "json",
+        }
+        data = DEFAULT_HTTP_CLIENT.get(self.ENDPOINT, params=params).json()
+        pages = data.get("query", {}).get("pages", {})
+        page = next(iter(pages.values()), {})
+        revisions = page.get("revisions", [])
+        return {
+            "extract": page.get("extract", ""),
+            "revision_id": str(revisions[0].get("revid"))
+            if revisions and revisions[0].get("revid")
+            else None,
+        }

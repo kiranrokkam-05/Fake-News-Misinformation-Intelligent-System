@@ -97,3 +97,38 @@ Date: 2026-09-29
 
 - The new fields are not yet populated by retrieval or NLI.
 - Legacy comparison and decision behavior remains active only in the standalone legacy pipeline until later phases replace it.
+
+## Phase 3 — Retrieval and passages
+
+Date: 2026-09-29
+
+### Changed
+
+- Added deterministic claim normalization, quantity/entity extraction, and query variants.
+- Added sentence-window passage extraction.
+- Added CPU-safe lexical/hybrid ranking interfaces with optional dense-ranker boundary.
+- Updated Wikipedia retrieval to fetch page extracts and revision IDs after search.
+- Added oldid permalinks, retrieval timestamps, source type, licensing note, and passage text to Wikipedia evidence.
+- Added retrieval component tests.
+
+### Commands run
+
+```text
+pytest -q
+python -m ... retrieve_evidence_with_status(...)
+```
+
+### Real results
+
+- Tests: `26 passed, 2 warnings`
+- Wikipedia live retrieval returned real passages for both requested claims.
+- Moon query returned `Orbit of the Moon` with revision `1372790933`.
+- Sun/Earth query returned `Earth's rotation` with revision `1373717750` and `Sun` with revision `1376829934`.
+- Every returned Wikipedia item in the smoke test had a URL, oldid permalink, revision ID, retrieval timestamp, and passage text.
+
+### Limitations
+
+- Search results are not yet reranked across providers or deduplicated by semantic similarity.
+- Dense retrieval and cross-encoder reranking are interfaces with a deterministic lexical fallback; model installation/loading is a later phase.
+- Provider status is emitted once per query rather than aggregated per provider.
+- Wikipedia retrieval now has real passages, but no NLI verdict is made from them yet.
