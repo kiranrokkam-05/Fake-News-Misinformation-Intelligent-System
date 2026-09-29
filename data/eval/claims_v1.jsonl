@@ -1,0 +1,8 @@
+{"id":"earth-orbit-sun","claim":"The Earth revolves around the Sun once approximately every 365.25 days.","label":"SUPPORTS","label_source_url":"https://solarsystem.nasa.gov/solar-system/earth/in-depth/","needs_human_review":true}
+{"id":"moon-orbits-earth","claim":"The Moon orbits the Earth.","label":"SUPPORTS","label_source_url":"https://science.nasa.gov/moon/facts/","needs_human_review":true}
+{"id":"water-freezes-zero","claim":"Water freezes at approximately 0 degrees Celsius under standard atmospheric pressure.","label":"SUPPORTS","label_source_url":"https://www.usgs.gov/special-topics/water-science-school/science/water-density","needs_human_review":true}
+{"id":"sun-orbits-earth","claim":"The Sun revolves around the Earth once every 24 hours.","label":"REFUTES","label_source_url":"https://science.nasa.gov/solar-system/solar-system-facts/","needs_human_review":true}
+{"id":"water-freezes-hundred","claim":"Water normally freezes at 100 degrees Celsius under standard atmospheric pressure.","label":"REFUTES","label_source_url":"https://www.usgs.gov/special-topics/water-science-school/science/water-density","needs_human_review":true}
+{"id":"pacific-largest","claim":"The Pacific Ocean is the largest ocean on Earth.","label":"SUPPORTS","label_source_url":"https://oceanservice.noaa.gov/facts/pacific.html","needs_human_review":true}
+{"id":"hamlet-shakespeare","claim":"Shakespeare wrote Hamlet.","label":"SUPPORTS","label_source_url":"https://www.britannica.com/topic/Hamlet-literature","needs_human_review":true}
+{"id":"obscure-claim","claim":"A previously unrecorded village on an unnamed island has exactly 17 left-handed residents.","label":"INSUFFICIENT","label_source_url":"","needs_human_review":true}

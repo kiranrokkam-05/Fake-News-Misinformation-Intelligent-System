@@ -169,3 +169,63 @@ python -c "retrieve real passages; score them with NLI"
 - The NLI model is downloaded into the local Hugging Face cache, not committed to the repository.
 - The model is uncalibrated; scores are not factual probabilities.
 - The downloaded model's license and exact revision still need to be recorded in the model card/registry phase.
+
+## Phase 5 — Evaluation status at pause
+
+Date: 2026-09-29
+
+### User-directed execution change
+
+The initial full SciFact development evaluation was stopped after running
+for approximately 26 minutes without producing a final report. It must not
+be run again in full.
+
+The subsequent bounded run was also stopped at the user's direction before
+completion. No full-benchmark result was reported or fabricated.
+
+### Preserved outputs
+
+- The existing report-only custom validation output was written to
+  `reports/custom_validation.json`.
+- No `reports/scifact_dev.json`, `reports/scifact_dev_progress.jsonl`,
+  `reports/scifact_test.json`, or `reports/scifact_test_progress.jsonl`
+  existed from the stopped SciFact runs at the time of this pause.
+- SciFact source files remain in `data/eval/scifact/`.
+
+### Completed custom validation
+
+The custom validation script ran all eight report-only claims through live
+Wikipedia retrieval and the NLI model. It recorded actual predictions,
+scores, provider statuses, evidence passages, revision IDs, and per-claim
+timings in `reports/custom_validation.json`.
+
+The claims were not used for training or threshold tuning.
+
+### Prepared but not yet run
+
+`scripts/run_eval.py` now:
+
+- uses fixed random seed `42`;
+- samples exactly 60 SciFact dev claims and 60 SciFact test claims;
+- labels the output `Small-sample, not a full benchmark`;
+- writes one JSONL checkpoint row per claim and flushes immediately;
+- logs per-claim progress;
+- writes average and p95 seconds per claim;
+- reports dev metrics only for the labeled dev subset;
+- reports no accuracy for the downloaded unlabeled test split;
+- does not tune thresholds.
+
+The optimized batched evaluator was prepared after the stopped run, but
+the 60-dev/60-test execution remains pending until the user explicitly
+requests continuation.
+
+### Phase 5 gate status
+
+- Full evaluation stopped as requested: PASS
+- No fabricated full-benchmark metrics: PASS
+- Custom validation report written: PASS
+- Fixed-seed subset evaluator implemented: PASS
+- 60 dev subset executed: PENDING
+- 60 test subset executed: PENDING
+- Average/p95 subset latency report: PENDING
+- Phase 6 API v1: NOT STARTED
