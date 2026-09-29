@@ -20,6 +20,21 @@ class Stance(str, Enum):
     NEUTRAL = "neutral"
 
 
+class ProviderStatusValue(str, Enum):
+    OK = "ok"
+    SKIPPED = "skipped"
+    ERROR = "error"
+
+
+@dataclass
+class ProviderStatus:
+    name: str
+    status: ProviderStatusValue
+    reason: str = ""
+    latency_ms: float = 0.0
+    n_results: int = 0
+
+
 class Verdict(str, Enum):
     VERIFIED = "VERIFIED"
     FALSE = "FALSE / CONTRADICTED"

@@ -40,3 +40,38 @@ pytest -q
 - Optional providers are unconfigured.
 - No Docker/WSGI/deployment setup is present.
 - Existing working-tree changes predated this phase and were not reverted.
+
+## Phase 1 — Foundations
+
+Date: 2026-09-29
+
+### Changed
+
+- Replaced untyped verification configuration constants with `pydantic-settings` settings and compatibility aliases.
+- Added automatic `.env` loading and a placeholder User-Agent warning.
+- Added `verification_module/retrieval/http_client.py` with host allowlisting, timeout, redirect restriction, User-Agent, and response-size limits.
+- Routed all existing provider adapters through the shared HTTP client.
+- Added `ProviderStatus` and `RetrievalResult` structures.
+- Changed retrieval orchestration to report skipped and failed providers rather than silently swallowing orchestrator exceptions.
+- Added structured logging helpers that keep claim text out of INFO metadata.
+- Added foundation tests.
+
+### Commands run
+
+```text
+pytest -q
+python -c "from verification_module.evidence_retrieval import retrieve_evidence_with_status; ..."
+```
+
+### Real results
+
+- Tests: `21 passed, 2 warnings`
+- Live Wikipedia smoke test: `ok`, 5 results for both astronomical claims
+- Optional providers: explicitly reported as `skipped` because credentials are absent
+- Wikipedia results included relevant pages such as `Orbit of the Moon`, `Earth's orbit`, `Earth's rotation`, and `Sun`
+
+### Limitations
+
+- Adapters still return search snippets rather than full passages; passage retrieval is Phase 3.
+- The legacy lexical comparison and decision engine remain in place and are not yet allowed to make evidence-backed verdicts.
+- Provider status is currently available through the retrieval result but is not yet exposed through Flask.

@@ -11,11 +11,10 @@ Docs: https://www.mediawiki.org/wiki/API:Search
 
 from typing import List
 
-import requests
-
 from verification_module import config
 from verification_module.adapters.base import SearchAdapter
 from verification_module.models import EvidenceItem
+from verification_module.retrieval.http_client import DEFAULT_HTTP_CLIENT
 
 
 class WikipediaAdapter(SearchAdapter):
@@ -37,14 +36,8 @@ class WikipediaAdapter(SearchAdapter):
             "srlimit": max_results,
         }
 
-        try:
-            resp = requests.get(
-                self.ENDPOINT, params=params, timeout=config.REQUEST_TIMEOUT_SECONDS
-            )
-            resp.raise_for_status()
-            data = resp.json()
-        except (requests.RequestException, ValueError):
-            return []
+        resp = DEFAULT_HTTP_CLIENT.get(self.ENDPOINT, params=params)
+        data = resp.json()
 
         results = []
         for item in data.get("query", {}).get("search", [])[:max_results]:

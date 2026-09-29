@@ -10,11 +10,21 @@ this module runs on its own; swap `generate_queries()` for the real
 NLP module's output once it's ready.
 """
 
+import time
+from dataclasses import dataclass
 from typing import List
 
 from verification_module import config
 from verification_module.adapters import ALL_ADAPTERS
-from verification_module.models import EvidenceItem
+from verification_module.models import EvidenceItem, ProviderStatus, ProviderStatusValue
+from verification_module.retrieval.http_client import RetrievalHTTPError
+from verification_module.logging_setup import logger
+
+
+@dataclass
+class RetrievalResult:
+    evidence: List[EvidenceItem]
+    provider_statuses: List[ProviderStatus]
 
 
 def generate_queries(claim: str) -> List[str]:
@@ -32,11 +42,24 @@ def retrieve_evidence(claim: str) -> List[EvidenceItem]:
     """Run the claim through every configured adapter and return a
     single deduplicated list of EvidenceItem."""
 
+    return retrieve_evidence_with_status(claim).evidence
+
+
+def retrieve_evidence_with_status(claim: str) -> RetrievalResult:
     queries = generate_queries(claim)
     all_results: List[EvidenceItem] = []
+    statuses: List[ProviderStatus] = []
 
     for adapter in ALL_ADAPTERS:
+        started = time.perf_counter()
         if not adapter.is_configured():
+            statuses.append(
+                ProviderStatus(
+                    adapter.provider_name,
+                    ProviderStatusValue.SKIPPED,
+                    "provider is not configured",
+                )
+            )
             continue  # skip providers with no API key set
         for query in queries:
             try:
@@ -44,12 +67,28 @@ def retrieve_evidence(claim: str) -> List[EvidenceItem]:
                     query, max_results=config.MAX_RESULTS_PER_ADAPTER
                 )
                 all_results.extend(results)
-            except Exception:
-                # A single misbehaving adapter should never take down
-                # the whole pipeline.
-                continue
+                statuses.append(
+                    ProviderStatus(
+                        adapter.provider_name,
+                        ProviderStatusValue.OK,
+                        latency_ms=(time.perf_counter() - started) * 1000,
+                        n_results=len(results),
+                    )
+                )
+            except (RetrievalHTTPError, ValueError, RuntimeError) as exc:
+                logger.warning(
+                    "provider retrieval failed: %s (%s)", adapter.provider_name, exc
+                )
+                statuses.append(
+                    ProviderStatus(
+                        adapter.provider_name,
+                        ProviderStatusValue.ERROR,
+                        reason=str(exc),
+                        latency_ms=(time.perf_counter() - started) * 1000,
+                    )
+                )
 
-    return _deduplicate(all_results)
+    return RetrievalResult(_deduplicate(all_results), statuses)
 
 
 def _deduplicate(items: List[EvidenceItem]) -> List[EvidenceItem]:
