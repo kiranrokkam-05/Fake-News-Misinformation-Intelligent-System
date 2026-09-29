@@ -15,8 +15,7 @@ if not exist "models\pytorch_claim_binary_v2_model.pt" (
   echo.
   echo Missing v2 model artifact:
   echo   models\pytorch_claim_binary_v2_model.pt
-  echo Training is intentionally not started by this launcher.
-  echo Run python setup_ml.py manually only when a retraining decision is approved.
+  echo Model files are missing. Restore them from backup or see docs\ for recovery guidance.
   pause
   exit /b 1
 )

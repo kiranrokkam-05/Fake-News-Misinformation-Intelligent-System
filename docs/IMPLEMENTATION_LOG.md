@@ -240,3 +240,40 @@ stop training. It now installs/verifies dependencies, checks that all existing
 v2 artifacts are present, and starts `python -m backend.app` without training.
 Missing artifacts cause a visible error and instruct the operator to run
 training manually only after an explicit retraining decision.
+
+## Phase 6 — Evidence API v1
+
+Date: 2026-09-29
+
+### Changed
+
+- Added the versioned `/api/v1` Flask blueprint with single-claim, batch,
+  article, liveness, readiness, version, and model metadata endpoints.
+- Added strict Pydantic request validation and JSON-only request handling.
+- Added structured validation and model-unavailable error responses.
+- Added the evidence retrieval + NLI orchestration service, including source
+  credibility scoring before evidence aggregation.
+- Added a WSGI entry point and API contract tests.
+- Kept `/api/analyze` available as a deprecated, non-evidence baseline route.
+
+### Validation
+
+```text
+pytest -q
+33 passed, 2 warnings
+```
+
+The real Flask server was restarted with the Phase 6 code and tested over
+HTTP:
+
+- `GET /api/v1/health/live` returned `200`.
+- `POST /api/v1/verify` for “The Moon orbits the Earth.” returned `200`,
+  verdict `SUPPORTS`, with two evidence items.
+
+### Limitations
+
+- Evidence NLI scores are uncalibrated and are not probabilities of factual
+  truth.
+- The frontend still uses the legacy route until the planned frontend phase.
+- SciFact bounded evaluation results remain pending while the fixed-seed
+  evaluator runs; no full benchmark is being executed.
