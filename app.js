@@ -616,49 +616,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- DYNAMIC HISTORY DATABASE ---
-  const historyData = [
-    {
-      id: 'h1',
-      verdict: 'FALSE',
-      verdictClass: 'tag-false',
-      confidence: '98%',
-      categoryKey: 'cat_space',
-      timestampKey: 'time_today',
-      claimTextKey: 'claim_h1',
-      rawText: 'ISRO successfully sent humans to Mars in 2025.'
-    },
-    {
-      id: 'h2',
-      verdict: 'TRUE',
-      verdictClass: 'tag-true',
-      confidence: '92%',
-      categoryKey: 'cat_science',
-      timestampKey: 'time_yesterday',
-      claimTextKey: 'claim_h2',
-      rawText: 'Water boiling point decreases at higher altitudes.'
-    },
-    {
-      id: 'h3',
-      verdict: 'MISLEADING',
-      verdictClass: 'tag-misleading',
-      confidence: '81%',
-      categoryKey: 'cat_medicine',
-      timestampKey: 'time_aug5',
-      claimTextKey: 'claim_h3',
-      rawText: 'New COVID variant is resistant to all current immunity options.'
-    },
-    {
-      id: 'h4',
-      verdict: 'FALSE',
-      verdictClass: 'tag-false',
-      confidence: '99%',
-      categoryKey: 'cat_science',
-      timestampKey: 'time_jul28',
-      claimTextKey: 'claim_h4',
-      rawText: 'NASA confirmed discovery of alien cities on Jupiter.'
-    }
-  ];
-
+  const historyData = JSON.parse(localStorage.getItem('verificationHistory') || '[]');
+  /* Historical results are populated only from completed backend analyses. */
   function renderHistoryTable(lang) {
     const t = translations[lang] || translations.en;
     const tbody = document.getElementById('history-table-body');
@@ -666,9 +625,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     tbody.innerHTML = '';
     historyData.forEach(item => {
-      const claimText = t[item.claimTextKey] || translations.en[item.claimTextKey];
-      const categoryText = t[item.categoryKey] || translations.en[item.categoryKey];
-      const timestampText = t[item.timestampKey] || translations.en[item.timestampKey];
+      const claimText = item.claimText || t[item.claimTextKey] || '';
+      const categoryText = item.category || t[item.categoryKey] || '';
+      const timestampText = item.timestamp || t[item.timestampKey] || '';
       
       let verdictLabel = t.v_false;
       if (item.verdict === 'TRUE') verdictLabel = t.v_true;
@@ -729,7 +688,7 @@ async function checkMLBackendStatus() {
     if (data.modelReady) {
 
       statusEl.textContent =
-        `PyTorch NLP model ready · ${
+        `Fake-news NLP model ready · ${
           data.trainingRows || 0
         } training rows`;
 
@@ -742,7 +701,7 @@ async function checkMLBackendStatus() {
     } else {
 
       statusEl.textContent =
-        'PyTorch model not trained · ' +
+        'Fake-news model not trained · ' +
         'Run: python -m backend.nlp_pipeline';
 
       statusEl.style.background =
@@ -755,7 +714,7 @@ async function checkMLBackendStatus() {
   } catch (error) {
 
     statusEl.textContent =
-      'PyTorch backend offline · ' +
+      'Fake-news backend offline · ' +
       'Start with: python backend\\app.py';
 
     statusEl.style.background =
@@ -835,8 +794,7 @@ async function checkMLBackendStatus() {
         state.claimText = textarea.value;
         updateCharCounter();
         
-        // Create verification data
-        generateVerdictData(file.name);
+        // OCR is not implemented in this frontend yet; keep extracted text explicit.
       }
     });
   });
@@ -877,43 +835,57 @@ async function analyzeWithBackend(claim) {
 
     if (!response.ok) {
       throw new Error(
-        payload.error || 'PyTorch model analysis failed'
+      payload.error || 'Fake-news model analysis failed'
       );
     }
+
+    const verificationResponse = await fetch('/api/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ claim })
+    });
+    const verification = verificationResponse.ok
+      ? await verificationResponse.json()
+      : { verdict: 'UNVERIFIED', confidence: 0, evidence: [], sources_checked: [] };
 
     state.analysisError = null;
 
     /*
      * IMPORTANT:
-     * The prediction comes ONLY from the PyTorch backend.
+     * The prediction comes ONLY from the backend.
      *
      * No frontend prediction logic is performed here.
      */
 
+    const classification = payload.classification || {};
+    const confidenceAssessment = payload.confidence_assessment || {};
     state.verdictData = {
       backend: true,
-
-      prediction:
-        payload.prediction,
-
-      confidence:
-        Number(payload.confidence || 0),
-
-      model:
-        payload.model,
-
-      classificationType:
-        payload.classification_type,
-
-      classProbabilities:
-        payload.class_probabilities || {},
-
-      tfidfFeatures:
-        Number(payload.tfidf_features || 0),
-
-      processedText:
-        payload.processed_text || ''
+      prediction: classification.verdict || 'UNVERIFIED',
+      confidence: Number(confidenceAssessment.confidence_percentage || 0),
+      model: 'FakeNewsClassifier',
+      classificationType: 'fake/real misinformation classification',
+      classProbabilities: {
+        REAL: Number(classification.real_probability || 0),
+        FAKE: Number(classification.fake_probability || 0)
+      },
+      tfidfFeatures: null,
+      processedText: payload.input_text_summary?.cleaned_preview || '',
+      classification,
+      confidenceAssessment,
+      verification
     };
+    const history = JSON.parse(localStorage.getItem('verificationHistory') || '[]');
+    history.unshift({
+      id: Date.now().toString(),
+      verdict: classification.verdict || 'UNVERIFIED',
+      verdictClass: classification.is_fake ? 'tag-false' : 'tag-true',
+      confidence: `${Number(confidenceAssessment.confidence_percentage || 0).toFixed(1)}%`,
+      rawText: claim,
+      claimText: claim,
+      timestamp: new Date().toISOString()
+    });
+    localStorage.setItem('verificationHistory', JSON.stringify(history.slice(0, 50)));
 
     return payload;
 
@@ -921,7 +893,7 @@ async function analyzeWithBackend(claim) {
 
     state.analysisError =
       error.message ||
-      'PyTorch backend unavailable';
+      'Fake-news backend unavailable';
 
     state.verdictData = null;
 
@@ -989,22 +961,22 @@ async function analyzeWithBackend(claim) {
     const statusPhrases = {
       en: [
         "Analyzing text claim structural patterns...",
-        "Searching global fact-checking indices...",
-        "Crawling trusted media archives...",
+        "Extracting claims and entities...",
+        "Running fake-news classifier...",
         "Evaluating source credibility weights...",
         "Consolidating final verification reports..."
       ],
       te: [
         "క్లెయిమ్ ప్రకటనను విశ్లేషిస్తోంది...",
-        "గ్లోబల్ ఫాక్ట్-చెక్ డేటాబేస్ శోధిస్తోంది...",
-        "విశ్వసనీయ మీడియా మూలాలను పరిశీలిస్తోంది...",
+        "క్లెయిమ్‌లు మరియు ఎంటిటీలను వెలికితీస్తోంది...",
+        "ఫేక్-న్యూస్ క్లాసిఫైయర్‌ను నడుపుతోంది...",
         "ఆధారాల విశ్వసనీయతను లెక్కిస్తోంది...",
         "తుది నివేదికను సిద్ధం చేస్తోంది..."
       ],
       hi: [
         "दावे के पैटर्न का विश्लेषण...",
-        "वैश्विक तथ्य-जांच डेटाबेस में खोजना...",
-        "विश्वसनीय समाचार अभिलेखागार खोजना...",
+        "दावे और संस्थाओं को निकालना...",
+        "फेक-न्यूज़ क्लासिफायर चलाना...",
         "स्रोतों की विश्वसनीयता की जांच...",
         "अंतिम रिपोर्ट तैयार की जा रही है..."
       ]
@@ -1165,7 +1137,7 @@ function revealFinalVerdict() {
 
 
   // ==========================================================
-  // ONLY PYTORCH MODEL RESULT
+  // ONLY BACKEND MODEL RESULT
   // ==========================================================
 
   const prediction =
@@ -1253,7 +1225,7 @@ function revealFinalVerdict() {
   /*
    * We are NOT using TRUE/FALSE/MISLEADING here.
    *
-   * The PyTorch model is a multi-class subject classifier.
+   * The backend model is a fake/real classifier.
    */
 
 
@@ -1279,7 +1251,7 @@ function revealFinalVerdict() {
   // ==========================================================
 
   typeText.textContent =
-    `Subject Classification · ${d.model}`;
+    `Fake/Real Classification · ${d.model}`;
 
 
   // ==========================================================
@@ -1341,11 +1313,10 @@ function revealFinalVerdict() {
 
   explanationText.textContent =
 
-    `The PyTorch NewsClassificationModel classified ` +
-    `this article under the subject "${prediction}" ` +
+    `The fake-news classifier classified ` +
+    `this article as "${prediction}" ` +
     `with ${confidence.toFixed(2)}% confidence. ` +
-    `The classification uses the trained TF-IDF ` +
-    `representation and PyTorch neural network.`;
+    `The result combines the trained classifier with linguistic and claim-analysis signals.`;
 
 
   // ==========================================================
@@ -1354,8 +1325,7 @@ function revealFinalVerdict() {
 
   sourcesText.textContent =
 
-    `Model: ${d.model} · ` +
-    `TF-IDF features: ${d.tfidfFeatures}`;
+    `Model: ${d.model} · Evidence providers: ${checkedSources} · Items: ${evidenceCount}`;
 
 
   // ==========================================================
@@ -1375,6 +1345,14 @@ function revealFinalVerdict() {
 
   const probabilities =
     d.classProbabilities || {};
+
+  const verification = d.verification || {};
+  const evidenceCount = Array.isArray(verification.evidence)
+    ? verification.evidence.length
+    : 0;
+  const checkedSources = Array.isArray(verification.sources_checked)
+    ? verification.sources_checked.join(', ')
+    : 'none';
 
 
   const probabilityLines =
@@ -1396,14 +1374,19 @@ function revealFinalVerdict() {
 
     `Classification type: ${
       d.classificationType ||
-      'Multi-class subject classification'
+      'Fake/real misinformation classification'
     }`,
 
-    `Predicted subject: ${prediction}`,
+    `Verdict: ${prediction}`,
 
     `Confidence: ${confidence.toFixed(2)}%`,
 
-    `TF-IDF features: ${d.tfidfFeatures}`,
+    `Evidence verdict: ${verification.verdict || 'UNVERIFIED'}`,
+
+    `Evidence sources checked: ${checkedSources}`,
+
+    `Evidence items found: ${evidenceCount}`,
+
 
     `<strong>Class probabilities:</strong>`,
 
@@ -1621,7 +1604,7 @@ function revealFinalVerdict() {
       case 4:
         return {
           title: t.step4_title,
-          summaryText: t.currentLang === 'te' ? 'వివిధ వెబ్ క్రాలర్లు మరియు రిజిస్ట్రీలలో శోధిస్తోంది.' : (t.currentLang === 'hi' ? 'खोज क्वेरी बनाना और तथ्य-जांच प्रणालियों में खोजना।' : 'Generating query keywords and searching fact-checking APIs.'),
+          summaryText: t.currentLang === 'te' ? 'విశ్లేషణ మరియు ఐచ్ఛిక ఆధారాల ధృవీకరణ.' : (t.currentLang === 'hi' ? 'विश्लेषण और वैकल्पिक साक्ष्य सत्यापन।' : 'Analyzing the claim with the local model; evidence verification is available separately.'),
           desc: t.step4_desc,
           icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>`,
           illustration: `
@@ -1820,7 +1803,7 @@ function triggerStepSimulations(stepNum) {
 
   // ==========================================================
   // STEP 3
-  // SHOW PYTORCH MODEL INFORMATION
+  // SHOW CLASSIFIER INFORMATION
   // ==========================================================
 
   else if (stepNum === 3) {
@@ -1846,7 +1829,7 @@ function triggerStepSimulations(stepNum) {
       if (entitiesSpan) {
 
         entitiesSpan.textContent =
-          `PyTorch classification: ${
+          `Fake/real classification: ${
             d.prediction
           }`;
 
@@ -1881,10 +1864,8 @@ function triggerStepSimulations(stepNum) {
           </div>
 
           <div>
-            TF-IDF Features:
-            <span style="font-weight:700;">
-              ${d.tfidfFeatures}
-            </span>
+            Fake probability:
+            <span style="font-weight:700;">${((d.classification?.fake_probability || 0) * 100).toFixed(2)}%</span>
           </div>
 
         `;
@@ -1897,7 +1878,7 @@ function triggerStepSimulations(stepNum) {
 
   // ==========================================================
   // STEP 4
-  // NO FAKE WEB SEARCH
+  // VERIFICATION INTEGRATION STATUS
   // ==========================================================
 
   else if (stepNum === 4) {
@@ -1915,7 +1896,7 @@ function triggerStepSimulations(stepNum) {
         <div class="query-tag">
 
           <span>
-            PyTorch model inference completed
+            Local classifier inference completed; external evidence verification is available via /api/verify.
           </span>
 
         </div>
@@ -1929,7 +1910,7 @@ function triggerStepSimulations(stepNum) {
 
   // ==========================================================
   // STEP 5
-  // NO FAKE SOURCE CREDIBILITY
+  // MODEL CONFIDENCE
   // ==========================================================
 
   else if (stepNum === 5) {
@@ -1947,13 +1928,11 @@ function triggerStepSimulations(stepNum) {
         <div class="source-item">
 
           <span class="source-name">
-            PyTorch Model
+            Evidence providers
           </span>
 
           <span class="source-trust high">
-            ${Number(
-              d?.confidence || 0
-            ).toFixed(2)}% confidence
+            ${(d.verification?.sources_checked || []).join(', ') || 'none'}
           </span>
 
         </div>
@@ -1991,9 +1970,7 @@ function triggerStepSimulations(stepNum) {
         background:var(--bg-main);
       ">
 
-        <strong>
-          PyTorch Classification
-        </strong>
+        <strong>Fake/Real Classification</strong>
 
         <br><br>
 
@@ -2002,12 +1979,12 @@ function triggerStepSimulations(stepNum) {
         <br>
 
         <strong>
-          TF-IDF → PyTorch Neural Network
+          NLP preprocessing → FakeNewsClassifier
         </strong>
 
         <br><br>
 
-        Predicted subject:
+        Predicted verdict:
 
         <strong>
           ${d.prediction}

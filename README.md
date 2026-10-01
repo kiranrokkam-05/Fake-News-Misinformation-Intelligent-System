@@ -2,21 +2,13 @@
 
 ## NLP & ML Developer Implementation
 
-This version connects the existing frontend to a real Python NLP/ML backend. The assigned NLP & ML Developer responsibilities are implemented as an end-to-end pipeline:
+This version connects the existing frontend to a real Python NLP/ML backend. The live API uses the fake/real misinformation pipeline in `src/` and exposes optional evidence verification from `verification_module/`.
 
 1. Text preprocessing and normalization
-2. Tokenization
-3. Claim extraction
-4. Named Entity Recognition (lightweight offline NER)
-5. TF-IDF semantic embeddings
-6. Semantic similarity with cosine similarity
-7. Logistic Regression classification
-8. Random Forest classification
-9. XGBoost classification
-10. Confidence calculation from model probabilities
-11. Best-model selection using validation F1 score
-12. REST API for frontend integration
-13. End-to-end prediction from user claim to final dashboard result
+2. Claim/entity extraction and linguistic analysis
+3. Fake/real classification with calibrated confidence
+4. REST API for frontend integration
+5. Optional evidence retrieval, source scoring, and explainable verification
 
 ## Setup
 
@@ -34,7 +26,7 @@ Then open:
 http://127.0.0.1:5000
 ```
 
-`setup_ml.py` downloads the public Fake/Real News dataset and trains the models. It saves the trained bundle in `models/fake_news_models.joblib` and evaluation metrics in `models/model_metrics.json`.
+The live API loads the trained fake/real bundle from `models/fake_news_model.joblib` and metrics from `models/model_metrics.json`.
 
 ## API
 
@@ -58,7 +50,11 @@ Request:
 }
 ```
 
-Response contains the prediction, confidence, selected model, predictions from all trained models, semantic similarity, embeddings information, extracted claims, entities, sentiment, stance, and preprocessing diagnostics.
+Response contains fake/real classification, confidence, extracted claims/entities, and preprocessing diagnostics.
+
+### Evidence verification
+
+`POST /api/verify` accepts `{ "claim": "Your claim here" }` and returns an explainable verification result. Only configured providers are queried; Wikipedia is enabled by default and paid providers require environment keys.
 
 ## Dataset
 

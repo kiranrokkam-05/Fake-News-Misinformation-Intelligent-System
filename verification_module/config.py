@@ -9,6 +9,23 @@ with zero keys configured (using Wikipedia + mock evidence only).
 """
 
 import os
+from pathlib import Path
+
+# Load the project-local secrets file automatically. The file remains ignored
+# by Git, so credentials never need to be committed or exported manually.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DOTENV_PATH = PROJECT_ROOT / "verification_module" / ".env"
+try:
+    from dotenv import load_dotenv
+    load_dotenv(DOTENV_PATH)
+except ImportError:
+    # Keep first-run startup working before dependencies are installed.
+    if DOTENV_PATH.exists():
+        for line in DOTENV_PATH.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                key, value = line.split("=", 1)
+                os.environ.setdefault(key.strip(), value.strip().strip('"\''))
 
 # ---------------------------------------------------------------------
 # Search / evidence provider API keys (all optional; free tiers)
