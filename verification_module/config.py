@@ -39,12 +39,17 @@ GOOGLE_FACTCHECK_KEY = os.environ.get("GOOGLE_FACTCHECK_KEY", "")  # Fact Check 
 # Wikipedia's REST API needs no key -- always available as a
 # baseline "does this topic exist" source.
 WIKIPEDIA_ENABLED = True
+WIKIPEDIA_USER_AGENT = os.environ.get(
+    "WIKIPEDIA_USER_AGENT",
+    "FakeNewsClaimVerifier/0.1 (local development)",
+)
 
 # ---------------------------------------------------------------------
 # Pipeline behaviour
 # ---------------------------------------------------------------------
 MAX_RESULTS_PER_ADAPTER = 5
 REQUEST_TIMEOUT_SECONDS = 8
+MAX_RESPONSE_BYTES = 2_000_000
 
 # Verdict thresholds (0-1 scale of aggregated support). Tune these
 # once real similarity/NLI scores are wired in.
