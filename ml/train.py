@@ -10,11 +10,11 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, accuracy_score, precision_recall_fscore_support
 
-from src.ml.classifier import FakeNewsClassifier
+from ml.classifier import FakeNewsClassifier
 
 
 
-def load_dataset(data_dir: str = "data_sample") -> pd.DataFrame:
+def load_dataset(data_dir: str = "data/sample") -> pd.DataFrame:
     """
     Loads dataset from fake.csv or zip file.
     Synthesizes labeled dataset if only single class is present.

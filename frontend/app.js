@@ -702,7 +702,7 @@ async function checkMLBackendStatus() {
 
       statusEl.textContent =
         'Fake-news model not trained · ' +
-        'Run: python -m backend.nlp_pipeline';
+        'Run: python setup_ml.py';
 
       statusEl.style.background =
         '#fff7ed';
@@ -1041,7 +1041,7 @@ async function analyzeWithBackend(claim) {
             <div class="premium-loader-card" style="padding:28px;">
               <h3 style="color:#b91c1c;">NLP/ML backend is not ready</h3>
               <p style="margin-top:8px;color:#475569;">${error.message || 'Start the Python backend and train the model first.'}</p>
-              <p style="margin-top:8px;color:#475569;"><strong>Run:</strong> <code>python setup_ml.py</code> and then <code>python backend/app.py</code></p>
+              <p style="margin-top:8px;color:#475569;"><strong>Run:</strong> <code>python setup_ml.py</code> and then <code>python -m backend.app</code></p>
             </div>`;
         });
       }

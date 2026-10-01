@@ -2,7 +2,7 @@
 
 ## NLP & ML Developer Implementation
 
-This version connects the existing frontend to a real Python NLP/ML backend. The live API uses the fake/real misinformation pipeline in `src/` and exposes optional evidence verification from `verification_module/`.
+This version connects the existing frontend to a real Python NLP/ML backend. The live API uses the fake/real misinformation pipeline in `nlp/` and `ml/`, and exposes optional evidence verification from `verification_module/`.
 
 1. Text preprocessing and normalization
 2. Claim/entity extraction and linguistic analysis
@@ -62,6 +62,20 @@ The project uses the public Fake/Real News dataset by George McIntire. The datas
 
 ## Important
 
-Do not open `index.html` directly with `file://` for the ML version. Start the Flask server so the frontend can call `/api/analyze`.
+Do not open `frontend/index.html` directly with `file://` for the ML version. Start the Flask server so the frontend can call `/api/analyze`.
+
+## Repository layout
+
+- `frontend/` — browser UI (`index.html`, `app.js`, `style.css`)
+- `backend/` — Flask API and backend model services
+- `nlp/` — preprocessing, claim extraction, embeddings, and NLP pipeline
+- `ml/` — classifiers, confidence scoring, and training utilities
+- `verification_module/` — evidence adapters, retrieval, reasoning, and verification
+- `models/` — trained model artifacts and registry metadata
+- `data/` — datasets, samples, and evaluation corpora
+- `scripts/` — setup, evaluation, and demo scripts
+- `tests/` — automated tests
+- `docs/` — project documentation
+- `archive/project-legacy/` — preserved legacy frontend copy
 
 Runtime verification completed successfully.
