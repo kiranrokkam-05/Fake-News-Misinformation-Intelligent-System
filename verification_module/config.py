@@ -1,66 +1,53 @@
-"""Typed, environment-backed verification settings."""
+"""
+Configuration.
 
-from pydantic import Field
-from pydantic_settings import BaseSettings, SettingsConfigDict
+All API keys are read from environment variables (never hard-code
+keys). Copy .env.example to .env and fill in whichever free-tier
+keys you actually have -- adapters whose key is missing are simply
+skipped at runtime instead of crashing, so the pipeline still works
+with zero keys configured (using Wikipedia + mock evidence only).
+"""
 
+import os
+from pathlib import Path
 
-class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=(".env", "verification_module/.env"),
-        env_file_encoding="utf-8",
-        extra="ignore",
-    )
+# Load the project-local secrets file automatically. The file remains ignored
+# by Git, so credentials never need to be committed or exported manually.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DOTENV_PATH = PROJECT_ROOT / "verification_module" / ".env"
+try:
+    from dotenv import load_dotenv
+    load_dotenv(DOTENV_PATH)
+except ImportError:
+    # Keep first-run startup working before dependencies are installed.
+    if DOTENV_PATH.exists():
+        for line in DOTENV_PATH.read_text(encoding="utf-8").splitlines():
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                key, value = line.split("=", 1)
+                os.environ.setdefault(key.strip(), value.strip().strip('"\''))
 
-    newsapi_key: str = Field(default="", validation_alias="NEWSAPI_KEY")
-    gnews_key: str = Field(default="", validation_alias="GNEWS_KEY")
-    google_cse_key: str = Field(default="", validation_alias="GOOGLE_CSE_KEY")
-    google_cse_cx: str = Field(default="", validation_alias="GOOGLE_CSE_CX")
-    google_factcheck_key: str = Field(
-        default="", validation_alias="GOOGLE_FACTCHECK_KEY"
-    )
-    wikipedia_enabled: bool = Field(default=True, validation_alias="WIKIPEDIA_ENABLED")
-    wikipedia_user_agent: str = Field(
-        default="FakeNewsClaimVerifier/0.1 (contact@example.invalid)",
-        validation_alias="WIKIPEDIA_USER_AGENT",
-    )
-    max_results_per_adapter: int = Field(
-        default=5, validation_alias="MAX_RESULTS_PER_ADAPTER"
-    )
-    request_timeout_seconds: float = Field(
-        default=8.0, validation_alias="REQUEST_TIMEOUT_SECONDS"
-    )
-    max_response_bytes: int = Field(
-        default=2_000_000, validation_alias="MAX_RESPONSE_BYTES"
-    )
-    support_threshold: float = Field(default=0.65, validation_alias="SUPPORT_THRESHOLD")
-    contradiction_threshold: float = Field(
-        default=0.65, validation_alias="CONTRADICTION_THRESHOLD"
-    )
-    min_evidence_for_decision: int = Field(
-        default=1, validation_alias="MIN_EVIDENCE_FOR_DECISION"
-    )
+# ---------------------------------------------------------------------
+# Search / evidence provider API keys (all optional; free tiers)
+# ---------------------------------------------------------------------
+NEWSAPI_KEY = os.environ.get("NEWSAPI_KEY", "")          # newsapi.org
+GNEWS_KEY = os.environ.get("GNEWS_KEY", "")               # gnews.io
+GOOGLE_CSE_KEY = os.environ.get("GOOGLE_CSE_KEY", "")      # Google Custom Search JSON API
+GOOGLE_CSE_CX = os.environ.get("GOOGLE_CSE_CX", "")        # Custom Search Engine ID
+GOOGLE_FACTCHECK_KEY = os.environ.get("GOOGLE_FACTCHECK_KEY", "")  # Fact Check Tools API
 
+# Wikipedia's REST API needs no key -- always available as a
+# baseline "does this topic exist" source.
+WIKIPEDIA_ENABLED = True
 
-settings = Settings()
+# ---------------------------------------------------------------------
+# Pipeline behaviour
+# ---------------------------------------------------------------------
+MAX_RESULTS_PER_ADAPTER = 5
+REQUEST_TIMEOUT_SECONDS = 8
 
-# Compatibility aliases for the existing adapters and tests.
-NEWSAPI_KEY = settings.newsapi_key
-GNEWS_KEY = settings.gnews_key
-GOOGLE_CSE_KEY = settings.google_cse_key
-GOOGLE_CSE_CX = settings.google_cse_cx
-GOOGLE_FACTCHECK_KEY = settings.google_factcheck_key
-WIKIPEDIA_ENABLED = settings.wikipedia_enabled
-WIKIPEDIA_USER_AGENT = settings.wikipedia_user_agent
-MAX_RESULTS_PER_ADAPTER = settings.max_results_per_adapter
-REQUEST_TIMEOUT_SECONDS = settings.request_timeout_seconds
-MAX_RESPONSE_BYTES = settings.max_response_bytes
-SUPPORT_THRESHOLD = settings.support_threshold
-CONTRADICTION_THRESHOLD = settings.contradiction_threshold
-MIN_EVIDENCE_FOR_DECISION = settings.min_evidence_for_decision
-
-
-def configuration_warnings() -> list[str]:
-    warnings = []
-    if "example.invalid" in settings.wikipedia_user_agent:
-        warnings.append("WIKIPEDIA_USER_AGENT still uses the placeholder contact")
-    return warnings
+# Verdict thresholds (0-1 scale of aggregated support). Tune these
+# once real similarity/NLI scores are wired in.
+SUPPORT_THRESHOLD = 0.65
+CONTRADICTION_THRESHOLD = 0.65
+MIN_EVIDENCE_FOR_DECISION = 1

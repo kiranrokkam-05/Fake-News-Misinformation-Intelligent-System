@@ -2,20 +2,13 @@
 
 ## NLP & ML Developer Implementation
 
-This version connects the existing frontend to a Python NLP/ML backend that performs **binary claim classification**:
-
-- `TRUE`
-- `FALSE`
-
-The active backend pipeline is implemented in [backend/nlp_pipeline.py](./backend/nlp_pipeline.py) and provides:
+This version connects the existing frontend to a real Python NLP/ML backend. The live API uses the fake/real misinformation pipeline in `src/` and exposes optional evidence verification from `verification_module/`.
 
 1. Text preprocessing and normalization
-2. Tokenization
-3. TF-IDF feature extraction
-4. PyTorch neural-network binary classification
-5. Confidence calculation from class probabilities
-6. REST API for frontend integration
-7. End-to-end prediction from user claim to dashboard result
+2. Claim/entity extraction and linguistic analysis
+3. Fake/real classification with calibrated confidence
+4. REST API for frontend integration
+5. Optional evidence retrieval, source scoring, and explainable verification
 
 ## Setup
 
@@ -33,21 +26,7 @@ Then open:
 http://127.0.0.1:5000
 ```
 
-`setup_ml.py` trains the active binary classifier using:
-
-- [data/fake_and_real_news_dataset.csv](./data/fake_and_real_news_dataset.csv)
-
-Saved artifacts (separate from older models):
-
-- `models/pytorch_claim_binary_model.pt`
-- `models/pytorch_claim_binary_tfidf.joblib`
-- `models/pytorch_claim_binary_label_encoder.joblib`
-- `models/pytorch_claim_binary_metrics.json`
-
-Label handling:
-
-- `REAL` is mapped to `TRUE`
-- `FAKE` is mapped to `FALSE`
+The live API loads the trained fake/real bundle from `models/fake_news_model.joblib` and metrics from `models/model_metrics.json`.
 
 ## API
 
@@ -71,17 +50,18 @@ Request:
 }
 ```
 
-Response includes prediction (`TRUE`/`FALSE`), confidence percentage, model metadata, and per-class probabilities.
+Response contains fake/real classification, confidence, extracted claims/entities, and preprocessing diagnostics.
+
+### Evidence verification
+
+`POST /api/verify` accepts `{ "claim": "Your claim here" }` and returns an explainable verification result. Only configured providers are queried; Wikipedia is enabled by default and paid providers require environment keys.
 
 ## Dataset
 
-The active pipeline expects a binary-labeled dataset with a `label` column containing either:
-
-- `TRUE` / `FALSE`, or
-- `REAL` / `FAKE` (normalized internally to `TRUE` / `FALSE`)
-
-The current bundled dataset already satisfies this requirement.
+The project uses the public Fake/Real News dataset by George McIntire. The dataset contains real/fake news records with title/text and a REAL/FAKE label. The project does not ship a large third-party dataset inside the ZIP; `setup_ml.py` downloads it into `data/` when the user runs setup.
 
 ## Important
 
 Do not open `index.html` directly with `file://` for the ML version. Start the Flask server so the frontend can call `/api/analyze`.
+
+Runtime verification completed successfully.

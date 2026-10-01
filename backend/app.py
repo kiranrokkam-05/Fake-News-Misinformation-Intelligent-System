@@ -1,38 +1,34 @@
 import json
+import logging
 import sys
-from functools import lru_cache
 from pathlib import Path
 from flask import Flask, jsonify, request, send_from_directory
-from backend.api_v1 import api_v1
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-try:
-    from backend.nlp_pipeline_v2 import MODEL_PATH, METRICS_PATH, analyze, load_bundle
-except ImportError:
-    from nlp_pipeline_v2 import MODEL_PATH, METRICS_PATH, analyze, load_bundle
+from src.nlp_ml_pipeline import FakeNewsNLPPipeline
+from verification_module.verify_pipeline import verify_claim
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 app = Flask(__name__, static_folder=str(BASE_DIR), static_url_path="")
-app.register_blueprint(api_v1)
+logger = logging.getLogger(__name__)
+MODEL_PATH = BASE_DIR / "models" / "fake_news_model.joblib"
+METRICS_PATH = BASE_DIR / "models" / "model_metrics.json"
+_pipeline = None
 
 
-@lru_cache(maxsize=1)
-def get_bundle():
-    return load_bundle()
+def get_pipeline():
+    global _pipeline
+    if _pipeline is None:
+        _pipeline = FakeNewsNLPPipeline(model_path=str(MODEL_PATH))
+    return _pipeline
 
 
 @app.get("/api/health")
 def health():
-    required_artifacts = [
-        MODEL_PATH,
-        MODEL_PATH.with_name("pytorch_claim_binary_v2_tfidf.joblib"),
-        MODEL_PATH.with_name("pytorch_claim_binary_v2_label_encoder.joblib"),
-        METRICS_PATH,
-    ]
-    ready = all(path.exists() for path in required_artifacts)
+    ready = MODEL_PATH.exists()
     metrics = {}
     if METRICS_PATH.exists():
         try:
@@ -41,11 +37,10 @@ def health():
             pass
     return jsonify({
         "status": "healthy" if ready else "model_not_trained",
-        "service": "NLP & ML FEVER Claim Classification Backend",
+        "service": "NLP & ML Fake News Analysis Backend",
         "modelReady": ready,
-        "bestModel": metrics.get("best_model") or metrics.get("model"),
-        "modelFile": MODEL_PATH.name,
-        "trainingRows": metrics.get("total_usable_samples", 0),
+        "bestModel": metrics.get("best_model"),
+        "trainingRows": metrics.get("training_rows", 0),
     })
 
 
@@ -58,27 +53,42 @@ def model_metrics():
 
 @app.post("/api/analyze")
 def api_analyze():
-    if not request.is_json:
-        return jsonify({"error": "Request body must be valid JSON with a text field."}), 400
-    payload = request.get_json(silent=True)
-    if not isinstance(payload, dict):
-        return jsonify({"error": "Request body must be a JSON object with a text field."}), 400
+    payload = request.get_json(silent=True) or {}
     text = str(payload.get("text", "")).strip()
     if len(text) < 5:
         return jsonify({"error": "Please provide at least 5 characters of claim/news text."}), 400
+    if not MODEL_PATH.exists():
+        return jsonify({"error": "Fake-news model is not ready.", "code": "MODEL_NOT_READY"}), 503
     try:
-        result = analyze(text, get_bundle())
-        result["warning"] = (
-            "Deprecated pattern baseline only; this response is not evidence-based. "
-            "Use POST /api/v1/verify for evidence assessment."
-        )
+        result = get_pipeline().analyze_text(text)
+        if "error" in result:
+            return jsonify(result), 400
         return jsonify(result)
-    except (FileNotFoundError, ValueError, RuntimeError) as exc:
-        app.logger.exception("Binary model analysis unavailable")
+    except FileNotFoundError as exc:
         return jsonify({"error": str(exc), "code": "MODEL_NOT_READY"}), 503
-    except Exception as exc:
-        app.logger.exception("Analysis failed")
-        return jsonify({"error": f"Analysis failed: {exc}"}), 500
+    except Exception:
+        logger.exception("Analysis failed")
+        return jsonify({"error": "Analysis failed. Check the backend logs."}), 500
+
+
+@app.route("/api/verify", methods=["GET", "POST"])
+def api_verify():
+    if request.method == "GET":
+        return jsonify({
+            "endpoint": "/api/verify",
+            "method": "POST",
+            "body": {"claim": "Your claim or news text here"},
+            "message": "Send a POST request with JSON to verify a claim against configured evidence sources.",
+        })
+    payload = request.get_json(silent=True) or {}
+    claim = str(payload.get("claim", payload.get("text", ""))).strip()
+    if len(claim) < 5:
+        return jsonify({"error": "Please provide at least 5 characters of claim text."}), 400
+    try:
+        return jsonify(verify_claim(claim).to_dict())
+    except Exception:
+        logger.exception("Verification failed")
+        return jsonify({"error": "Verification failed. Check the backend logs."}), 502
 
 
 @app.get("/")
