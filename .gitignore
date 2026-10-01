@@ -223,5 +223,13 @@ __marimo__/
 models/*.joblib
 models/*.pt
 models/*.json
+!models/registry.json
 Project/
 /verification_module/.env
+
+# Downloaded evaluation data and local caches
+data/eval/scifact/
+reports/scifact*_progress.jsonl
+node_modules/
+.cache/
+huggingface/

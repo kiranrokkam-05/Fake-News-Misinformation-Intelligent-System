@@ -10,11 +10,10 @@ free to create at https://programmablesearchengine.google.com/
 
 from typing import List
 
-import requests
-
 from verification_module import config
 from verification_module.adapters.base import SearchAdapter
 from verification_module.models import EvidenceItem
+from verification_module.retrieval.http_client import DEFAULT_HTTP_CLIENT
 
 
 class GoogleCSEAdapter(SearchAdapter):
@@ -35,14 +34,8 @@ class GoogleCSEAdapter(SearchAdapter):
             "num": min(max_results, 10),  # API max is 10 per request
         }
 
-        try:
-            resp = requests.get(
-                self.ENDPOINT, params=params, timeout=config.REQUEST_TIMEOUT_SECONDS
-            )
-            resp.raise_for_status()
-            data = resp.json()
-        except (requests.RequestException, ValueError):
-            return []
+        resp = DEFAULT_HTTP_CLIENT.get(self.ENDPOINT, params=params)
+        data = resp.json()
 
         results = []
         for item in data.get("items", [])[:max_results]:

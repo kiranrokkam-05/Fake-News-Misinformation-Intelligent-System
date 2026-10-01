@@ -26,6 +26,6 @@ class SearchAdapter(ABC):
     @abstractmethod
     def search(self, query: str, max_results: int = 5) -> List[EvidenceItem]:
         """Run a search and return normalized EvidenceItem objects.
-        Must never raise on network/API errors -- catch and return
-        an empty list so one flaky provider can't break the pipeline."""
+        Network/API errors should be raised as retrieval errors so the
+        orchestrator can expose a structured ProviderStatus."""
         raise NotImplementedError
