@@ -12,7 +12,7 @@ const translations = {
     nav_how: "How it Works",
     nav_about: "About Us",
     input_title: "1. Input Your Claim",
-    input_sub: "Enter text or upload image / PDF",
+    input_sub: "Enter text",
     tab_text: "Text",
     tab_image: "Image",
     tab_pdf: "PDF",
@@ -180,7 +180,7 @@ const translations = {
     nav_how: "పనితీరు",
     nav_about: "మా గురించి",
     input_title: "1. మీ క్లెయిమ్‌ను నమోదు చేయండి",
-    input_sub: "టెక్స్ట్ టైప్ చేయండి లేదా ఇమేజ్ / PDF అప్‌లోడ్ చేయండి",
+    input_sub: "టెక్స్ట్ నమోదు చేయండి",
     tab_text: "టెక్స్ట్",
     tab_image: "ఇమేజ్",
     tab_pdf: "PDF",
@@ -348,7 +348,7 @@ const translations = {
     nav_how: "यह कैसे काम करता है",
     nav_about: "हमारे बारे में",
     input_title: "1. अपना दावा दर्ज करें",
-    input_sub: "टेक्स्ट टाइप करें या इमेज / PDF अपलोड करें",
+    input_sub: "टेक्स्ट दर्ज करें",
     tab_text: "टेक्स्ट",
     tab_image: "इमेज",
     tab_pdf: "PDF",
@@ -584,11 +584,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const confidenceText = document.getElementById('confidence-text');
   const verdictWidget = document.getElementById('widget-verdict');
   const typeText = document.getElementById('type-text');
-  const starsContainer = document.getElementById('reliability-stars');
   const explanationText = document.getElementById('explanation-text');
   const sourcesText = document.getElementById('sources-text');
-  const summaryText = document.getElementById('summary-text');
-  const insightsText = document.getElementById('insights-text');
 
   // SPA navigation links & section lists
   const navLinks = document.querySelectorAll('.nav-link');
@@ -1029,11 +1026,8 @@ document.addEventListener('DOMContentLoaded', () => {
         content.textContent = '-';
         widget.className = 'result-widget locked verdict-widget';
       } else if (widget.id === 'widget-confidence') {
-        confidenceCircle.style.strokeDashoffset = 125.6;
-        confidenceText.textContent = '-%';
-      } else if (widget.id === 'widget-reliability') {
-        // Reset stars
-        starsContainer.className = 'reliability-stars';
+        if (confidenceCircle) confidenceCircle.style.strokeDashoffset = 125.6;
+        if (confidenceText) confidenceText.textContent = '-%';
       } else {
         content.textContent = '-';
       }
@@ -1107,36 +1101,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 2. Confidence Score Widget
-    confidenceText.textContent = `${d.confidence}%`;
-    const offset = 125.6 * (1 - d.confidence / 100);
-    confidenceCircle.style.strokeDashoffset = offset;
+    if (confidenceText) confidenceText.textContent = `${d.confidence}%`;
+    if (confidenceCircle) {
+      const offset = 125.6 * (1 - d.confidence / 100);
+      confidenceCircle.style.strokeDashoffset = offset;
+    }
 
     // 3. Claim Type Widget
-    typeText.textContent = resData.type;
+    if (typeText) typeText.textContent = resData.type;
 
-    // 4. Reliability Stars Widget
-    starsContainer.className = 'reliability-stars active-stars';
-    let starsHTML = '';
-    for (let i = 1; i <= 5; i++) {
-      if (i <= d.reliability) {
-        starsHTML += `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="fill: var(--warning);"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
-      } else {
-        starsHTML += `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="fill: var(--text-muted);"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
-      }
-    }
-    starsContainer.innerHTML = starsHTML;
+    // 4. Explanation (Why?)
+    if (explanationText) explanationText.textContent = resData.explanation;
 
-    // 5. Explanation
-    explanationText.textContent = resData.explanation;
-
-    // 6. Sources
-    sourcesText.textContent = resData.sources;
-
-    // 7. Summary
-    summaryText.textContent = resData.summary;
-
-    // 8. Insights
-    insightsText.innerHTML = resData.insights.replace(/\n/g, '<br>');
+    // 5. Top Sources
+    if (sourcesText) sourcesText.textContent = resData.sources;
 
     // Smooth Scroll to Results Section
     document.querySelector('.results-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1734,16 +1712,13 @@ document.addEventListener('DOMContentLoaded', () => {
       resultsBannerText.textContent = state.isVerifying && state.currentStep === 7 ? t.results_banner_complete : t.results_banner_default;
     }
 
-    // Results widget titles
+    // Results widget titles (5 active widgets)
     const widgetsConfigs = [
       { id: 'widget-verdict', title: t.w_verdict },
       { id: 'widget-confidence', title: t.w_confidence },
       { id: 'widget-type', title: t.w_type },
-      { id: 'widget-reliability', title: t.w_reliability },
       { id: 'widget-explanation', title: t.w_explanation },
-      { id: 'widget-sources', title: t.w_sources },
-      { id: 'widget-summary', title: t.w_summary },
-      { id: 'widget-insights', title: t.w_insights }
+      { id: 'widget-sources', title: t.w_sources }
     ];
 
     widgetsConfigs.forEach(cfg => {

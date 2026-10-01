@@ -35,18 +35,7 @@
         </svg>
         History
       </a>
-      <a href="#" class="nav-link" id="nav-how">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-        </svg>
-        How it Works
-      </a>
-      <a href="#" class="nav-link" id="nav-about">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        About Us
-      </a>
+    </nav>
 
     <div class="header-right">
       <div class="lang-selector-container">
@@ -78,7 +67,7 @@
       <section class="card input-claim-card">
         <div class="sidebar-title-group">
           <h2>1. Input Your Claim</h2>
-          <p>Enter text or upload image / PDF</p>
+          <p>Enter text</p>
         </div>
 
         <div class="tabs-container">
@@ -88,45 +77,11 @@
             </svg>
             Text
           </button>
-          <button class="tab-btn" data-tab="image">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-            Image
-          </button>
-          <button class="tab-btn" data-tab="pdf">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-            </svg>
-            PDF
-          </button>
         </div>
 
         <div class="textarea-container">
           <textarea class="claim-textarea" id="claim-text" placeholder="Type your claim statement here..." maxlength="2000"></textarea>
           <div class="char-counter" id="char-counter">0/2000</div>
-        </div>
-
-        <div class="file-upload-section">
-          <h3>Or upload files</h3>
-          <div class="upload-btn-container">
-            <label class="upload-btn-label" for="image-upload">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-              <span>Upload Image</span>
-            </label>
-            <input type="file" id="image-upload" class="file-input" accept="image/*">
-
-            <label class="upload-btn-label" for="pdf-upload">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-              </svg>
-              <span>Upload PDF</span>
-            </label>
-            <input type="file" id="pdf-upload" class="file-input" accept="application/pdf">
-          </div>
-          <p class="upload-info-text">Supports JPG, PNG, PDF (Max 10MB)</p>
         </div>
 
         <div class="tips-box">
@@ -331,31 +286,10 @@
             </div>
           </div>
 
-          <!-- Widget 4: Overall Reliability -->
-          <div class="result-widget locked" id="widget-reliability">
-            <span class="result-widget-title">Overall Reliability</span>
-            <div class="result-widget-content">
-              <div class="reliability-stars" id="reliability-stars">
-                <!-- Stars will be highlighted active via JS -->
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-              </div>
-            </div>
-            <span class="result-widget-subtext">Will be shown at the end</span>
-            <div class="widget-lock-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Widget 5: Explanation -->
+          <!-- Widget 4: Explanation (Why?) -->
           <div class="result-widget locked" id="widget-explanation">
             <span class="result-widget-title">Explanation (Why?)</span>
-            <div class="result-widget-content" id="explanation-text" style="font-size: 0.76rem; font-weight: 500;">-</div>
+            <div class="result-widget-content" id="explanation-text" style="font-size: 0.8rem; font-weight: 500; line-height: 1.4;">-</div>
             <span class="result-widget-subtext">Will be shown at the end</span>
             <div class="widget-lock-icon">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
@@ -364,34 +298,10 @@
             </div>
           </div>
 
-          <!-- Widget 6: Top Sources -->
+          <!-- Widget 5: Top Sources -->
           <div class="result-widget locked" id="widget-sources">
             <span class="result-widget-title">Top Sources</span>
-            <div class="result-widget-content" id="sources-text" style="font-size: 0.76rem; font-weight: 500;">-</div>
-            <span class="result-widget-subtext">Will be shown at the end</span>
-            <div class="widget-lock-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Widget 7: Evidence Summary -->
-          <div class="result-widget locked" id="widget-summary">
-            <span class="result-widget-title">Evidence Summary</span>
-            <div class="result-widget-content" id="summary-text" style="font-size: 0.76rem; font-weight: 500;">-</div>
-            <span class="result-widget-subtext">Will be shown at the end</span>
-            <div class="widget-lock-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-              </svg>
-            </div>
-          </div>
-
-          <!-- Widget 8: NLP Insights -->
-          <div class="result-widget locked" id="widget-insights">
-            <span class="result-widget-title">NLP Insights</span>
-            <div class="result-widget-content" id="insights-text" style="font-size: 0.76rem; font-weight: 500;">-</div>
+            <div class="result-widget-content" id="sources-text" style="font-size: 0.8rem; font-weight: 500; line-height: 1.4;">-</div>
             <span class="result-widget-subtext">Will be shown at the end</span>
             <div class="widget-lock-icon">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
@@ -518,22 +428,7 @@
 
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-left">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-      </svg>
-      <span>&copy; 2025 Fake News Detection & Claim Verification System. All rights reserved.</span>
-    </div>
-    <div class="footer-right">
-      <span>Built with</span>
-      <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
-      </svg>
-      <span>for a better informed world.</span>
-    </div>
-  </footer>
+
 
   <script src="app.js"></script>
 </body>

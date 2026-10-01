@@ -12,7 +12,7 @@ const translations = {
     nav_how: "How it Works",
     nav_about: "About Us",
     input_title: "1. Input Your Claim",
-    input_sub: "Enter text or upload image / PDF",
+    input_sub: "Enter text",
     tab_text: "Text",
     tab_image: "Image",
     tab_pdf: "PDF",
@@ -180,7 +180,7 @@ const translations = {
     nav_how: "పనితీరు",
     nav_about: "మా గురించి",
     input_title: "1. మీ క్లెయిమ్‌ను నమోదు చేయండి",
-    input_sub: "టెక్స్ట్ టైప్ చేయండి లేదా ఇమేజ్ / PDF అప్‌లోడ్ చేయండి",
+    input_sub: "టెక్స్ట్ నమోదు చేయండి",
     tab_text: "టెక్స్ట్",
     tab_image: "ఇమేజ్",
     tab_pdf: "PDF",
@@ -348,7 +348,7 @@ const translations = {
     nav_how: "यह कैसे काम करता है",
     nav_about: "हमारे बारे में",
     input_title: "1. अपना दावा दर्ज करें",
-    input_sub: "टेक्स्ट टाइप करें या इमेज / PDF अपलोड करें",
+    input_sub: "टेक्स्ट दर्ज करें",
     tab_text: "टेक्स्ट",
     tab_image: "इमेज",
     tab_pdf: "PDF",
@@ -586,11 +586,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const confidenceText = document.getElementById('confidence-text');
   const verdictWidget = document.getElementById('widget-verdict');
   const typeText = document.getElementById('type-text');
-  const starsContainer = document.getElementById('reliability-stars');
   const explanationText = document.getElementById('explanation-text');
   const sourcesText = document.getElementById('sources-text');
-  const summaryText = document.getElementById('summary-text');
-  const insightsText = document.getElementById('insights-text');
 
   // SPA navigation links & section lists
   const navLinks = document.querySelectorAll('.nav-link');
@@ -1125,11 +1122,8 @@ async function analyzeWithBackend(claim) {
         content.textContent = '-';
         widget.className = 'result-widget locked verdict-widget';
       } else if (widget.id === 'widget-confidence') {
-        confidenceCircle.style.strokeDashoffset = 125.6;
-        confidenceText.textContent = '-%';
-      } else if (widget.id === 'widget-reliability') {
-        // Reset stars
-        starsContainer.className = 'reliability-stars';
+        if (confidenceCircle) confidenceCircle.style.strokeDashoffset = 125.6;
+        if (confidenceText) confidenceText.textContent = '-%';
       } else {
         content.textContent = '-';
       }
@@ -1283,133 +1277,28 @@ function revealFinalVerdict() {
 
 
   // ==========================================================
-  // RELIABILITY VISUAL
-  // ==========================================================
-
-  const reliability =
-    Math.max(
-      1,
-      Math.min(
-        5,
-        Math.round(confidence / 20)
-      )
-    );
-
-
-  starsContainer.className =
-    'reliability-stars active-stars';
-
-
-  starsContainer.innerHTML =
-    Array.from(
-      { length: 5 },
-      (_, i) => {
-
-        const filled =
-          i < reliability;
-
-        return `
-          <svg
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-            style="
-              fill:${
-                filled
-                  ? 'var(--warning)'
-                  : 'var(--text-muted)'
-              }
-            "
-          >
-            <path
-              d="
-                M12 17.27L18.18 21l-1.64-7.03
-                L22 9.24l-7.19-.61L12 2
-                9.19 8.63 2 9.24
-                7.82 14 6.18 21z
-              "
-            />
-          </svg>
-        `;
-
-      }
-    ).join('');
-
-
   // ==========================================================
   // EXPLANATION
   // ==========================================================
 
-  explanationText.textContent =
-
-    `The PyTorch NewsClassificationModel classified ` +
-    `this article under the subject "${prediction}" ` +
-    `with ${confidence.toFixed(2)}% confidence. ` +
-    `The classification uses the trained TF-IDF ` +
-    `representation and PyTorch neural network.`;
-
+  if (explanationText) {
+    explanationText.textContent =
+      `The PyTorch NewsClassificationModel classified ` +
+      `this article under the subject "${prediction}" ` +
+      `with ${confidence.toFixed(2)}% confidence. ` +
+      `The classification uses the trained TF-IDF ` +
+      `representation and PyTorch neural network.`;
+  }
 
   // ==========================================================
   // SOURCES / MODEL INFORMATION
   // ==========================================================
 
-  sourcesText.textContent =
-
-    `Model: ${d.model} · ` +
-    `TF-IDF features: ${d.tfidfFeatures}`;
-
-
-  // ==========================================================
-  // SUMMARY
-  // ==========================================================
-
-  summaryText.textContent =
-
-    `The model identified the article as ` +
-    `"${prediction}" with a confidence of ` +
-    `${confidence.toFixed(2)}%.`;
-
-
-  // ==========================================================
-  // CLASS PROBABILITIES
-  // ==========================================================
-
-  const probabilities =
-    d.classProbabilities || {};
-
-
-  const probabilityLines =
-    Object.entries(probabilities)
-
-      .sort(
-        (a, b) => b[1] - a[1]
-      )
-
-      .map(
-        ([label, probability]) =>
-          `${label}: ${(probability * 100).toFixed(2)}%`
-      );
-
-
-  insightsText.innerHTML = [
-
-    `Model: ${d.model}`,
-
-    `Classification type: ${
-      d.classificationType ||
-      'Multi-class subject classification'
-    }`,
-
-    `Predicted subject: ${prediction}`,
-
-    `Confidence: ${confidence.toFixed(2)}%`,
-
-    `TF-IDF features: ${d.tfidfFeatures}`,
-
-    `<strong>Class probabilities:</strong>`,
-
-    ...probabilityLines
-
-  ].join('<br>');
+  if (sourcesText) {
+    sourcesText.textContent =
+      `Model: ${d.model} · ` +
+      `TF-IDF features: ${d.tfidfFeatures}`;
+  }
 
 
   // ==========================================================
@@ -2141,16 +2030,13 @@ function triggerStepSimulations(stepNum) {
       resultsBannerText.textContent = state.isVerifying && state.currentStep === 7 ? t.results_banner_complete : t.results_banner_default;
     }
 
-    // Results widget titles
+    // Results widget titles (5 active widgets)
     const widgetsConfigs = [
       { id: 'widget-verdict', title: t.w_verdict },
       { id: 'widget-confidence', title: t.w_confidence },
       { id: 'widget-type', title: t.w_type },
-      { id: 'widget-reliability', title: t.w_reliability },
       { id: 'widget-explanation', title: t.w_explanation },
-      { id: 'widget-sources', title: t.w_sources },
-      { id: 'widget-summary', title: t.w_summary },
-      { id: 'widget-insights', title: t.w_insights }
+      { id: 'widget-sources', title: t.w_sources }
     ];
 
     widgetsConfigs.forEach(cfg => {

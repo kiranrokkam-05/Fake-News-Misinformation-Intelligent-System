@@ -852,7 +852,7 @@ header {
 
 .results-grid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
   position: relative;
   width: 100%;
@@ -1431,9 +1431,9 @@ footer {
   }
 }
 
-@media (max-width: 1350px) {
+@media (max-width: 1200px) {
   .results-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
