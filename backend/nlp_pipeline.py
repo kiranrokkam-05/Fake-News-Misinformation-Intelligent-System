@@ -1,27 +1,14 @@
 """
-PyTorch NLP Classification Pipeline
+PyTorch NLP Binary Claim Classification Pipeline
 
 Dataset:
-    data_sample/fake.csv
+    data/fake_and_real_news_dataset.csv
 
-Columns:
-    title
-    text
-    subject
-    date
-
-Input:
-    title + text
+Required columns:
+    label + (title/text or full_text)
 
 Target:
-    subject
-
-Model:
-    TF-IDF
-        ↓
-    PyTorch Neural Network
-        ↓
-    Multi-class subject classification
+    TRUE / FALSE
 """
 
 from __future__ import annotations
@@ -29,880 +16,349 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 
 import joblib
 import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
-
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-
-
-# ============================================================
-# 1. PATHS
-# ============================================================
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-DATASET_PATH = BASE_DIR / "data_sample" / "fake.csv"
+DATASET_PATH = BASE_DIR / "data" / "fake_and_real_news_dataset.csv"
 
 MODEL_DIR = BASE_DIR / "models"
 MODEL_DIR.mkdir(exist_ok=True)
 
-MODEL_PATH = MODEL_DIR / "pytorch_news_model.pt"
-
-VECTORIZER_PATH = MODEL_DIR / "pytorch_tfidf.joblib"
-
-LABEL_ENCODER_PATH = MODEL_DIR / "pytorch_label_encoder.joblib"
-
-METRICS_PATH = MODEL_DIR / "pytorch_model_metrics.json"
-
-
-# ============================================================
-# 2. DEVICE
-# ============================================================
+MODEL_PATH = MODEL_DIR / "pytorch_claim_binary_model.pt"
+VECTORIZER_PATH = MODEL_DIR / "pytorch_claim_binary_tfidf.joblib"
+LABEL_ENCODER_PATH = MODEL_DIR / "pytorch_claim_binary_label_encoder.joblib"
+METRICS_PATH = MODEL_DIR / "pytorch_claim_binary_metrics.json"
 
 DEVICE = torch.device("cpu")
+EXPECTED_LABELS = {"TRUE", "FALSE"}
+LABEL_NORMALIZATION = {
+    "TRUE": "TRUE",
+    "REAL": "TRUE",
+    "1": "TRUE",
+    "FALSE": "FALSE",
+    "FAKE": "FALSE",
+    "0": "FALSE",
+}
 
-
-# ============================================================
-# 3. NLTK
-# ============================================================
 
 try:
-
-    STOP_WORDS = set(
-        stopwords.words("english")
-    )
-
+    STOP_WORDS = set(stopwords.words("english"))
 except LookupError:
-
     import nltk
 
     nltk.download("stopwords")
-
-    STOP_WORDS = set(
-        stopwords.words("english")
-    )
-
+    STOP_WORDS = set(stopwords.words("english"))
 
 try:
-
     LEMMATIZER = WordNetLemmatizer()
-
-    # Force WordNet lookup so missing data is detected here.
     LEMMATIZER.lemmatize("test")
-
 except LookupError:
-
     import nltk
 
     nltk.download("wordnet")
-
     LEMMATIZER = WordNetLemmatizer()
 
 
-# ============================================================
-# 4. TEXT PREPROCESSING
-# ============================================================
-
-def preprocess_text(text: str) -> str:
-
-    # Convert to string
-    text = str(text or "")
-
-    # Lowercase
-    text = text.lower()
-
-    # Remove URLs
-    text = re.sub(
-        r"http\S+|www\S+",
-        "",
-        text
-    )
-
-    # Keep only alphabets and spaces
-    text = re.sub(
-        r"[^a-zA-Z\s]",
-        "",
-        text
-    )
-
-    # Tokenization
-    tokens = text.split()
-
-    # Stopword removal + lemmatization
-    tokens = [
-        LEMMATIZER.lemmatize(word)
-        for word in tokens
-        if word not in STOP_WORDS
-    ]
-
-    return " ".join(tokens)
-
-
-# ============================================================
-# 5. PYTORCH MODEL
-# ============================================================
-
-class NewsClassificationModel(nn.Module):
-
-    def __init__(
-        self,
-        input_size: int,
-        num_classes: int
-    ):
-
+class ClaimClassificationModel(nn.Module):
+    def __init__(self, input_size: int, num_classes: int):
         super().__init__()
-
         self.network = nn.Sequential(
-
-            nn.Linear(
-                input_size,
-                128
-            ),
-
+            nn.Linear(input_size, 128),
             nn.ReLU(),
-
-            nn.Linear(
-                128,
-                64
-            ),
-
+            nn.Linear(128, 64),
             nn.ReLU(),
-
-            nn.Linear(
-                64,
-                num_classes
-            )
-
+            nn.Linear(64, num_classes),
         )
 
     def forward(self, x):
-
         return self.network(x)
 
 
-# ============================================================
-# 6. LOAD DATASET
-# ============================================================
+def preprocess_text(text: str) -> str:
+    text = str(text or "").lower()
+    text = re.sub(r"http\S+|www\S+", "", text)
+    text = re.sub(r"[^a-zA-Z\s]", "", text)
+    tokens = text.split()
+    tokens = [LEMMATIZER.lemmatize(token) for token in tokens if token not in STOP_WORDS]
+    return " ".join(tokens)
 
-def load_dataset():
 
-    if not DATASET_PATH.exists():
-
-        raise FileNotFoundError(
-            f"Dataset not found: {DATASET_PATH}"
-        )
-
-    df = pd.read_csv(
-        DATASET_PATH
-    )
-
-    required_columns = {
-        "title",
-        "text",
-        "subject"
-    }
-
-    missing = required_columns - set(
-        df.columns
-    )
-
-    if missing:
-
+def _normalize_label(raw_label: str) -> str:
+    canonical = LABEL_NORMALIZATION.get(str(raw_label).strip().upper())
+    if canonical is None:
         raise ValueError(
-            f"Dataset is missing columns: {missing}"
+            "Unsupported label value found in dataset: "
+            f"{raw_label!r}. Supported labels are TRUE/FALSE or REAL/FAKE."
+        )
+    return canonical
+
+
+def load_dataset() -> pd.DataFrame:
+    if not DATASET_PATH.exists():
+        raise FileNotFoundError(f"Dataset not found: {DATASET_PATH}")
+
+    df = pd.read_csv(DATASET_PATH)
+    if "label" not in df.columns:
+        raise ValueError("Dataset is missing required column: label")
+
+    has_full_text = "full_text" in df.columns
+    has_title_text = "title" in df.columns and "text" in df.columns
+    if not has_full_text and not has_title_text:
+        raise ValueError(
+            "Dataset must contain either full_text or both title and text columns."
         )
 
-    # Keep only required columns
-    df = df[
-        [
-            "title",
-            "text",
-            "subject"
-        ]
-    ].dropna()
+    if has_full_text:
+        content = df["full_text"].fillna("").astype(str)
+    else:
+        content = df["title"].fillna("").astype(str) + " " + df["text"].fillna("").astype(str)
 
-    # Combine title + article text
-    df["content"] = (
+    labels = df["label"].astype(str).str.strip()
+    work = pd.DataFrame({"content": content, "label": labels}).dropna()
+    work["content"] = work["content"].astype(str).str.strip()
+    work = work[work["content"].str.len() > 10]
+    work = work.drop_duplicates(subset=["content"], keep="first")
+    if work.empty:
+        raise ValueError("Dataset has no usable rows after filtering empty/short content.")
 
-        df["title"].astype(str)
+    work["label"] = work["label"].apply(_normalize_label)
+    found_labels = set(work["label"].unique().tolist())
+    if found_labels != EXPECTED_LABELS:
+        raise ValueError(
+            "Binary classifier requires both TRUE and FALSE labels. "
+            f"Found labels: {sorted(found_labels)}"
+        )
 
-        + " "
-
-        + df["text"].astype(str)
-
-    )
-
-    # Remove empty content
-    df = df[
-        df["content"].str.strip().str.len() > 10
-    ]
-
-    # Clean labels
-    df["subject"] = (
-        df["subject"]
-        .astype(str)
-        .str.strip()
-    )
-
-    return df
+    return work.reset_index(drop=True)
 
 
-# ============================================================
-# 7. TRAIN MODEL
-# ============================================================
-
-def train_models(
-    dataset_path: str | None = None,
-    random_state: int = 42
-):
-    """Compatibility wrapper used by the project setup script.
-
-    The project historically exposed a `train_models` entrypoint, while the
-    backend implementation actually defines `train_model`. This wrapper keeps
-    both names working and allows callers to pass an optional dataset path.
-    """
+def train_models(dataset_path: str | None = None, random_state: int = 42):
     if dataset_path is not None:
         global DATASET_PATH
         DATASET_PATH = Path(dataset_path)
     return train_model(random_state=random_state)
 
 
-def train_model(
-    random_state: int = 42
-):
+def train_model(random_state: int = 42):
+    print("\n" + "=" * 64)
+    print("TRAINING PYTORCH BINARY CLAIM CLASSIFIER (TRUE/FALSE)")
+    print("=" * 64)
 
-    print("\n" + "=" * 60)
-    print("TRAINING PYTORCH NEWS CLASSIFICATION MODEL")
-    print("=" * 60)
-
-    # --------------------------------------------------------
-    # Load dataset
-    # --------------------------------------------------------
-
+    np.random.seed(random_state)
+    torch.manual_seed(random_state)
     df = load_dataset()
+    print(f"\nDataset rows: {len(df)}")
+    print("\nLabel distribution:")
+    print(df["label"].value_counts())
 
-    print(
-        f"\nDataset rows: {len(df)}"
-    )
-
-    print(
-        "\nClasses:"
-    )
-
-    print(
-        df["subject"].value_counts()
-    )
-
-    # --------------------------------------------------------
-    # Preprocess
-    # --------------------------------------------------------
-
-    print(
-        "\nPreprocessing text..."
-    )
-
-    df["processed_text"] = (
-        df["content"]
-        .apply(preprocess_text)
-    )
-
-    # --------------------------------------------------------
-    # Encode labels
-    # --------------------------------------------------------
+    print("\nPreprocessing text...")
+    df["processed_text"] = df["content"].apply(preprocess_text)
 
     label_encoder = LabelEncoder()
+    df["encoded_label"] = label_encoder.fit_transform(df["label"])
 
-    df["label"] = (
-        label_encoder
-        .fit_transform(df["subject"])
-    )
-
-    print(
-        "\nLabel Mapping:"
-    )
-
-    for index, category in enumerate(
-        label_encoder.classes_
-    ):
-
-        print(
-            f"{index} -> {category}"
+    classes = set(label_encoder.classes_.tolist())
+    if classes != EXPECTED_LABELS:
+        raise ValueError(
+            "Encoded class set is invalid for binary TRUE/FALSE classifier. "
+            f"Classes: {sorted(classes)}"
         )
 
-    # --------------------------------------------------------
-    # Train/test split
-    # --------------------------------------------------------
-
-    X_train_text, X_test_text, y_train, y_test = (
-        train_test_split(
-
-            df["processed_text"],
-
-            df["label"],
-
-            test_size=0.20,
-
-            random_state=random_state,
-
-            stratify=df["label"]
-
-        )
+    X_train_text, X_test_text, y_train, y_test = train_test_split(
+        df["processed_text"],
+        df["encoded_label"],
+        test_size=0.20,
+        random_state=random_state,
+        stratify=df["encoded_label"],
     )
 
-    # --------------------------------------------------------
-    # TF-IDF
-    # --------------------------------------------------------
+    vectorizer = TfidfVectorizer(max_features=5000)
+    X_train_sparse = vectorizer.fit_transform(X_train_text)
+    X_test_sparse = vectorizer.transform(X_test_text)
 
-    print(
-        "\nCreating TF-IDF features..."
-    )
-
-    vectorizer = TfidfVectorizer(
-
-        max_features=5000
-
-    )
-
-    X_train_sparse = (
-        vectorizer.fit_transform(
-            X_train_text
-        )
-    )
-
-    X_test_sparse = (
-        vectorizer.transform(
-            X_test_text
-        )
-    )
-
-    print(
-        f"TF-IDF features: {X_train_sparse.shape[1]}"
-    )
-
-    # --------------------------------------------------------
-    # Convert to tensors
-    # --------------------------------------------------------
-
-    X_train = torch.tensor(
-
-        X_train_sparse.toarray(),
-
-        dtype=torch.float32
-
-    )
-
-    X_test = torch.tensor(
-
-        X_test_sparse.toarray(),
-
-        dtype=torch.float32
-
-    )
-
-    y_train_tensor = torch.tensor(
-
-        y_train.to_numpy(),
-
-        dtype=torch.long
-
-    )
-
-    y_test_tensor = torch.tensor(
-
-        y_test.to_numpy(),
-
-        dtype=torch.long
-
-    )
-
-    # --------------------------------------------------------
-    # Model
-    # --------------------------------------------------------
+    X_train = torch.tensor(X_train_sparse.toarray(), dtype=torch.float32)
+    X_test = torch.tensor(X_test_sparse.toarray(), dtype=torch.float32)
+    y_train_tensor = torch.tensor(y_train.to_numpy(), dtype=torch.long)
+    y_test_tensor = torch.tensor(y_test.to_numpy(), dtype=torch.long)
 
     input_size = X_train.shape[1]
-
-    num_classes = len(
-        label_encoder.classes_
-    )
-
-    model = NewsClassificationModel(
-
-        input_size=input_size,
-
-        num_classes=num_classes
-
-    )
-
-    model.to(DEVICE)
-
-    # --------------------------------------------------------
-    # Loss
-    # --------------------------------------------------------
-
+    model = ClaimClassificationModel(input_size=input_size, num_classes=2).to(DEVICE)
     loss_function = nn.CrossEntropyLoss()
-
-    # --------------------------------------------------------
-    # Optimizer
-    # --------------------------------------------------------
-
-    optimizer = torch.optim.Adam(
-
-        model.parameters(),
-
-        lr=0.001
-
-    )
-
-    # --------------------------------------------------------
-    # Training
-    # --------------------------------------------------------
+    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
 
     epochs = 20
-
-    print(
-        "\nStarting training..."
-    )
-
+    print("\nStarting training...")
     for epoch in range(epochs):
-
         model.train()
-
-        outputs = model(
-            X_train
-        )
-
-        loss = loss_function(
-
-            outputs,
-
-            y_train_tensor
-
-        )
-
+        logits = model(X_train)
+        loss = loss_function(logits, y_train_tensor)
         optimizer.zero_grad()
-
         loss.backward()
-
         optimizer.step()
-
         if (epoch + 1) % 5 == 0:
-
-            print(
-
-                f"Epoch [{epoch + 1}/{epochs}] "
-                f"Loss: {loss.item():.4f}"
-
-            )
-
-    # --------------------------------------------------------
-    # Evaluation
-    # --------------------------------------------------------
+            print(f"Epoch [{epoch + 1}/{epochs}] Loss: {loss.item():.4f}")
 
     model.eval()
-
     with torch.no_grad():
-
-        outputs = model(
-            X_test
-        )
-
-        predictions = torch.argmax(
-
-            outputs,
-
-            dim=1
-
-        )
+        test_logits = model(X_test)
+        predictions = torch.argmax(test_logits, dim=1)
 
     y_true = y_test_tensor.numpy()
-
     y_pred = predictions.numpy()
-
-    accuracy = accuracy_score(
-        y_true,
-        y_pred
-    )
-
+    accuracy = accuracy_score(y_true, y_pred)
     report = classification_report(
-
         y_true,
-
         y_pred,
-
         target_names=label_encoder.classes_,
-
         output_dict=True,
-
-        zero_division=0
-
+        zero_division=0,
     )
+    matrix = confusion_matrix(y_true, y_pred).tolist()
+    macro_metrics = report["macro avg"]
 
-    print(
-        "\nAccuracy:",
-        round(accuracy, 4)
-    )
-
-    print(
-        "\nClassification Report:"
-    )
-
-    print(
-
-        classification_report(
-
-            y_true,
-
-            y_pred,
-
-            target_names=label_encoder.classes_,
-
-            zero_division=0
-
-        )
-
-    )
-
-    # --------------------------------------------------------
-    # Save PyTorch model
-    # --------------------------------------------------------
+    print("\nAccuracy:", round(float(accuracy), 4))
+    print("\nClassification Report:")
+    print(classification_report(y_true, y_pred, target_names=label_encoder.classes_, zero_division=0))
 
     torch.save(
-
         {
-            "model_state_dict":
-                model.state_dict(),
-
-            "input_size":
-                input_size,
-
-            "num_classes":
-                num_classes
-
+            "model_state_dict": model.state_dict(),
+            "input_size": input_size,
+            "num_classes": 2,
         },
-
-        MODEL_PATH
-
+        MODEL_PATH,
     )
-
-    # Save TF-IDF
-    joblib.dump(
-
-        vectorizer,
-
-        VECTORIZER_PATH
-
-    )
-
-    # Save label encoder
-    joblib.dump(
-
-        label_encoder,
-
-        LABEL_ENCODER_PATH
-
-    )
-
-    # --------------------------------------------------------
-    # Save metrics
-    # --------------------------------------------------------
+    joblib.dump(vectorizer, VECTORIZER_PATH)
+    joblib.dump(label_encoder, LABEL_ENCODER_PATH)
 
     metrics = {
-
-        "model":
-            "PyTorch NewsClassificationModel",
-
-        "training_rows":
-            len(df),
-
-        "test_rows":
-            len(X_test_text),
-
-        "accuracy":
-            float(accuracy),
-
-        "classes":
-            label_encoder.classes_.tolist(),
-
-        "tfidf_features":
-            input_size,
-
-        "epochs":
-            epochs
-
+        "model": "binary_claim_classifier",
+        "model_class": "ClaimClassificationModel",
+        "classification_type": "binary claim classification (TRUE/FALSE)",
+        "training_rows": len(df),
+        "test_rows": len(X_test_text),
+        "accuracy": float(accuracy),
+        "precision": float(macro_metrics["precision"]),
+        "recall": float(macro_metrics["recall"]),
+        "f1": float(macro_metrics["f1-score"]),
+        "classes": label_encoder.classes_.tolist(),
+        "tfidf_features": int(input_size),
+        "epochs": epochs,
+        "report": report,
+        "confusion_matrix": {
+            "labels": label_encoder.classes_.tolist(),
+            "values": matrix,
+        },
+        "dataset_path": str(DATASET_PATH),
     }
+    METRICS_PATH.write_text(json.dumps(metrics, indent=4), encoding="utf-8")
 
-    METRICS_PATH.write_text(
-
-        json.dumps(
-            metrics,
-            indent=4
-        ),
-
-        encoding="utf-8"
-
-    )
-
-    print(
-        "\nModel saved to:"
-    )
-
-    print(
-        MODEL_PATH
-    )
-
-    print(
-        "\nTraining completed successfully."
-    )
+    print("\nModel saved to:", MODEL_PATH)
+    print("Vectorizer saved to:", VECTORIZER_PATH)
+    print("Label encoder saved to:", LABEL_ENCODER_PATH)
+    print("Metrics saved to:", METRICS_PATH)
 
     return metrics
 
 
-# ============================================================
-# 8. LOAD TRAINED MODEL
-# ============================================================
-
 def load_bundle():
-
-    required_files = [
-
-        MODEL_PATH,
-
-        VECTORIZER_PATH,
-
-        LABEL_ENCODER_PATH
-
-    ]
-
+    required_files = [MODEL_PATH, VECTORIZER_PATH, LABEL_ENCODER_PATH]
     for path in required_files:
-
         if not path.exists():
-
             raise FileNotFoundError(
-
-                f"PyTorch model files are missing. "
-                f"Run: python -m backend.nlp_pipeline\n"
+                "Binary model files are missing. Run: python setup_ml.py\n"
                 f"Missing file: {path}"
-
             )
 
-    # Load vectorizer
-    vectorizer = joblib.load(
-        VECTORIZER_PATH
+    vectorizer = joblib.load(VECTORIZER_PATH)
+    label_encoder = joblib.load(LABEL_ENCODER_PATH)
+    checkpoint = torch.load(MODEL_PATH, map_location=DEVICE)
+
+    classes = set(label_encoder.classes_.tolist())
+    if classes != EXPECTED_LABELS:
+        raise ValueError(
+            "Loaded label encoder is not binary TRUE/FALSE. "
+            f"Classes: {sorted(classes)}"
+        )
+
+    tfidf_features = len(vectorizer.get_feature_names_out())
+    if int(checkpoint["input_size"]) != int(tfidf_features):
+        raise ValueError(
+            "Model/vectorizer feature mismatch detected. "
+            f"Model expects {checkpoint['input_size']} features, "
+            f"vectorizer provides {tfidf_features}."
+        )
+
+    model = ClaimClassificationModel(
+        input_size=int(checkpoint["input_size"]),
+        num_classes=int(checkpoint["num_classes"]),
     )
-
-    # Load label encoder
-    label_encoder = joblib.load(
-        LABEL_ENCODER_PATH
-    )
-
-    # Load PyTorch checkpoint
-    checkpoint = torch.load(
-
-        MODEL_PATH,
-
-        map_location=DEVICE
-
-    )
-
-    model = NewsClassificationModel(
-
-        input_size=checkpoint["input_size"],
-
-        num_classes=checkpoint["num_classes"]
-
-    )
-
-    model.load_state_dict(
-
-        checkpoint["model_state_dict"]
-
-    )
-
+    model.load_state_dict(checkpoint["model_state_dict"])
     model.to(DEVICE)
-
     model.eval()
 
     return {
-
-        "model":
-            model,
-
-        "vectorizer":
-            vectorizer,
-
-        "label_encoder":
-            label_encoder
-
+        "model": model,
+        "vectorizer": vectorizer,
+        "label_encoder": label_encoder,
     }
 
 
-# ============================================================
-# 9. ANALYZE NEW TEXT
-# ============================================================
-
-def analyze(
-    text: str,
-    bundle: Dict
-):
-
+def analyze(text: str, bundle: Dict):
     text = str(text or "").strip()
-
     if len(text) < 5:
+        raise ValueError("Please provide at least 5 characters.")
 
-        raise ValueError(
-            "Please provide at least 5 characters."
-        )
-
-    # --------------------------------------------------------
-    # Preprocess exactly as training
-    # --------------------------------------------------------
-
-    processed_text = preprocess_text(
-        text
-    )
-
-    # --------------------------------------------------------
-    # TF-IDF
-    # --------------------------------------------------------
-
+    processed_text = preprocess_text(text)
     vectorizer = bundle["vectorizer"]
-
-    vector = vectorizer.transform(
-        [processed_text]
-    )
-
-    # --------------------------------------------------------
-    # PyTorch tensor
-    # --------------------------------------------------------
-
-    tensor = torch.tensor(
-
-        vector.toarray(),
-
-        dtype=torch.float32
-
-    ).to(DEVICE)
-
-    # --------------------------------------------------------
-    # Prediction
-    # --------------------------------------------------------
+    vector = vectorizer.transform([processed_text])
+    tensor = torch.tensor(vector.toarray(), dtype=torch.float32).to(DEVICE)
 
     model = bundle["model"]
-
     label_encoder = bundle["label_encoder"]
 
     model.eval()
-
     with torch.no_grad():
+        logits = model(tensor)
+        probabilities = torch.softmax(logits, dim=1)
+        predicted_index = torch.argmax(probabilities, dim=1).item()
+        confidence = float(probabilities[0, predicted_index].item())
 
-        outputs = model(
-            tensor
-        )
-
-        probabilities = torch.softmax(
-
-            outputs,
-
-            dim=1
-
-        )
-
-        predicted_index = torch.argmax(
-
-            probabilities,
-
-            dim=1
-
-        ).item()
-
-        confidence = probabilities[
-
-            0,
-
-            predicted_index
-
-        ].item()
-
-    # --------------------------------------------------------
-    # Convert number back to subject
-    # --------------------------------------------------------
-
-    prediction = label_encoder.inverse_transform(
-
-        [predicted_index]
-
-    )[0]
-
-    # --------------------------------------------------------
-    # Probability of every class
-    # --------------------------------------------------------
+    prediction = str(label_encoder.inverse_transform([predicted_index])[0]).upper()
+    if prediction not in EXPECTED_LABELS:
+        raise ValueError(f"Unexpected prediction label from model: {prediction}")
 
     class_probabilities = {}
-
-    for index, category in enumerate(
-
-        label_encoder.classes_
-
-    ):
-
-        class_probabilities[category] = round(
-
-            float(
-                probabilities[0, index].item()
-            ),
-
-            6
-
-        )
-
-    # --------------------------------------------------------
-    # Return ONLY information generated by this pipeline
-    # --------------------------------------------------------
+    for idx, cls in enumerate(label_encoder.classes_):
+        class_probabilities[str(cls).upper()] = round(float(probabilities[0, idx].item()), 6)
 
     return {
-
-        "prediction":
-            prediction,
-
-        "confidence":
-            round(
-                confidence * 100,
-                2
-            ),
-
-        "model":
-            "PyTorch NewsClassificationModel",
-
-        "classification_type":
-            "multi-class subject classification",
-
-        "class_probabilities":
-            class_probabilities,
-
-        "tfidf_features":
-            int(vector.shape[1]),
-
-        "processed_text":
-            processed_text
-
+        "prediction": prediction,
+        "confidence": round(confidence * 100, 2),
+        "model": "binary_claim_classifier",
+        "model_file": MODEL_PATH.name,
+        "classification_type": "binary claim classification (TRUE/FALSE)",
+        "class_probabilities": class_probabilities,
+        "tfidf_features": int(vector.shape[1]),
+        "processed_text": processed_text,
+        "message": (
+            "Confidence is the model's probability estimate, not absolute factual certainty."
+        ),
     }
 
 
-# ============================================================
-# 10. COMMAND-LINE TRAINING
-# ============================================================
-
 if __name__ == "__main__":
-
     train_model()
