@@ -26,3 +26,18 @@ if __name__ == "__main__":
     print("\nTraining complete")
     print(f"Rows: {report['total_usable_samples']}")
     print(f"Model: {report['model']}")
+    print("\nEvaluation metrics")
+    print(f"Accuracy:            {report['accuracy']:.4f} ({report['accuracy'] * 100:.2f}%)")
+    print(f"Validation accuracy: {report['validation_accuracy']:.4f} ({report['validation_accuracy'] * 100:.2f}%)")
+    print(f"Precision (macro):   {report['precision']:.4f} ({report['precision'] * 100:.2f}%)")
+    print(f"Recall (macro):      {report['recall']:.4f} ({report['recall'] * 100:.2f}%)")
+    print(f"F1 score (macro):    {report['f1']:.4f} ({report['f1'] * 100:.2f}%)")
+    print("\nPer-class metrics")
+    for label, values in report.get('report', {}).items():
+        if isinstance(values, dict) and 'precision' in values:
+            print(
+                f"{label}: precision={values['precision']:.4f}, "
+                f"recall={values['recall']:.4f}, "
+                f"f1={values['f1-score']:.4f}, "
+                f"support={int(values['support'])}"
+            )
