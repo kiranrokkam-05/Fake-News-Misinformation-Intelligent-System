@@ -581,7 +581,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Results Elements
   const resultsBanner = document.getElementById('results-banner');
   const resultsCardTitle = document.querySelector('.results-card h2');
-  const resultWidgets = document.querySelectorAll('.result-widget');
+  const resultWidgets = document.querySelectorAll('#widget-verdict, #widget-confidence, #widget-type, #widget-explanation, #widget-sources');
   const confidenceCircle = document.getElementById('confidence-circle');
   const confidenceText = document.getElementById('confidence-text');
   const verdictWidget = document.getElementById('widget-verdict');
@@ -1130,6 +1130,9 @@ function revealFinalVerdict() {
   }
 
   const d = state.verdictData;
+  const verification = d.verification || {};
+  const evidenceCount = Array.isArray(verification.evidence) ? verification.evidence.length : 0;
+  const checkedSources = Array.isArray(verification.sources_checked) ? verification.sources_checked.join(', ') : 'none';
 
   const t =
     translations[state.currentLang] ||
@@ -1311,12 +1314,14 @@ function revealFinalVerdict() {
   // EXPLANATION
   // ==========================================================
 
+  const evidenceReason = verification.reason || 'No external evidence explanation was returned.';
   explanationText.textContent =
 
     `The fake-news classifier classified ` +
     `this article as "${prediction}" ` +
     `with ${confidence.toFixed(2)}% confidence. ` +
     `The result combines the trained classifier with linguistic and claim-analysis signals.`;
+  explanationText.textContent = `${evidenceReason} The local classifier returned ${prediction} with ${confidence.toFixed(2)}% confidence. Evidence searched: ${checkedSources}; items found: ${evidenceCount}.`;
 
 
   // ==========================================================
@@ -1345,15 +1350,6 @@ function revealFinalVerdict() {
 
   const probabilities =
     d.classProbabilities || {};
-
-  const verification = d.verification || {};
-  const evidenceCount = Array.isArray(verification.evidence)
-    ? verification.evidence.length
-    : 0;
-  const checkedSources = Array.isArray(verification.sources_checked)
-    ? verification.sources_checked.join(', ')
-    : 'none';
-
 
   const probabilityLines =
     Object.entries(probabilities)

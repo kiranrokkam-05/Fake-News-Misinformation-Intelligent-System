@@ -1872,3 +1872,16 @@ footer {
     transform: translateY(0);
   }
 }
+/* Current release: text-only verification and focused final results. */
+#nav-how,
+#nav-about,
+#how-view,
+#about-view,
+footer,
+.tabs-container,
+.file-upload-section,
+#widget-reliability,
+#widget-summary,
+#widget-insights {
+  display: none !important;
+}
