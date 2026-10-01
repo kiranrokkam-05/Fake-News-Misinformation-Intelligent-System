@@ -2,11 +2,11 @@ import os
 import logging
 from typing import List, Dict, Any, Optional
 
-from src.nlp.preprocessor import TextPreprocessor
-from src.nlp.claim_extractor import ClaimExtractor
-from src.nlp.embeddings import SemanticSimilarityEngine
-from src.ml.classifier import FakeNewsClassifier
-from src.ml.confidence import ConfidenceCalculator
+from nlp.preprocessor import TextPreprocessor
+from nlp.claim_extractor import ClaimExtractor
+from nlp.embeddings import SemanticSimilarityEngine
+from ml.classifier import FakeNewsClassifier
+from ml.confidence import ConfidenceCalculator
 
 logger = logging.getLogger(__name__)
 

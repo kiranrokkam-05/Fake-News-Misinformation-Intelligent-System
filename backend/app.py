@@ -8,11 +8,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 if str(BASE_DIR) not in sys.path:
     sys.path.insert(0, str(BASE_DIR))
 
-from src.nlp_ml_pipeline import FakeNewsNLPPipeline
+from nlp.pipeline import FakeNewsNLPPipeline
 from verification_module.verify_pipeline import verify_claim
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-app = Flask(__name__, static_folder=str(BASE_DIR), static_url_path="")
+FRONTEND_DIR = BASE_DIR / "frontend"
+app = Flask(__name__, static_folder=str(FRONTEND_DIR), static_url_path="")
 logger = logging.getLogger(__name__)
 MODEL_PATH = BASE_DIR / "models" / "fake_news_model.joblib"
 METRICS_PATH = BASE_DIR / "models" / "model_metrics.json"
@@ -93,12 +94,12 @@ def api_verify():
 
 @app.get("/")
 def index():
-    return send_from_directory(BASE_DIR, "index.html")
+    return send_from_directory(BASE_DIR / "frontend", "index.html")
 
 
 @app.get("/<path:path>")
 def static_files(path):
-    return send_from_directory(BASE_DIR, path)
+    return send_from_directory(BASE_DIR / "frontend", path)
 
 
 if __name__ == "__main__":

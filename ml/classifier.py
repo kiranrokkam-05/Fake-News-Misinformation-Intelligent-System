@@ -13,7 +13,7 @@ from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
 
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
-from ..nlp.preprocessor import TextPreprocessor
+from nlp.preprocessor import TextPreprocessor
 
 
 class LinguisticFeatureExtractor(BaseEstimator, TransformerMixin):

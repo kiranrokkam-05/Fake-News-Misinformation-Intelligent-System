@@ -1,12 +1,18 @@
 import os
 import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+import sys
 import json
 
 # Ensure project root is in sys.path
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
-from src.nlp_ml_pipeline import FakeNewsNLPPipeline
-from src.ml.train import train_and_evaluate_model
+from nlp.pipeline import FakeNewsNLPPipeline
+from ml.train import train_and_evaluate_model
 
 
 
