@@ -19,7 +19,7 @@ class NewsAPIAdapter(SearchAdapter):
     ENDPOINT = "https://newsapi.org/v2/everything"
 
     def is_configured(self) -> bool:
-        return bool(config.NEWSAPI_KEY)
+        return bool(config.get_api_key("NEWSAPI_KEY"))
 
     def search(self, query: str, max_results: int = 5) -> List[EvidenceItem]:
         if not self.is_configured():
@@ -27,7 +27,7 @@ class NewsAPIAdapter(SearchAdapter):
 
         params = {
             "q": query,
-            "apiKey": config.NEWSAPI_KEY,
+            "apiKey": config.get_api_key("NEWSAPI_KEY"),
             "pageSize": max_results,
             "sortBy": "relevancy",
             "language": "en",

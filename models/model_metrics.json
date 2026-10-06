@@ -1,31 +1,27 @@
 {
-  "best_model": "xgboost",
-  "training_rows": 4594,
+  "best_model": "linear_svc_word_char_tfidf",
+  "training_rows": 3657,
   "classes": [
-    "FALSE",
-    "TRUE"
+    "REAL",
+    "FAKE"
   ],
   "metrics": {
-    "logistic_regression": {
-      "accuracy": 0.9314,
-      "precision": 0.9318,
-      "recall": 0.9314,
-      "f1": 0.9314,
-      "roc_auc": 0.9842
-    },
-    "random_forest": {
-      "accuracy": 0.9151,
-      "precision": 0.9152,
-      "recall": 0.9151,
-      "f1": 0.9151,
-      "roc_auc": 0.9735
-    },
-    "xgboost": {
-      "accuracy": 0.9325,
-      "precision": 0.9327,
-      "recall": 0.9325,
-      "f1": 0.9325,
-      "roc_auc": 0.9865
+    "linear_svc_word_char_tfidf": {
+      "accuracy": 0.9628415300546448,
+      "precision": 0.9530916844349681,
+      "recall": 0.9738562091503268,
+      "f1": 0.9633620689655172,
+      "macro_f1": 0.9628340278308739,
+      "roc_auc": 0.9931821656537859
     }
+  },
+  "training_accuracy": 1.0,
+  "test_rows": 915,
+  "features": {
+    "word_tfidf_max_features": 60000,
+    "char_tfidf_max_features": 80000
+  },
+  "regularization": {
+    "linear_svc_c": 10.0
   }
 }

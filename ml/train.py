@@ -1,74 +1,52 @@
 import os
 import sys
+import json
 
 # Ensure project root is in sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-import zipfile
 import pandas as pd
-import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, accuracy_score, precision_recall_fscore_support
+from sklearn.metrics import (
+    accuracy_score,
+    classification_report,
+    f1_score,
+    precision_recall_fscore_support,
+    roc_auc_score,
+)
 
 from ml.classifier import FakeNewsClassifier
 
 
 
-def load_dataset(data_dir: str = "data/sample") -> pd.DataFrame:
-    """
-    Loads dataset from fake.csv or zip file.
-    Synthesizes labeled dataset if only single class is present.
-    """
-    fake_csv_path = os.path.join(data_dir, "fake.csv")
-    zip_path = "fake.csv.zip"
-
-    if not os.path.exists(fake_csv_path) and os.path.exists(zip_path):
-        os.makedirs(data_dir, exist_ok=True)
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(data_dir)
-
-    if os.path.exists(fake_csv_path):
-        fake_df = pd.read_csv(fake_csv_path)
+def load_dataset(data_dir: str = "data") -> pd.DataFrame:
+    """Load and clean the project's actual REAL/FAKE article dataset."""
+    dataset_path = os.path.join(data_dir, "fake_and_real_news_dataset.csv")
+    if not os.path.exists(dataset_path):
+        raise FileNotFoundError(f"Dataset not found: {dataset_path}")
+    source = pd.read_csv(dataset_path)
+    if "label" not in source:
+        raise ValueError("Dataset must include a label column.")
+    if "full_text" in source:
+        content = source["full_text"].fillna("").astype(str)
+    elif {"title", "text"}.issubset(source.columns):
+        content = source["title"].fillna("").astype(str) + " " + source["text"].fillna("").astype(str)
     else:
-        # Sample fallback dataset if CSV is missing
-        fake_df = pd.DataFrame({
-            "title": ["Breaking: Shocking secret revealed!"] * 10,
-            "text": ["You won't believe what happened today! Unbelievable conspiracy!"] * 10,
-            "subject": ["News"] * 10,
-            "date": ["2026-01-01"] * 10
-        })
-
-    fake_df['full_text'] = fake_df['title'].fillna('') + ' ' + fake_df['text'].fillna('')
-    fake_df['label'] = 1  # 1 for Fake
-
-    # Curated factual news dataset samples for balanced multi-class training
-    real_news_samples = [
-        "The Federal Reserve announced a quarter-point interest rate adjustment following its annual policy meeting on Thursday. Chairman Powell stated that economic indicators remain stable with steady employment figures.",
-        "NASA successfully launched its new Earth observation satellite from Cape Canaveral Space Force Station. The satellite will monitor global sea surface temperatures and atmospheric moisture levels over a five-year mission.",
-        "Scientists at the World Health Organization published a peer-reviewed study analyzing global immunization rates over the past decade. The report highlights significant improvements in disease prevention across lower-income nations.",
-        "The European Parliament passed new digital market regulations aimed at enhancing consumer data privacy and preventing anti-competitive practices among major tech conglomerates.",
-        "Local municipal authorities initiated a public transportation expansion project to construct 15 miles of light rail infrastructure connecting suburban neighborhoods to the downtown commercial center.",
-        "Quarterly financial earnings reports released by major retail corporations indicate a modest increase in consumer spending during the recent holiday quarter.",
-        "The Ministry of Energy unveiled a renewable power grid initiative designed to increase solar and wind generation capacity by thirty percent over the next six years.",
-        "A joint academic consortium from leading universities published research detailing advances in high-efficiency photovoltaic solar cells capable of converting 28% of sunlight into electricity.",
-        "Global trade representatives met in Geneva to negotiate updated maritime shipping guidelines aimed at reducing carbon emissions across international freight corridors.",
-        "The Department of Transportation completed safety inspections for over two hundred bridges and overpasses, reporting full compliance with federal structural standards."
-    ]
-
-    # Replicate real samples to create balanced subset
-    repeat_factor = int(np.ceil(len(fake_df) / len(real_news_samples)))
-    real_df = pd.DataFrame({
-        "full_text": (real_news_samples * repeat_factor)[:len(fake_df)],
-        "label": 0  # 0 for Real
-    })
-
-    combined_df = pd.concat([fake_df[['full_text', 'label']], real_df[['full_text', 'label']]], ignore_index=True)
-    return combined_df.sample(frac=1.0, random_state=42).reset_index(drop=True)
+        raise ValueError("Dataset must include full_text or both title and text columns.")
+    labels = source["label"].astype(str).str.strip().str.upper().map(
+        {"REAL": 0, "TRUE": 0, "0": 0, "FAKE": 1, "FALSE": 1, "1": 1}
+    )
+    frame = pd.DataFrame({"full_text": content.str.strip(), "label": labels})
+    frame = frame.dropna().drop_duplicates(subset="full_text")
+    frame = frame[frame["full_text"].str.len() >= 20].reset_index(drop=True)
+    if set(frame["label"].unique()) != {0, 1}:
+        raise ValueError("Dataset must contain both REAL and FAKE labels.")
+    return frame
 
 
 def train_and_evaluate_model(
     model_output_path: str = "models/fake_news_model.joblib",
-    sample_limit: int = 2000
+    sample_limit: int = 12000
 ) -> None:
     """
     Trains the FakeNewsClassifier, evaluates metrics, and saves trained model weights.
@@ -87,32 +65,59 @@ def train_and_evaluate_model(
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
-    classifier = FakeNewsClassifier(model_type="logistic")
+    classifier = FakeNewsClassifier(model_type="linear_svc")
     
     print("Training model...")
     train_results = classifier.train(X_train, y_train)
     print(f"Training Complete! Features: {train_results['feature_dimension']}, Training Accuracy: {train_results['training_accuracy']}")
 
     # Evaluation on Test set
-    y_pred = []
-    for text in X_test:
-        pred_dict = classifier.predict(text)
-        y_pred.append(1 if pred_dict["is_fake"] else 0)
+    test_features = classifier._prepare_features(X_test, fit=False)
+    y_pred = classifier.model.predict(test_features).tolist()
 
     acc = accuracy_score(y_test, y_pred)
     prec, rec, f1, _ = precision_recall_fscore_support(y_test, y_pred, average='binary')
+    macro_f1 = f1_score(y_test, y_pred, average="macro")
+    test_scores = classifier.model.decision_function(test_features)
+    roc_auc = roc_auc_score(y_test, test_scores)
 
     print("\n--- Test Set Performance Evaluation ---")
     print(f"Accuracy:  {acc * 100:.2f}%")
     print(f"Precision: {prec * 100:.2f}%")
     print(f"Recall:    {rec * 100:.2f}%")
     print(f"F1-Score:  {f1 * 100:.2f}%")
+    print(f"Macro F1:  {macro_f1 * 100:.2f}%")
+    print(f"ROC AUC:   {roc_auc * 100:.2f}%")
     print("\nClassification Report:")
     print(classification_report(y_test, y_pred, target_names=["REAL", "FAKE"]))
 
     # Save model artifact
     classifier.save_model(model_output_path)
     print(f"Model successfully saved to {os.path.abspath(model_output_path)}")
+
+    metrics_path = os.path.join(os.path.dirname(model_output_path), "model_metrics.json")
+    metrics = {
+        "best_model": "linear_svc_word_char_tfidf",
+        "training_rows": len(X_train),
+        "classes": ["REAL", "FAKE"],
+        "metrics": {
+            "linear_svc_word_char_tfidf": {
+                "accuracy": float(acc),
+                "precision": float(prec),
+                "recall": float(rec),
+                "f1": float(f1),
+                "macro_f1": float(macro_f1),
+                "roc_auc": float(roc_auc),
+            }
+        },
+        "training_accuracy": train_results["training_accuracy"],
+        "test_rows": len(X_test),
+        "features": {"word_tfidf_max_features": 60000, "char_tfidf_max_features": 80000},
+        "regularization": {"linear_svc_c": 10.0},
+    }
+    with open(metrics_path, "w", encoding="utf-8") as metrics_file:
+        json.dump(metrics, metrics_file, indent=2)
+    print(f"Training metrics saved to {os.path.abspath(metrics_path)}")
 
 
 if __name__ == "__main__":

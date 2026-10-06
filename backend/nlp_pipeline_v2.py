@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import copy
 from pathlib import Path
 from typing import Dict, Iterable
 
@@ -66,15 +67,16 @@ except LookupError:
 
 
 class ClaimClassificationModelV2(nn.Module):
-    def __init__(self, input_size: int, num_classes: int = 2):
+    def __init__(self, input_size: int, num_classes: int = 2, dropout: bool = True):
         super().__init__()
-        self.network = nn.Sequential(
-            nn.Linear(input_size, 128),
-            nn.ReLU(),
-            nn.Linear(128, 64),
-            nn.ReLU(),
-            nn.Linear(64, num_classes),
-        )
+        layers = [nn.Linear(input_size, 128), nn.ReLU()]
+        if dropout:
+            layers.append(nn.Dropout(p=0.35))
+        layers.extend([nn.Linear(128, 64), nn.ReLU()])
+        if dropout:
+            layers.append(nn.Dropout(p=0.25))
+        layers.append(nn.Linear(64, num_classes))
+        self.network = nn.Sequential(*layers)
 
     def forward(self, features):
         return self.network(features)
@@ -177,7 +179,7 @@ def train_model(random_state: int = 42):
     x_test = vectorizer.transform(processed_test)
 
     model = ClaimClassificationModelV2(input_size=x_train.shape[1]).to(DEVICE)
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
     class_counts = np.bincount(y_train, minlength=2).astype(np.float32)
     class_weights = torch.tensor(
         class_counts.sum() / (2.0 * class_counts),
@@ -185,8 +187,13 @@ def train_model(random_state: int = 42):
     )
     loss_function = nn.CrossEntropyLoss(weight=class_weights)
     batch_size = 512
-    epochs = 12
-    for _ in range(epochs):
+    max_epochs = 30
+    patience = 4
+    best_validation_loss = float("inf")
+    best_state = None
+    best_epoch = 0
+    epochs_trained = 0
+    for epoch in range(max_epochs):
         model.train()
         order = np.random.permutation(x_train.shape[0])
         for offset in range(0, len(order), batch_size):
@@ -197,6 +204,26 @@ def train_model(random_state: int = 42):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
+
+        model.eval()
+        with torch.no_grad():
+            validation_loss = 0.0
+            for offset in range(0, x_validation.shape[0], batch_size):
+                end = min(offset + batch_size, x_validation.shape[0])
+                logits = model(_batch_features(x_validation, offset, end))
+                targets = torch.tensor(y_validation[offset:end], dtype=torch.long)
+                validation_loss += float(loss_function(logits, targets)) * (end - offset)
+            validation_loss /= max(1, x_validation.shape[0])
+        epochs_trained = epoch + 1
+        if validation_loss < best_validation_loss:
+            best_validation_loss = validation_loss
+            best_state = copy.deepcopy(model.state_dict())
+            best_epoch = epochs_trained
+        elif epochs_trained - best_epoch >= patience:
+            break
+
+    if best_state is not None:
+        model.load_state_dict(best_state)
 
     def predict(matrix):
         model.eval()
@@ -243,7 +270,11 @@ def train_model(random_state: int = 42):
             "token_pattern": r"(?u)\b\w+(?:\.\w+)*\b",
         },
         "preprocessing": "lowercase, URL removal, token normalization, stopword removal, lemmatization; numbers/decimals retained",
-        "epochs": epochs,
+        "epochs": epochs_trained,
+        "best_epoch": best_epoch,
+        "early_stopping_patience": patience,
+        "weight_decay": 0.01,
+        "dropout": [0.35, 0.25],
         "report": report,
         "confusion_matrix": {
             "labels": encoder.classes_.tolist(),
@@ -274,8 +305,14 @@ def load_bundle():
         raise ValueError("v2 model does not have exactly two classes.")
     if checkpoint["input_size"] != len(vectorizer.get_feature_names_out()):
         raise ValueError("v2 model/vectorizer feature mismatch.")
-    model = ClaimClassificationModelV2(checkpoint["input_size"], checkpoint["num_classes"])
-    model.load_state_dict(checkpoint["model_state_dict"])
+    state_dict = checkpoint["model_state_dict"]
+    # Older saved v2 weights predate the dropout layers. Their linear layer
+    # indices are 0, 2, and 4, while current weights use 0, 3, and 6.
+    legacy_no_dropout = "network.2.weight" in state_dict
+    model = ClaimClassificationModelV2(
+        checkpoint["input_size"], checkpoint["num_classes"], dropout=not legacy_no_dropout
+    )
+    model.load_state_dict(state_dict)
     model.eval()
     return {"model": model, "vectorizer": vectorizer, "label_encoder": encoder}
 

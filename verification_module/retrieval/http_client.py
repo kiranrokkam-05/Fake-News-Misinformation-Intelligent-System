@@ -43,7 +43,18 @@ class RetrievalHttpClient:
             )
             response.raise_for_status()
         except requests.RequestException as exc:
-            raise RetrievalHTTPError(str(exc)) from exc
+            status = getattr(getattr(exc, "response", None), "status_code", None)
+            if status is not None:
+                message = f"Provider returned HTTP {int(status)}"
+            elif isinstance(exc, requests.Timeout):
+                message = "Provider request timed out"
+            elif isinstance(exc, requests.ConnectionError):
+                message = "Provider connection failed"
+            else:
+                message = f"Provider request failed ({type(exc).__name__})"
+            # requests exception strings include full URLs. Provider URLs may
+            # contain keys in their query strings, so never forward them.
+            raise RetrievalHTTPError(message) from None
         if len(response.content) > config.MAX_RESPONSE_BYTES:
             raise RetrievalHTTPError("Provider response exceeded the configured size cap")
         return HttpResponse(response.status_code, dict(response.headers), response.content)

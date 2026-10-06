@@ -19,7 +19,7 @@ class GNewsAdapter(SearchAdapter):
     ENDPOINT = "https://gnews.io/api/v4/search"
 
     def is_configured(self) -> bool:
-        return bool(config.GNEWS_KEY)
+        return bool(config.get_api_key("GNEWS_KEY"))
 
     def search(self, query: str, max_results: int = 5) -> List[EvidenceItem]:
         if not self.is_configured():
@@ -27,7 +27,7 @@ class GNewsAdapter(SearchAdapter):
 
         params = {
             "q": query,
-            "token": config.GNEWS_KEY,
+            "token": config.get_api_key("GNEWS_KEY"),
             "max": max_results,
             "lang": "en",
         }

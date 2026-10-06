@@ -5,12 +5,26 @@ from verification_module.retrieval.queries import generate_claim_queries
 
 
 def test_query_generation_preserves_numbers_and_entities():
-    queries = generate_claim_queries(
-        "The Earth revolves around the Sun once every 365.25 days."
-    )
-    assert queries[0].endswith("365.25 days.")
+    claim = "The Earth revolves around the Sun once every 365.25 days."
+    queries = generate_claim_queries(claim)
+    assert queries
     assert any("Earth" in query for query in queries)
-    assert "365.25" in extract_structure(queries[0]).quantities
+    assert any("365.25" in extract_structure(query).quantities for query in queries)
+    assert all(len(query.split()) <= 10 for query in queries)
+    assert claim not in queries
+
+
+def test_long_article_queries_are_concise_and_use_salient_terms():
+    article = (
+        "Investors and economists are expecting the Reserve Bank of India to consider "
+        "raising interest rates as inflationary pressures increase by 25 basis points. "
+        "Officials will meet next week to discuss the monetary policy decision."
+    )
+    queries = generate_claim_queries(article)
+    assert 1 <= len(queries) <= 3
+    assert all(len(query.split()) <= 10 for query in queries)
+    assert any("Reserve" in query and "India" in query and "25" in query for query in queries)
+    assert all(len(query) < len(article) for query in queries)
 
 
 def test_sentence_windows_include_page_title():

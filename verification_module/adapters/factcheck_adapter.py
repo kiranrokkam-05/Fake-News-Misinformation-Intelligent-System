@@ -21,7 +21,7 @@ class FactCheckAdapter(SearchAdapter):
     ENDPOINT = "https://factchecktools.googleapis.com/v1alpha1/claims:search"
 
     def is_configured(self) -> bool:
-        return bool(config.GOOGLE_FACTCHECK_KEY)
+        return bool(config.get_api_key("GOOGLE_FACTCHECK_KEY"))
 
     def search(self, query: str, max_results: int = 5) -> List[EvidenceItem]:
         if not self.is_configured():
@@ -29,7 +29,7 @@ class FactCheckAdapter(SearchAdapter):
 
         params = {
             "query": query,
-            "key": config.GOOGLE_FACTCHECK_KEY,
+            "key": config.get_api_key("GOOGLE_FACTCHECK_KEY"),
             "pageSize": max_results,
         }
 
