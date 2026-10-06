@@ -8,6 +8,7 @@ from scipy.sparse import hstack, csr_matrix
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 from sklearn.linear_model import LogisticRegression, PassiveAggressiveClassifier
+from sklearn.svm import LinearSVC
 from sklearn.ensemble import RandomForestClassifier, VotingClassifier
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -103,27 +104,43 @@ class FakeNewsClassifier:
     Combines TF-IDF N-grams with custom linguistic/stylistic feature extraction.
     """
 
-    def __init__(self, model_type: str = "logistic"):
+    def __init__(self, model_type: str = "linear_svc"):
         self.model_type = model_type
         self.preprocessor = TextPreprocessor()
         
         # Pipeline components
         self.tfidf = TfidfVectorizer(
-            max_features=10000,
+            max_features=60000,
+            min_df=1,
+            max_df=0.98,
             ngram_range=(1, 2),
             sublinear_tf=True,
-            stop_words='english'
+            strip_accents="unicode",
+        )
+        self.char_tfidf = (
+            TfidfVectorizer(
+                analyzer="char_wb",
+                ngram_range=(3, 5),
+                max_features=80000,
+                min_df=1,
+                sublinear_tf=True,
+                strip_accents="unicode",
+            )
+            if model_type == "linear_svc"
+            else None
         )
         self.linguistic_extractor = LinguisticFeatureExtractor()
 
-        if model_type == "logistic":
-            self.model = LogisticRegression(C=1.0, max_iter=1000, random_state=42)
+        if model_type == "linear_svc":
+            self.model = LinearSVC(C=10.0, random_state=42)
+        elif model_type == "logistic":
+            self.model = LogisticRegression(C=0.25, max_iter=1000, class_weight="balanced", random_state=42)
         elif model_type == "random_forest":
             self.model = RandomForestClassifier(n_estimators=100, random_state=42)
         elif model_type == "passive_aggressive":
             self.model = PassiveAggressiveClassifier(max_iter=1000, random_state=42)
         else:
-            self.model = LogisticRegression(C=1.0, max_iter=1000, random_state=42)
+            self.model = LogisticRegression(C=0.25, max_iter=1000, class_weight="balanced", random_state=42)
 
         self.is_trained = False
 
@@ -133,9 +150,24 @@ class FakeNewsClassifier:
         cleaned_texts = [self.preprocessor.clean_text(t) for t in texts]
         
         if fit:
+            # Tiny demo/training sets cannot support corpus-frequency cutoffs.
+            min_df = 2 if len(cleaned_texts) >= 20 else 1
+            self.tfidf.set_params(
+                min_df=min_df,
+                max_df=0.98 if len(cleaned_texts) >= 20 else 1.0,
+            )
             tfidf_features = self.tfidf.fit_transform(cleaned_texts)
+            if self.char_tfidf is not None:
+                self.char_tfidf.set_params(min_df=min_df)
+                char_features = self.char_tfidf.fit_transform(cleaned_texts)
+            else:
+                char_features = None
         else:
             tfidf_features = self.tfidf.transform(cleaned_texts)
+            char_features = self.char_tfidf.transform(cleaned_texts) if self.char_tfidf is not None else None
+
+        if char_features is not None:
+            return hstack([tfidf_features, char_features]).tocsr()
 
         ling_features = self.linguistic_extractor.transform(cleaned_texts)
         ling_sparse = csr_matrix(ling_features)
@@ -162,55 +194,91 @@ class FakeNewsClassifier:
             "model_type": self.model_type
         }
 
-    def predict_proba(self, text: str) -> Dict[str, float]:
-        """
-        Predicts class probabilities for input text.
-        Returns {"real_probability": float, "fake_probability": float}.
-        """
+    def _score_text(self, text: str) -> Dict[str, Any]:
+        """Calculate both legacy class scores and the raw margin in one pass."""
         if not self.is_trained:
-            # Heuristic default based on linguistic cues if model is un-trained
             ling_vec = self.linguistic_extractor._extract_single_features(text)
             caps_ratio, exclamation_ratio = ling_vec[0], ling_vec[1]
-            fake_prob = min(0.95, max(0.05, 0.5 + (caps_ratio * 2.0) + (exclamation_ratio * 3.0)))
-            return {
-                "real_probability": round(1.0 - fake_prob, 4),
-                "fake_probability": round(fake_prob, 4)
-            }
+            fake_score = min(0.95, max(0.05, 0.5 + (caps_ratio * 2.0) + (exclamation_ratio * 3.0)))
+            return {"real_score": round(1.0 - fake_score, 4), "fake_score": round(fake_score, 4), "decision_margin": None, "score_kind": "untrained_linguistic_heuristic"}
 
         X_mat = self._prepare_features([text], fit=False)
-
+        decision = None
+        if hasattr(self.model, "decision_function"):
+            decision = float(np.asarray(self.model.decision_function(X_mat)).reshape(-1)[0])
         if hasattr(self.model, "predict_proba"):
             probs = self.model.predict_proba(X_mat)[0]
-            real_p, fake_p = float(probs[0]), float(probs[1])
+            class_indices = {int(label): idx for idx, label in enumerate(self.model.classes_)}
+            real_score = float(probs[class_indices[0]])
+            fake_score = float(probs[class_indices[1]])
+            score_kind = "uncalibrated_model_score"
+        elif decision is not None:
+            # Compatibility score only. Sigmoid(decision_function) is not
+            # probability calibration and must never be called confidence.
+            fake_score = float(1.0 / (1.0 + np.exp(-np.clip(decision, -30, 30))))
+            real_score = 1.0 - fake_score
+            score_kind = "uncalibrated_sigmoid_of_svm_margin"
         else:
-            decision = self.model.decision_function(X_mat)[0]
-            fake_p = float(1.0 / (1.0 + np.exp(-decision)))
-            real_p = 1.0 - fake_p
+            predicted = int(self.model.predict(X_mat)[0])
+            fake_score, real_score = float(predicted == 1), float(predicted == 0)
+            score_kind = "uncalibrated_hard_class_score"
 
         return {
-            "real_probability": round(real_p, 4),
-            "fake_probability": round(fake_p, 4)
+            "real_score": round(real_score, 4),
+            "fake_score": round(fake_score, 4),
+            "decision_margin": decision,
+            "score_kind": score_kind,
+        }
+
+    def predict_proba(self, text: str) -> Dict[str, float]:
+        """
+        Return legacy score fields for API compatibility.
+
+        LinearSVC has no predict_proba method. Its decision margin is mapped
+        through a sigmoid only as a bounded display score; this is NOT a
+        calibrated probability. Callers must check the metadata returned by
+        predict() and must not treat this score as factual confidence.
+        """
+        scores = self._score_text(text)
+
+        return {
+            "real_probability": scores["real_score"],
+            "fake_probability": scores["fake_score"],
         }
 
     def predict(self, text: str) -> Dict[str, Any]:
         """
-        Returns classification verdict for text.
-        """
-        probs = self.predict_proba(text)
-        fake_p = probs["fake_probability"]
+        Classify by the SVM decision margin and expose score semantics.
 
-        if fake_p >= 0.65:
+        LinearSVC's hinge-loss margin is used as an abstention band: only
+        margins beyond +/-1 are decisive. The interval around the boundary
+        is explicitly uncertain. This avoids turning a sigmoid of the raw
+        SVM margin into apparent probability certainty.
+        """
+        scores = self._score_text(text)
+        fake_p = scores["fake_score"]
+        decision_margin = scores["decision_margin"]
+
+        if decision_margin is not None and decision_margin >= 1.0:
             verdict = "FAKE"
-        elif fake_p <= 0.35:
+        elif decision_margin is not None and decision_margin <= -1.0:
             verdict = "REAL"
         else:
             verdict = "SUSPICIOUS / UNCERTAIN"
 
         return {
             "verdict": verdict,
+            # Kept for compatibility. These are scores, not calibrated
+            # probabilities; new consumers should use fake_score and margin.
             "fake_probability": fake_p,
-            "real_probability": probs["real_probability"],
-            "is_fake": fake_p > 0.5
+            "real_probability": scores["real_score"],
+            "fake_score": fake_p,
+            "real_score": scores["real_score"],
+            "score_kind": scores["score_kind"],
+            "probability_calibrated": False,
+            "decision_margin": decision_margin,
+            "margin_threshold": 1.0,
+            "is_fake": True if verdict == "FAKE" else False if verdict == "REAL" else None,
         }
 
     def save_model(self, filepath: str) -> None:
@@ -218,6 +286,7 @@ class FakeNewsClassifier:
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         data = {
             "tfidf": self.tfidf,
+            "char_tfidf": self.char_tfidf,
             "model": self.model,
             "model_type": self.model_type,
             "is_trained": self.is_trained
@@ -231,6 +300,7 @@ class FakeNewsClassifier:
 
         data = joblib.load(filepath)
         self.tfidf = data["tfidf"]
+        self.char_tfidf = data.get("char_tfidf")
         self.model = data["model"]
         self.model_type = data.get("model_type", "logistic")
         self.is_trained = data.get("is_trained", True)

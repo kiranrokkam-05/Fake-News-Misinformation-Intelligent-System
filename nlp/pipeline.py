@@ -67,10 +67,27 @@ class FakeNewsNLPPipeline:
             consensus_res = self.similarity_engine.calculate_consensus_score(claim_texts, reference_texts)
 
         # Step 4: Machine Learning Classification
-        ml_res = self.classifier.predict(text)
+        is_short_claim = preprocess_res["word_count"] <= 25 and preprocess_res["sentence_count"] <= 2
+        ml_res = (
+            {
+                "verdict": "NOT APPLIED — SHORT CLAIM",
+                "is_fake": None,
+                "fake_probability": None,
+                "real_probability": None,
+                "fake_score": None,
+                "real_score": None,
+                "score_kind": None,
+                "probability_calibrated": False,
+                "decision_margin": None,
+                "margin_threshold": None,
+                "applicable": False,
+            }
+            if is_short_claim
+            else {**self.classifier.predict(text), "applicable": True}
+        )
 
-        # Step 5: Calibrated Multi-Factor Confidence Scoring
-        confidence_res = self.confidence_calculator.calculate_confidence(
+        # Step 5: Report score semantics without inventing a calibrated confidence.
+        confidence_res = None if is_short_claim else self.confidence_calculator.calculate_confidence(
             ml_prediction=ml_res,
             claims_analysis=claims_res,
             preprocessed_meta=preprocess_res,
@@ -89,7 +106,14 @@ class FakeNewsNLPPipeline:
                 "verdict": ml_res["verdict"],
                 "is_fake": ml_res["is_fake"],
                 "fake_probability": ml_res["fake_probability"],
-                "real_probability": ml_res["real_probability"]
+                "real_probability": ml_res["real_probability"],
+                "fake_score": ml_res.get("fake_score", ml_res["fake_probability"]),
+                "real_score": ml_res.get("real_score", ml_res["real_probability"]),
+                "score_kind": ml_res.get("score_kind"),
+                "probability_calibrated": ml_res.get("probability_calibrated", False),
+                "decision_margin": ml_res.get("decision_margin"),
+                "margin_threshold": ml_res.get("margin_threshold"),
+                "applicable": ml_res["applicable"],
             },
             "confidence_assessment": confidence_res,
             "claims_and_entities": {

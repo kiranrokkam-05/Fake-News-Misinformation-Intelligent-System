@@ -118,6 +118,7 @@ class VerificationResult:
     model_versions: dict[str, str] = field(default_factory=dict)
     limitations: list[str] = field(default_factory=list)
     timing_ms: Optional[float] = None
+    search_queries: list[str] = field(default_factory=list)
 
     def to_dict(self) -> dict:
         return {
@@ -131,6 +132,7 @@ class VerificationResult:
             "strength_band": self.strength_band,
             "flags": self.flags,
             "sources_checked": self.sources_checked,
+            "search_queries": self.search_queries,
             "provider_statuses": [
                 {
                     "name": status.name,

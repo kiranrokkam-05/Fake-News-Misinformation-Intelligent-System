@@ -20,27 +20,30 @@ from verification_module.models import EvidenceItem, Stance, Verdict, Verificati
 
 
 def _weighted_stance_scores(evidence: List[EvidenceItem]) -> dict:
-    """Credibility-weighted average score per stance, on a 0-1 scale.
+    """Credibility-weight relevant support/refutation, ignoring neutral hits.
 
-    IMPORTANT: this averages over the TOTAL number of evidence items,
-    not over the sum of weights. Normalizing by total weight would let
-    a single low-confidence, low-credibility item look like "100%
-    support" just because it's the only vote cast -- averaging by
-    count means weak evidence stays weak instead of being inflated.
+    Search results that do not address the claim are not votes and must not
+    dilute a relevant passage. Credibility and stance confidence still scale
+    each vote, so a weak or low-credibility source cannot become strong merely
+    because it is the only relevant result.
     """
-    n = len(evidence)
-    if n == 0:
+    relevant = [
+        item
+        for item in evidence
+        if item.stance != Stance.NEUTRAL and item.stance_confidence >= 0.5
+    ]
+    if not relevant:
         return {"supports": 0.0, "contradicts": 0.0, "neutral": 0.0}
 
     totals = {Stance.SUPPORTS: 0.0, Stance.CONTRADICTS: 0.0, Stance.NEUTRAL: 0.0}
-    for item in evidence:
+    for item in relevant:
         weight = (item.credibility_score / 100.0) * item.stance_confidence
         totals[item.stance] += weight
 
     return {
-        "supports": totals[Stance.SUPPORTS] / n,
-        "contradicts": totals[Stance.CONTRADICTS] / n,
-        "neutral": totals[Stance.NEUTRAL] / n,
+        "supports": totals[Stance.SUPPORTS] / len(relevant),
+        "contradicts": totals[Stance.CONTRADICTS] / len(relevant),
+        "neutral": 0.0,
     }
 
 

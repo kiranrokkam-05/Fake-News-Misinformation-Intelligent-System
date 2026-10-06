@@ -16,16 +16,18 @@ call: `verify_claim(claim_text)`.
 from verification_module.comparison import compare_claim_to_evidence
 from verification_module.credibility import score_all
 from verification_module.decision_engine import decide
-from verification_module.evidence_retrieval import retrieve_evidence
+from verification_module.evidence_retrieval import retrieve_evidence_with_status
 from verification_module.explainability import format_report
 from verification_module.models import VerificationResult
 
 
 def _topic_exists(evidence) -> bool:
-    """Very simple baseline: if Wikipedia (or any source) returned
-    anything at all, the topic is considered to "exist" in some
-    recognizable form."""
-    return len(evidence) > 0
+    """Only call the topic related when a passage has meaningful overlap.
+
+    An unrelated search hit must not turn an inconclusive result into an
+    ``EXISTING TOPIC`` verdict merely because a provider returned a page.
+    """
+    return any(item.stance_confidence >= 0.5 for item in evidence)
 
 
 def verify_claim(claim: str) -> VerificationResult:
@@ -38,12 +40,15 @@ def verify_claim(claim: str) -> VerificationResult:
     if not claim or not claim.strip():
         raise ValueError("verify_claim() requires a non-empty claim string")
 
-    evidence = retrieve_evidence(claim)
+    retrieval = retrieve_evidence_with_status(claim)
+    evidence = retrieval.evidence
     evidence = score_all(evidence)
     evidence = compare_claim_to_evidence(claim, evidence)
 
     topic_exists = _topic_exists(evidence)
     result = decide(claim, evidence, topic_exists=topic_exists)
+    result.provider_statuses = retrieval.provider_statuses
+    result.search_queries = retrieval.queries
     return result
 
 

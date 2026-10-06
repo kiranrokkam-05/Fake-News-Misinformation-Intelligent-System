@@ -4,10 +4,9 @@ Evidence Retrieval Pipeline.
     Extracted Claim -> Query Generation -> Search Adapters (parallel)
     -> Aggregate -> Deduplicate -> return list[EvidenceItem]
 
-Query generation itself belongs to the NLP & ML Developer's module
-(Step 14 in the project doc). Here we provide a simple stand-in so
-this module runs on its own; swap `generate_queries()` for the real
-NLP module's output once it's ready.
+Queries are generated from content terms, named-entity-like tokens, and
+quantities. Provider failures are recorded as status and never become
+negative evidence.
 """
 
 import time
@@ -26,16 +25,11 @@ from verification_module.retrieval.queries import generate_claim_queries
 class RetrievalResult:
     evidence: List[EvidenceItem]
     provider_statuses: List[ProviderStatus]
+    queries: List[str]
 
 
 def generate_queries(claim: str) -> List[str]:
-    """STUB query generation.
-
-    TODO: replace with the NLP & ML Developer's real query-generation
-    step (keyphrase extraction + NER-driven query variants, per
-    project doc Step 14). For now we just use the raw claim -- good
-    enough to exercise the full pipeline end-to-end.
-    """
+    """Generate concise claim-focused provider queries."""
     return generate_claim_queries(claim)
 
 
@@ -52,7 +46,6 @@ def retrieve_evidence_with_status(claim: str) -> RetrievalResult:
     statuses: List[ProviderStatus] = []
 
     for adapter in ALL_ADAPTERS:
-        started = time.perf_counter()
         if not adapter.is_configured():
             statuses.append(
                 ProviderStatus(
@@ -62,34 +55,48 @@ def retrieve_evidence_with_status(claim: str) -> RetrievalResult:
                 )
             )
             continue  # skip providers with no API key set
-        for query in queries:
+        started = time.perf_counter()
+        provider_results = []
+        failures = []
+        successes = 0
+        for query in queries[:2]:
             try:
                 results = adapter.search(
                     query, max_results=config.MAX_RESULTS_PER_ADAPTER
                 )
-                all_results.extend(results)
-                statuses.append(
-                    ProviderStatus(
-                        adapter.provider_name,
-                        ProviderStatusValue.OK,
-                        latency_ms=(time.perf_counter() - started) * 1000,
-                        n_results=len(results),
-                    )
+                provider_results.extend(results)
+                successes += 1
+            except Exception as exc:
+                # Catch provider/network/HTTP/JSON failures at the boundary so
+                # one broken key or a 400/429 cannot fail verification or add
+                # a negative stance vote.
+                if isinstance(exc, (KeyboardInterrupt, SystemExit)):
+                    raise
+                safe_reason = (
+                    str(exc)
+                    if isinstance(exc, RetrievalHTTPError)
+                    else f"provider response failed ({type(exc).__name__})"
                 )
-            except (RetrievalHTTPError, ValueError, RuntimeError) as exc:
+                failures.append(safe_reason)
                 logger.warning(
-                    "provider retrieval failed: %s (%s)", adapter.provider_name, exc
+                    "provider retrieval failed: %s (%s)", adapter.provider_name, safe_reason
                 )
-                statuses.append(
-                    ProviderStatus(
-                        adapter.provider_name,
-                        ProviderStatusValue.ERROR,
-                        reason=str(exc),
-                        latency_ms=(time.perf_counter() - started) * 1000,
-                    )
-                )
+        all_results.extend(provider_results)
+        if successes:
+            status = ProviderStatusValue.OK
+            reason = f"{len(failures)} query request(s) failed" if failures else ""
+        else:
+            status = ProviderStatusValue.ERROR
+            reason = "; ".join(failures)[:500] or "No search query was generated"
+        statuses.append(ProviderStatus(
+            adapter.provider_name,
+            status,
+            reason=reason,
+            latency_ms=(time.perf_counter() - started) * 1000,
+            n_results=len(provider_results),
+        ))
 
-    return RetrievalResult(_deduplicate(all_results), statuses)
+    return RetrievalResult(_deduplicate(all_results), statuses, queries[:2])
 
 
 def _deduplicate(items: List[EvidenceItem]) -> List[EvidenceItem]:

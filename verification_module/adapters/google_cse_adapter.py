@@ -21,15 +21,15 @@ class GoogleCSEAdapter(SearchAdapter):
     ENDPOINT = "https://www.googleapis.com/customsearch/v1"
 
     def is_configured(self) -> bool:
-        return bool(config.GOOGLE_CSE_KEY and config.GOOGLE_CSE_CX)
+        return bool(config.get_api_key("GOOGLE_CSE_KEY") and config.get_api_key("GOOGLE_CSE_CX"))
 
     def search(self, query: str, max_results: int = 5) -> List[EvidenceItem]:
         if not self.is_configured():
             return []
 
         params = {
-            "key": config.GOOGLE_CSE_KEY,
-            "cx": config.GOOGLE_CSE_CX,
+            "key": config.get_api_key("GOOGLE_CSE_KEY"),
+            "cx": config.get_api_key("GOOGLE_CSE_CX"),
             "q": query,
             "num": min(max_results, 10),  # API max is 10 per request
         }

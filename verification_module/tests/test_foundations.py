@@ -23,6 +23,26 @@ def test_http_client_rejects_non_allowlisted_host():
         client.get("https://not-example.com/resource")
 
 
+def test_http_errors_do_not_echo_provider_url_or_credentials(monkeypatch):
+    import requests
+
+    class Response:
+        status_code = 429
+
+    client = RetrievalHttpClient({"example.com"})
+    monkeypatch.setattr(
+        client.session,
+        "get",
+        lambda *args, **kwargs: (_ for _ in ()).throw(
+            requests.HTTPError("429 for https://example.com?q=test&key=NEVER-ECHO", response=Response())
+        ),
+    )
+    with pytest.raises(RetrievalHTTPError) as exc:
+        client.get("https://example.com/resource")
+    assert str(exc.value) == "Provider returned HTTP 429"
+    assert "NEVER-ECHO" not in str(exc.value)
+
+
 def test_empty_optional_providers_are_reported_as_skipped(monkeypatch):
     for name in (
         "NEWSAPI_KEY",
@@ -40,3 +60,23 @@ def test_empty_optional_providers_are_reported_as_skipped(monkeypatch):
         for status in result.provider_statuses
         if status.name != "wikipedia"
     )
+
+
+def test_provider_http_failure_is_reported_without_negative_evidence(monkeypatch):
+    from verification_module import evidence_retrieval
+
+    class BrokenProvider:
+        provider_name = "broken_test_provider"
+
+        def is_configured(self):
+            return True
+
+        def search(self, query, max_results=5):
+            raise RetrievalHTTPError("Provider returned HTTP 429")
+
+    monkeypatch.setattr(evidence_retrieval, "ALL_ADAPTERS", [BrokenProvider()])
+    result = evidence_retrieval.retrieve_evidence_with_status("The test result is 42.")
+    assert result.evidence == []
+    assert len(result.provider_statuses) == 1
+    assert result.provider_statuses[0].status == ProviderStatusValue.ERROR
+    assert "429" in result.provider_statuses[0].reason

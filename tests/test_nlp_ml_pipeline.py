@@ -65,6 +65,9 @@ class TestNLPMLPipeline(unittest.TestCase):
 
         pred = classifier.predict("UNBELIEVABLE SHOCKING SECRET CONSPIRACY!!!")
         self.assertIn(pred["verdict"], ["FAKE", "REAL", "SUSPICIOUS / UNCERTAIN"])
+        self.assertFalse(pred["probability_calibrated"])
+        self.assertEqual(pred["score_kind"], "uncalibrated_sigmoid_of_svm_margin")
+        self.assertIn("decision_margin", pred)
 
     def test_confidence_calculator(self):
         calc = ConfidenceCalculator()
@@ -73,8 +76,8 @@ class TestNLPMLPipeline(unittest.TestCase):
         prep = {"raw_text": "SHOCKING!!!", "word_count": 2}
 
         conf = calc.calculate_confidence(ml_pred, claims, prep)
-        self.assertIn("confidence_percentage", conf)
-        self.assertGreaterEqual(conf["confidence_percentage"], 0.0)
+        self.assertIsNone(conf["confidence_percentage"])
+        self.assertEqual(conf["confidence_type"], "not_calibrated")
 
     def test_end_to_end_pipeline(self):
         pipeline = FakeNewsNLPPipeline(model_path="models/test_model.joblib")

@@ -9,6 +9,7 @@ with zero keys configured (using Wikipedia + mock evidence only).
 """
 
 import os
+from dataclasses import dataclass
 from pathlib import Path
 
 # Load the project-local secrets file automatically. The file remains ignored
@@ -50,6 +51,22 @@ WIKIPEDIA_USER_AGENT = os.environ.get(
 MAX_RESULTS_PER_ADAPTER = 5
 REQUEST_TIMEOUT_SECONDS = 8
 MAX_RESPONSE_BYTES = 2_000_000
+
+
+@dataclass(frozen=True)
+class Settings:
+    """Small compatibility view of shared retrieval safety settings."""
+
+    request_timeout_seconds: int = REQUEST_TIMEOUT_SECONDS
+    max_response_bytes: int = MAX_RESPONSE_BYTES
+
+
+settings = Settings()
+
+
+def get_api_key(name: str) -> str:
+    """Read credentials dynamically so runtime env changes and tests apply."""
+    return os.environ.get(name, "")
 
 # Verdict thresholds (0-1 scale of aggregated support). Tune these
 # once real similarity/NLI scores are wired in.

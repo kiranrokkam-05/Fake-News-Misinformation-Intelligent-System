@@ -28,6 +28,14 @@ _CONFIRMATION_CUES = {
     "accurate", "correct",
 }
 
+# Grammatical words add little value when comparing a short claim with a
+# retrieved passage. Removing them makes the overlap score reflect content.
+_CONTENT_STOP_WORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "been", "being", "by",
+    "for", "from", "has", "have", "in", "into", "is", "it", "its", "of",
+    "on", "or", "that", "the", "this", "to", "was", "were", "who", "with",
+}
+
 
 def _tokenize(text: str) -> set:
     return set(re.findall(r"[a-z0-9]+", text.lower()))
@@ -58,9 +66,10 @@ def _stance_for_pair(claim: str, evidence: EvidenceItem) -> (Stance, float):
     classifier from the NLP & ML Developer's module.
     """
 
-    claim_tokens = _tokenize(claim)
-    evidence_text = f"{evidence.title} {evidence.snippet}"
-    evidence_tokens = _tokenize(evidence_text)
+    claim_tokens = _tokenize(claim) - _CONTENT_STOP_WORDS
+    passage_text = evidence.passage.text if evidence.passage else ""
+    evidence_text = f"{evidence.title} {evidence.snippet} {passage_text}"
+    evidence_tokens = _tokenize(evidence_text) - _CONTENT_STOP_WORDS
 
     if not claim_tokens:
         return Stance.NEUTRAL, 0.0
@@ -81,8 +90,11 @@ def _stance_for_pair(claim: str, evidence: EvidenceItem) -> (Stance, float):
     if has_confirmation and not has_negation:
         return Stance.SUPPORTS, round(min(0.9, 0.5 + overlap), 2)
 
-    # Overlap is decent but no clear cue word either way -> treat as
-    # weak support proportional to overlap.
+    # Strong content-word overlap without contradiction is useful support
+    # for simple factual claims even when the passage lacks cue words such as
+    # "confirmed". Keep partial overlap conservative.
+    if overlap >= 0.75:
+        return Stance.SUPPORTS, round(min(0.9, 0.65 + overlap * 0.25), 2)
     return Stance.SUPPORTS, round(min(0.7, overlap), 2)
 
 

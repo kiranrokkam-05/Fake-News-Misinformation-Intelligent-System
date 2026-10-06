@@ -1,0 +1,26 @@
+{
+  "created_at_utc": "2026-10-06T17:09:41.257902+00:00",
+  "evaluation_dataset": "E:\\Fake-News-Misinformation-Intelligent-System\\evaluation\\external_evaluation.csv",
+  "cleaned_training_rows_compared": 4572,
+  "evaluation_rows_scanned": 0,
+  "tfidf": {
+    "method": "word unigram/bigram TF-IDF cosine similarity; vectorizer fitted on training text only",
+    "flag_threshold": 0.95,
+    "matches_at_or_above_threshold": [],
+    "warning": "TF-IDF similarity is a lexical heuristic and does not prove that two records are duplicate articles."
+  },
+  "title_overlap": {
+    "exact_train_evaluation_matches": [],
+    "normalized_train_evaluation_matches": [],
+    "exact_duplicate_groups_within_evaluation": [],
+    "normalized_duplicate_groups_within_evaluation": [],
+    "tfidf_method": "word unigram/bigram TF-IDF cosine over title text; fitted on raw training titles only",
+    "tfidf_flag_threshold": 0.85,
+    "tfidf_matches_at_or_above_threshold": []
+  },
+  "exact_text_train_evaluation_matches": [],
+  "normalized_text_train_evaluation_matches": [],
+  "exact_duplicate_groups_within_evaluation": [],
+  "normalized_duplicate_groups_within_evaluation": [],
+  "records_modified_or_deleted": 0
+}
