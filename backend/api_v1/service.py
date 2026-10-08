@@ -225,6 +225,7 @@ class EvidenceService:
                 "Authority and retrieval relevance do not guarantee source correctness.",
                 "The pipeline does not independently prove claims.",
                 f"Timestamped news evidence was limited to the last {recent_window_hours} hours; undated reference sources may remain.",
+                "Project dataset matches are labeled validation records, not independent factual proof.",
             ],
             "timing_ms": round((time.perf_counter() - started) * 1000, 2),
         }

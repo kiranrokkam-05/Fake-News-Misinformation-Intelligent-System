@@ -47,11 +47,16 @@ def retrieve_evidence_with_status(claim: str) -> RetrievalResult:
 
     for adapter in ALL_ADAPTERS:
         if not adapter.is_configured():
+            reason = (
+                "dataset file unavailable"
+                if adapter.provider_name == "project_dataset"
+                else "provider is not configured"
+            )
             statuses.append(
                 ProviderStatus(
                     adapter.provider_name,
                     ProviderStatusValue.SKIPPED,
-                    "provider is not configured",
+                    reason,
                 )
             )
             continue  # skip providers with no API key set

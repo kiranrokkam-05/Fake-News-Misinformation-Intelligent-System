@@ -99,8 +99,11 @@
     const right = node("div", "stack");
     const analysis = node("div", "card");
     analysis.appendChild(node("h2", "", "Evidence analysis"));
-    renderMeter(analysis, "Support signal", payload.aggregation?.support_score || 0, payload.strength_band || "insufficient");
-    renderMeter(analysis, "Refute signal", payload.aggregation?.refute_score || 0, payload.aggregation?.contested ? "contested" : "—");
+    const supportScore = payload.aggregation?.support_score || 0;
+    const refuteScore = payload.aggregation?.refute_score || 0;
+    renderMeter(analysis, "Supports (TRUE signal)", supportScore, `${Math.round(supportScore * 100)}%`);
+    renderMeter(analysis, "Refutes (FALSE signal)", refuteScore, `${Math.round(refuteScore * 100)}%`);
+    analysis.appendChild(node("p", "hint", "These are uncalibrated evidence signals, not probabilities that the claim is true or false."));
     const sec = node("div", "sec");
     sec.appendChild(node("h3", "", "Claim entities"));
     const chips = node("div", "chips");

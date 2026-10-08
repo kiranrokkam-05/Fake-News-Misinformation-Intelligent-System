@@ -1,6 +1,7 @@
 from verification_module.adapters.factcheck_adapter import FactCheckAdapter
 from verification_module.adapters.gnews_adapter import GNewsAdapter
 from verification_module.adapters.google_cse_adapter import GoogleCSEAdapter
+from verification_module.adapters.local_claims_adapter import LocalClaimsAdapter
 from verification_module.adapters.newsapi_adapter import NewsAPIAdapter
 from verification_module.adapters.wikipedia_adapter import WikipediaAdapter
 
@@ -8,6 +9,7 @@ from verification_module.adapters.wikipedia_adapter import WikipediaAdapter
 # writing a SearchAdapter subclass and appending it here -- nothing
 # else in the pipeline needs to change.
 ALL_ADAPTERS = [
+    LocalClaimsAdapter(),
     WikipediaAdapter(),
     NewsAPIAdapter(),
     GNewsAdapter(),

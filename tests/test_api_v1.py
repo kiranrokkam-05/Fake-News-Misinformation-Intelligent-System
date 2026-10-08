@@ -51,3 +51,19 @@ def test_frontend_uses_canonical_api_without_inner_html():
 def test_frontend_link_uses_url_endpoint():
     frontend = Path("frontend/app.js").read_text(encoding="utf-8")
     assert '"/api/v1/verify/url"' in frontend
+
+
+def test_project_dataset_adapter_matches_labeled_claim():
+    from verification_module.adapters.local_claims_adapter import LocalClaimsAdapter
+
+    results = LocalClaimsAdapter().search("The Moon orbits the Earth.")
+    assert results
+    assert results[0].provider == "project_dataset"
+    assert results[0].source_type == "project_dataset"
+    assert results[0].stance.value == "supports"
+
+
+def test_frontend_labels_support_and_refute_signals():
+    frontend = Path("frontend/app.js").read_text(encoding="utf-8")
+    assert "Supports (TRUE signal)" in frontend
+    assert "Refutes (FALSE signal)" in frontend

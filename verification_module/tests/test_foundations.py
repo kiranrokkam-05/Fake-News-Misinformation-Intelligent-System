@@ -58,7 +58,7 @@ def test_empty_optional_providers_are_reported_as_skipped(monkeypatch):
     assert all(
         status.status == ProviderStatusValue.SKIPPED
         for status in result.provider_statuses
-        if status.name != "wikipedia"
+        if status.name in {"newsapi", "gnews", "google_cse", "google_factcheck"}
     )
 
 
