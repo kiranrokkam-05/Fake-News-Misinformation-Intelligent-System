@@ -41,6 +41,7 @@ def verify():
             payload.claim,
             payload.options.max_evidence,
             payload.options.include_baseline,
+            payload.options.recent_window_hours,
         )
     )
 
@@ -56,6 +57,7 @@ def verify_batch():
                     item.claim,
                     item.options.max_evidence,
                     item.options.include_baseline,
+                    item.options.recent_window_hours,
                 )
                 for item in payload.claims
             ]
@@ -71,7 +73,7 @@ def verify_article():
     return jsonify(
         {
             "results": [
-                evidence_service.verify(sentence, 5, False)
+                evidence_service.verify(sentence, 5, False, 4)
                 for sentence in sentences[:20]
                 if len(sentence) >= 5
             ]

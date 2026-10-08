@@ -1,0 +1,13 @@
+.git
+.gitignore
+.env
+verification_module/.env
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+data/eval/scifact/
+reports/*progress*.jsonl
+node_modules/
+.cache/
+huggingface/

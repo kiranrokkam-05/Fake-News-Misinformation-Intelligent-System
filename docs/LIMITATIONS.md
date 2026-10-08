@@ -10,5 +10,14 @@
   correct.
 - The system can return insufficient evidence and requires human review for
   consequential decisions.
-- Phase 8 security hardening is not complete.
-- Phase 9 Docker and deployment work is not complete.
+- Basic Phase 8 protections are enabled locally: JSON request-size limits,
+  in-memory per-client rate limiting, and security response headers. A public
+  deployment still needs a shared rate limiter, authentication if required by
+  the deployment, secret management, TLS, network policy, and monitoring.
+- A Dockerfile is provided for reproducible local/container execution. Cloud
+  deployment, TLS termination, reverse-proxy configuration, and autoscaling
+  are not included.
+- Recent-news mode filters timestamped provider results to a configurable
+  window (the UI requests four hours). Undated reference sources can still
+  remain, and a recent article cannot be classified as fake or real without
+  corroborating or contradicting evidence.

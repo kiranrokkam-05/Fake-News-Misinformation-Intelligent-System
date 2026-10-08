@@ -1,6 +1,8 @@
 import json
 import logging
 import sys
+import time
+from collections import defaultdict, deque
 from pathlib import Path
 from flask import Flask, jsonify, request, send_from_directory
 
@@ -16,11 +18,48 @@ from backend.api_v1 import api_v1
 BASE_DIR = Path(__file__).resolve().parent.parent
 FRONTEND_DIR = BASE_DIR / "frontend"
 app = Flask(__name__, static_folder=str(FRONTEND_DIR), static_url_path="")
+app.config["MAX_CONTENT_LENGTH"] = 128 * 1024
 app.register_blueprint(api_v1)
 logger = logging.getLogger(__name__)
+_request_times: dict[str, deque[float]] = defaultdict(deque)
+_RATE_LIMIT_REQUESTS = 60
+_RATE_LIMIT_WINDOW_SECONDS = 60
 MODEL_PATH = BASE_DIR / "models" / "fake_news_model.joblib"
 METRICS_PATH = BASE_DIR / "models" / "model_metrics.json"
 _pipeline = None
+
+
+@app.before_request
+def enforce_request_limits():
+    if request.path.startswith("/static/"):
+        return None
+    now = time.monotonic()
+    client = request.remote_addr or "unknown"
+    timestamps = _request_times[client]
+    while timestamps and now - timestamps[0] >= _RATE_LIMIT_WINDOW_SECONDS:
+        timestamps.popleft()
+    if len(timestamps) >= _RATE_LIMIT_REQUESTS:
+        return jsonify({
+            "error": {
+                "code": "rate_limit_exceeded",
+                "message": "Too many requests; retry shortly.",
+            }
+        }), 429
+    timestamps.append(now)
+    return None
+
+
+@app.after_request
+def add_security_headers(response):
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("Referrer-Policy", "no-referrer")
+    response.headers.setdefault(
+        "Content-Security-Policy",
+        "default-src 'self'; style-src 'self'; script-src 'self'; "
+        "img-src 'self' data:; connect-src 'self'",
+    )
+    return response
 
 
 def print_startup_report():
@@ -50,7 +89,10 @@ def print_startup_report():
     if MODEL_PATH.exists():
         print(f"Model artifact: {MODEL_PATH.name} (ready)")
     else:
-        print(f"Model artifact: {MODEL_PATH.name} (missing; run python -m ml.train)")
+        print(
+            f"Legacy baseline artifact: {MODEL_PATH.name} is missing; "
+            "the evidence API can still run, but baseline analysis is unavailable."
+        )
 
     if METRICS_PATH.exists():
         try:
@@ -98,7 +140,7 @@ def print_startup_report():
         except Exception as exc:
             print(f"Metrics: could not read {METRICS_PATH.name} ({exc})")
     else:
-        print("Metrics: unavailable; run python -m ml.train")
+        print("Metrics: unavailable; legacy baseline metrics are not required by API v1.")
 
     print("\nStarting Flask server at http://127.0.0.1:5000")
     print("=" * 68 + "\n")

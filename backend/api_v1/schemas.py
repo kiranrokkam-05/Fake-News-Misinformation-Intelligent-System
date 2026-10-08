@@ -5,6 +5,7 @@ class VerifyOptions(BaseModel):
     model_config = ConfigDict(extra="forbid")
     include_baseline: bool = False
     max_evidence: int = Field(default=5, ge=1, le=20)
+    recent_window_hours: int = Field(default=4, ge=1, le=168)
 
 
 class VerifyRequest(BaseModel):

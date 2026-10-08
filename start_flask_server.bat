@@ -10,23 +10,15 @@ if exist ".venv\Scripts\activate.bat" (
   echo No project .venv found. Using Python from PATH.
 )
 
-if not exist "models\fake_news_model.joblib" (
-  echo.
-  echo Missing models\fake_news_model.joblib.
-  echo Train it with: python -m ml.train
-  pause
-  exit /b 1
-)
-
 echo.
 echo ================================================================
-echo Starting Flask; model metrics will print below.
-echo Console output includes NLP summaries and retrieved evidence.
+echo Starting the production-like Waitress server; model metrics are available at /api/model-metrics.
+echo The canonical evidence API does not require the legacy article model.
 echo Open http://127.0.0.1:5000 after the server starts.
 echo Press Ctrl+C to stop the server.
 echo ================================================================
 echo.
-python -u -m backend.app
+python -u -m waitress --listen=127.0.0.1:5000 backend.wsgi:app
 set SERVER_EXIT=%ERRORLEVEL%
 echo.
 echo Flask server stopped with exit code %SERVER_EXIT%.

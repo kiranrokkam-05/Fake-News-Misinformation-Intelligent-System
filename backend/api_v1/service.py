@@ -1,4 +1,5 @@
 import time
+from datetime import datetime, timedelta, timezone
 from uuid import uuid4
 
 from verification_module.claims.entities import extract_structure
@@ -7,6 +8,7 @@ from verification_module.evidence_retrieval import (
     retrieve_evidence_with_status,
 )
 from verification_module.models import NLIScores, Stance, Verdict
+from verification_module.models import Passage
 from verification_module.reasoning.aggregate import aggregate_evidence
 from verification_module.reasoning.decision import decide_from_aggregation
 from verification_module.reasoning.nli import load_nli_model
@@ -29,14 +31,37 @@ class EvidenceService:
             self._nli = load_nli_model()
         return self._nli
 
-    def verify(self, claim: str, max_evidence: int, include_baseline: bool = False) -> dict:
+    def verify(
+        self,
+        claim: str,
+        max_evidence: int,
+        include_baseline: bool = False,
+        recent_window_hours: int = 4,
+    ) -> dict:
         started = time.perf_counter()
         nli = self._get_nli()
         retrieval = retrieve_evidence_with_status(claim)
-        evidence = retrieval.evidence[:max_evidence]
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=recent_window_hours)
+        retrieved_count = len(retrieval.evidence)
+        evidence = [
+            item
+            for item in retrieval.evidence
+            if item.published_at is None or item.published_at >= cutoff
+        ][:max_evidence]
         score_all(evidence)
+        for item in evidence:
+            if item.passage is None and item.snippet:
+                item.passage = Passage(
+                    text=item.snippet,
+                    title=item.title,
+                    passage_id=item.url,
+                )
         pairs = [(item.passage.text, claim) for item in evidence if item.passage]
-        scores = nli.score_batch([pair[0] for pair in pairs], [pair[1] for pair in pairs])
+        scores = (
+            nli.score_batch([pair[0] for pair in pairs], [pair[1] for pair in pairs])
+            if pairs
+            else []
+        )
         for item, score in zip(evidence, scores):
             item.nli = NLIScores(
                 entailment=score["entailment"],
@@ -79,6 +104,15 @@ class EvidenceService:
                 "insufficient"
             ),
             "calibration": {"status": "uncalibrated"},
+            "recency": {
+                "window_hours": recent_window_hours,
+                "cutoff": cutoff.isoformat(),
+                "retrieved_items": retrieved_count,
+                "filtered_items": retrieved_count - len(evidence),
+                "timestamped_news_items": sum(
+                    item.published_at is not None for item in evidence
+                ),
+            },
             "flags": flags,
             "evidence": [
                 {
@@ -151,6 +185,7 @@ class EvidenceService:
                 "NLI scores are uncalibrated and are not probabilities of factual truth.",
                 "Authority and retrieval relevance do not guarantee source correctness.",
                 "The pipeline does not independently prove claims.",
+                f"Timestamped news evidence was limited to the last {recent_window_hours} hours; undated reference sources may remain.",
             ],
             "timing_ms": round((time.perf_counter() - started) * 1000, 2),
         }
