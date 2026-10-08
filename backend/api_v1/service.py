@@ -1,6 +1,12 @@
 import time
 from datetime import datetime, timedelta, timezone
+from html.parser import HTMLParser
+import ipaddress
+import socket
+from urllib.parse import urlparse
 from uuid import uuid4
+
+import requests
 
 from verification_module.claims.entities import extract_structure
 from verification_module.evidence_retrieval import (
@@ -30,6 +36,39 @@ class EvidenceService:
         if self._nli is None:
             self._nli = load_nli_model()
         return self._nli
+
+    def verify_url(self, url: str) -> dict:
+        parsed = urlparse(url)
+        if parsed.scheme not in {"http", "https"} or not parsed.netloc:
+            raise ValueError("Only valid http or https URLs are supported.")
+        hostname = parsed.hostname
+        if not hostname:
+            raise ValueError("The URL must include a hostname.")
+        if hostname.lower() in {"localhost", "localhost.localdomain"}:
+            raise ValueError("Local URLs are not supported.")
+        try:
+            addresses = socket.getaddrinfo(hostname, None)
+            if any(ipaddress.ip_address(item[4][0]).is_private for item in addresses):
+                raise ValueError("Private-network URLs are not supported.")
+        except socket.gaierror as exc:
+            raise ValueError("The article hostname could not be resolved.") from exc
+        response = requests.get(
+            url,
+            headers={"User-Agent": "FakeNewsClaimVerifier/0.1"},
+            timeout=8,
+            allow_redirects=False,
+        )
+        response.raise_for_status()
+        if len(response.content) > 2_000_000:
+            raise ValueError("The article is larger than the 2 MB limit.")
+        parser = _ArticleTextParser()
+        parser.feed(response.text)
+        text = " ".join(parser.parts).strip()
+        if len(text) < 5:
+            raise ValueError("No readable article text was found at that URL.")
+        result = self.verify(text[:1000], 10, False, 4)
+        result["article"] = {"url": url, "title": parser.title}
+        return result
 
     def verify(
         self,
@@ -190,6 +229,36 @@ class EvidenceService:
             "timing_ms": round((time.perf_counter() - started) * 1000, 2),
         }
         return result
+
+
+class _ArticleTextParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.parts = []
+        self.title = ""
+        self._ignored = 0
+        self._in_title = False
+
+    def handle_starttag(self, tag, attrs):
+        if tag in {"script", "style", "noscript", "svg"}:
+            self._ignored += 1
+        elif tag == "title":
+            self._in_title = True
+
+    def handle_endtag(self, tag):
+        if tag in {"script", "style", "noscript", "svg"} and self._ignored:
+            self._ignored -= 1
+        elif tag == "title":
+            self._in_title = False
+
+    def handle_data(self, data):
+        value = " ".join(data.split())
+        if not value or self._ignored:
+            return
+        if self._in_title and not self.title:
+            self.title = value[:300]
+        if len(value) > 20:
+            self.parts.append(value)
 
 
 evidence_service = EvidenceService()

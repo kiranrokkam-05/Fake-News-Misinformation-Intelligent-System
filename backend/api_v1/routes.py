@@ -4,11 +4,13 @@ from uuid import uuid4
 
 from flask import Blueprint, current_app, jsonify, request
 from pydantic import ValidationError
+import requests
 
 from .errors import error_payload
-from .schemas import ArticleRequest, BatchRequest, VerifyRequest
+from .schemas import ArticleRequest, BatchRequest, UrlRequest, VerifyRequest
 from .service import evidence_service
 from verification_module.reasoning.nli import ModelUnavailable
+from verification_module.adapters import ALL_ADAPTERS
 
 api_v1 = Blueprint("api_v1", __name__, url_prefix="/api/v1")
 
@@ -30,6 +32,16 @@ def validation_error(error):
 @api_v1.errorhandler(ModelUnavailable)
 def model_unavailable(error):
     return jsonify(error_payload("models_not_ready", str(error))), 503
+
+
+@api_v1.errorhandler(ValueError)
+def value_error(error):
+    return jsonify(error_payload("invalid_request", str(error))), 400
+
+
+@api_v1.errorhandler(requests.RequestException)
+def upstream_request_error(error):
+    return jsonify(error_payload("article_fetch_failed", "Unable to fetch that article URL.")), 422
 
 
 @api_v1.post("/verify")
@@ -81,6 +93,13 @@ def verify_article():
     )
 
 
+@api_v1.post("/verify/url")
+@_json_only
+def verify_url():
+    payload = UrlRequest.model_validate(request.get_json(silent=True))
+    return jsonify(evidence_service.verify_url(payload.url))
+
+
 @api_v1.get("/health/live")
 def health_live():
     return jsonify({"status": "alive"})
@@ -115,5 +134,20 @@ def models():
                 "name": "binary_claim_classifier_v2",
                 "role": "diagnostic non-evidence baseline",
             },
+        }
+    )
+
+
+@api_v1.get("/providers")
+def providers():
+    return jsonify(
+        {
+            "providers": [
+                {
+                    "name": adapter.provider_name,
+                    "configured": adapter.is_configured(),
+                }
+                for adapter in ALL_ADAPTERS
+            ]
         }
     )

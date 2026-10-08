@@ -59,9 +59,10 @@
     header.style.setProperty("--p", Math.round(strength * 100));
     const ring = node("div", "ring");
     const ringInner = node("div");
-    ringInner.appendChild(node("span", "", `${Math.round(strength * 100)}%`));
+    const strengthText = strength > 0 ? `${Math.round(strength * 100)}%` : "—";
+    ringInner.appendChild(node("span", "", strengthText));
     ringInner.firstChild.appendChild(node("br"));
-    ringInner.firstChild.appendChild(node("small", "", "evidence strength"));
+    ringInner.firstChild.appendChild(node("small", "", strength > 0 ? "evidence strength" : "insufficient evidence"));
     ring.appendChild(ringInner);
     const summary = node("div");
     append(summary, node("span", "badge", label), node("h2", "", payload.claim?.text || "Submitted claim"));
@@ -136,10 +137,14 @@
     result.hidden = true;
     button.disabled = true;
     try {
-      const response = await fetch("/api/v1/verify", {
+      const endpoint = input.hidden ? "/api/v1/verify/url" : "/api/v1/verify";
+      const body = input.hidden
+        ? {url: claim}
+        : {claim, options: {max_evidence: 10, recent_window_hours: 4}};
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({claim, options: {max_evidence: 10, recent_window_hours: 4}}),
+        body: JSON.stringify(body),
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(payload.error?.message || "Verification request failed.");

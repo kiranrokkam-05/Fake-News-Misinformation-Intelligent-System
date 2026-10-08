@@ -28,3 +28,7 @@ class BatchRequest(BaseModel):
 
 class ArticleRequest(BaseModel):
     text: str = Field(min_length=5, max_length=20_000)
+
+
+class UrlRequest(BaseModel):
+    url: str = Field(min_length=8, max_length=2048)

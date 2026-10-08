@@ -7,6 +7,8 @@ def test_v1_live_and_metadata_routes():
     assert client.get("/api/v1/health/live").status_code == 200
     assert client.get("/api/v1/version").get_json()["api_version"] == "v1"
     assert client.get("/api/v1/models").status_code == 200
+    providers = client.get("/api/v1/providers").get_json()["providers"]
+    assert all("configured" in provider for provider in providers)
 
 
 def test_v1_validation_and_content_type_errors():
@@ -44,3 +46,8 @@ def test_frontend_uses_canonical_api_without_inner_html():
     frontend = Path("frontend/app.js").read_text(encoding="utf-8")
     assert '"/api/v1/verify"' in frontend
     assert "innerHTML" not in frontend
+
+
+def test_frontend_link_uses_url_endpoint():
+    frontend = Path("frontend/app.js").read_text(encoding="utf-8")
+    assert '"/api/v1/verify/url"' in frontend

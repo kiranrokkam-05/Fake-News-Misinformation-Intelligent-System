@@ -18,11 +18,15 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DOTENV_PATH = PROJECT_ROOT / "verification_module" / ".env"
 try:
     from dotenv import load_dotenv
+    # Support both documented locations while keeping .env ignored.
+    load_dotenv(PROJECT_ROOT / ".env")
     load_dotenv(DOTENV_PATH)
 except ImportError:
     # Keep first-run startup working before dependencies are installed.
-    if DOTENV_PATH.exists():
-        for line in DOTENV_PATH.read_text(encoding="utf-8").splitlines():
+    for dotenv_path in (PROJECT_ROOT / ".env", DOTENV_PATH):
+        if not dotenv_path.exists():
+            continue
+        for line in dotenv_path.read_text(encoding="utf-8").splitlines():
             line = line.strip()
             if line and not line.startswith("#") and "=" in line:
                 key, value = line.split("=", 1)
