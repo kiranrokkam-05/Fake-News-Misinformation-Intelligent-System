@@ -1,134 +1,135 @@
 (() => {
-  const input = document.getElementById("article-text");
-  const button = document.getElementById("analyze-button");
-  const result = document.getElementById("result");
-  const progress = document.getElementById("progress");
-  const steps = document.getElementById("steps");
-  const error = document.getElementById("error-message");
-  const sampleButton = document.getElementById("sample-button");
-  const sample = "The Earth orbits the Sun.";
-
-  const element = (tag, className, text) => {
-    const node = document.createElement(tag);
-    if (className) node.className = className;
-    if (text !== undefined) node.textContent = String(text);
-    return node;
+  const $ = (id) => document.getElementById(id);
+  const input = $("txt");
+  const urlInput = $("url");
+  const button = $("go");
+  const result = $("result");
+  const progress = $("progress");
+  const steps = $("steps");
+  const error = $("error-message");
+  const verdictStyles = {
+    SUPPORTS: ["Supports", "--ok", "--okbg"],
+    REFUTES: ["Refutes", "--fake", "--fakebg"],
+    INSUFFICIENT: ["Insufficient evidence", "--unv", "--unvbg"],
   };
-
-  const clear = (node) => {
-    while (node.firstChild) node.removeChild(node.firstChild);
+  const node = (tag, className, text) => {
+    const item = document.createElement(tag);
+    if (className) item.className = className;
+    if (text !== undefined) item.textContent = String(text);
+    return item;
   };
-
-  const safeUrl = (value) => {
+  const clear = (item) => { while (item.firstChild) item.removeChild(item.firstChild); };
+  const append = (parent, ...children) => children.forEach((child) => parent.appendChild(child));
+  const row = (parent, label, value) => {
+    const item = node("div", "reason");
+    append(item, node("b", "", label), node("p", "", value || "Unavailable"));
+    parent.appendChild(item);
+  };
+  const sourceLink = (source) => {
     try {
-      const url = new URL(value, window.location.origin);
+      const url = new URL(source.permalink || source.url || "", window.location.origin);
       return ["http:", "https:"].includes(url.protocol) ? url.href : "";
-    } catch {
-      return "";
-    }
+    } catch { return ""; }
   };
-
-  const showError = (message) => {
-    error.textContent = message;
-    error.hidden = false;
+  const setMode = (mode) => {
+    const text = mode === "text";
+    input.hidden = !text;
+    urlInput.hidden = text;
+    $("tText").setAttribute("aria-pressed", String(text));
+    $("tUrl").setAttribute("aria-pressed", String(!text));
   };
-
-  const addRow = (parent, label, value) => {
-    const row = element("div", "reason");
-    row.append(element("b", "", label), element("p", "muted", value || "Unavailable"));
-    parent.appendChild(row);
+  const renderMeter = (parent, label, value, band) => {
+    const meter = node("div", "meter");
+    const labels = node("div", "lbl");
+    append(labels, node("span", "", label), node("span", "", band));
+    const bar = node("div", "bar");
+    const fill = node("i");
+    fill.style.width = `${Math.max(0, Math.min(100, value * 100))}%`;
+    bar.appendChild(fill);
+    append(meter, labels, bar);
+    parent.appendChild(meter);
   };
-
-  const renderEvidence = (payload) => {
+  const render = (payload) => {
     clear(result);
-    result.hidden = false;
-
-    const verdict = payload.verdict || "INSUFFICIENT";
-    const label = {
-      SUPPORTS: "Supports",
-      REFUTES: "Refutes",
-      INSUFFICIENT: "Insufficient evidence",
-    }[verdict] || "Insufficient evidence";
-    const header = element("section", "card verdict");
-    header.append(
-      element("span", "badge", label),
-      element("h2", "", payload.claim?.text || "Submitted claim"),
-      element("p", "muted", `Evidence strength: ${payload.strength_band || "insufficient"}`),
-      element("p", "muted", "NLI scores are uncalibrated and are not probabilities of factual truth.")
-    );
+    const [label, color, background] = verdictStyles[payload.verdict] || verdictStyles.INSUFFICIENT;
+    const strength = Number(payload.evidence_strength || 0);
+    const header = node("div", "card verdict");
+    header.style.setProperty("--vc", `var(${color})`);
+    header.style.setProperty("--vb", `var(${background})`);
+    header.style.setProperty("--p", Math.round(strength * 100));
+    const ring = node("div", "ring");
+    const ringInner = node("div");
+    ringInner.appendChild(node("span", "", `${Math.round(strength * 100)}%`));
+    ringInner.firstChild.appendChild(node("br"));
+    ringInner.firstChild.appendChild(node("small", "", "evidence strength"));
+    ring.appendChild(ringInner);
+    const summary = node("div");
+    append(summary, node("span", "badge", label), node("h2", "", payload.claim?.text || "Submitted claim"));
+    summary.appendChild(node("p", "", payload.explanation?.summary || "No summary was returned."));
+    append(header, ring, summary);
     result.appendChild(header);
 
-    if (payload.aggregation?.contested) {
-      const section = element("section", "card");
-      section.append(element("h2", "", "Contradictory evidence"), element("p", "empty", "Retrieved evidence contains competing support and refutation signals."));
-      result.appendChild(section);
-    }
-
-    const evidenceSection = element("section", "card");
-    evidenceSection.append(element("h2", "", "Evidence and sources"));
-    const evidence = Array.isArray(payload.evidence) ? payload.evidence : [];
-    if (!evidence.length) {
-      evidenceSection.appendChild(element("p", "empty", "No evidence passages were returned."));
-    }
-    evidence.forEach((item) => {
-      const card = element("article", "reason");
-      const source = item.source || {};
-      card.append(
-        element("span", "tag t-n", item.stance || "neutral"),
-        element("blockquote", "", item.passage || "No quotation returned.")
-      );
-      addRow(card, "Source", source.title || "Unnamed source");
-      addRow(card, "Provider", source.provider || "Unknown provider");
-      addRow(card, "Date", source.published_at || source.retrieved_at || "Date unavailable");
-      const href = safeUrl(source.permalink || source.url);
-      if (href) {
-        const link = element("a", "", "Open source");
-        link.href = href;
-        link.target = "_blank";
-        link.rel = "noopener noreferrer";
-        card.appendChild(link);
-      }
-      evidenceSection.appendChild(card);
+    const grid = node("div", "grid");
+    const left = node("div", "stack");
+    const why = node("div", "card");
+    why.appendChild(node("h2", "", "Why this result"));
+    (payload.evidence || []).forEach((item) => {
+      const reason = node("div", "reason");
+      const stance = (item.stance || "neutral").toLowerCase();
+      const tagClass = stance === "supports" ? "t-s" : stance === "contradicts" ? "t-c" : "t-n";
+      append(reason, node("span", `tag ${tagClass}`, stance), node("b", "", item.source?.title || "Source"));
+      reason.appendChild(node("p", "", item.passage || "No quotation returned."));
+      why.appendChild(reason);
     });
-    result.appendChild(evidenceSection);
-
-    const providerSection = element("section", "card");
-    providerSection.appendChild(element("h2", "", "Provider status"));
-    const providers = payload.retrieval?.providers || [];
-    if (!providers.length) providerSection.appendChild(element("p", "empty", "No provider status was returned."));
-    providers.forEach((provider) => {
-      addRow(providerSection, provider.name, `${provider.status}${provider.n_results ? ` (${provider.n_results} results)` : ""}${provider.reason ? ` — ${provider.reason}` : ""}`);
+    if (!payload.evidence?.length) why.appendChild(node("p", "empty", "No evidence passages were returned."));
+    left.appendChild(why);
+    const sources = node("div", "card");
+    sources.appendChild(node("h2", "", "Sources searched"));
+    (payload.retrieval?.providers || []).forEach((provider) => {
+      const item = node("div", "src");
+      const icon = node("div", "ico", (provider.name || "?").slice(0, 1).toUpperCase());
+      const details = node("div");
+      append(details, node("b", "", provider.name), node("span", "", `${provider.status}${provider.n_results ? ` · ${provider.n_results} results` : ""}`));
+      append(item, icon, details, node("span", "tag t-n", provider.status));
+      sources.appendChild(item);
     });
-    result.appendChild(providerSection);
+    left.appendChild(sources);
 
-    const reasoningSection = element("section", "card");
-    reasoningSection.appendChild(element("h2", "", "Reasoning steps"));
-    const stepsList = element("ol", "");
-    (payload.explanation?.steps || []).forEach((step) => stepsList.appendChild(element("li", "", step)));
-    reasoningSection.appendChild(stepsList);
-    result.appendChild(reasoningSection);
+    const right = node("div", "stack");
+    const analysis = node("div", "card");
+    analysis.appendChild(node("h2", "", "Evidence analysis"));
+    renderMeter(analysis, "Support signal", payload.aggregation?.support_score || 0, payload.strength_band || "insufficient");
+    renderMeter(analysis, "Refute signal", payload.aggregation?.refute_score || 0, payload.aggregation?.contested ? "contested" : "—");
+    const sec = node("div", "sec");
+    sec.appendChild(node("h3", "", "Claim entities"));
+    const chips = node("div", "chips");
+    (payload.claim?.entities || []).forEach((entity) => chips.appendChild(node("span", "chip", entity)));
+    sec.appendChild(chips);
+    analysis.appendChild(sec);
+    right.appendChild(analysis);
+    const wording = node("div", "card");
+    wording.appendChild(node("h2", "", "Submitted text"));
+    wording.appendChild(node("div", "excerpt", payload.claim?.text || ""));
+    right.appendChild(wording);
+    append(grid, left, right);
+    result.appendChild(grid);
 
-    const limitations = element("section", "card limitations");
-    limitations.append(
-      element("h2", "", "Limitations"),
-      element("p", "", "This is an evidence assessment system. It does not independently prove a claim."),
-      element("p", "", "The pattern baseline is hidden and is not evidence.")
-    );
-    (payload.limitations || []).forEach((item) => limitations.appendChild(element("p", "", item)));
-    result.appendChild(limitations);
+    const note = node("p", "note", "NLI scores are uncalibrated and are not probabilities of factual truth. Review linked sources before sharing.");
+    result.appendChild(note);
+    result.hidden = false;
   };
-
   async function verify() {
-    const claim = input.value.trim();
+    const claim = (input.hidden ? urlInput.value : input.value).trim();
     error.hidden = true;
     if (claim.length < 5) {
-      showError("Enter at least 5 characters to verify.");
-      input.focus();
+      error.textContent = "Enter at least 5 characters to verify.";
+      error.hidden = false;
       return;
     }
     clear(steps);
-    ["Retrieve evidence", "Assess passages", "Prepare report"].forEach((label) => {
-      const item = element("li", "", label);
+    ["Reading and cleaning the article", "Searching available sources", "Comparing claims with sources"].forEach((label) => {
+      const item = node("li");
+      append(item, node("i"), node("span", "", label));
       steps.appendChild(item);
     });
     progress.hidden = false;
@@ -137,23 +138,26 @@
     try {
       const response = await fetch("/api/v1/verify", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ claim, options: { max_evidence: 10, recent_window_hours: 4 } }),
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({claim, options: {max_evidence: 10, recent_window_hours: 4}}),
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(payload.error?.message || "Verification request failed.");
-      renderEvidence(payload);
+      render(payload);
     } catch (cause) {
-      showError(cause.message || "Verification failed. Try again.");
+      error.textContent = cause.message || "Verification failed. Try again.";
+      error.hidden = false;
     } finally {
       button.disabled = false;
       progress.hidden = true;
     }
   }
-
-  sampleButton.addEventListener("click", () => {
-    input.value = sample;
+  $("tText").addEventListener("click", () => setMode("text"));
+  $("tUrl").addEventListener("click", () => setMode("url"));
+  document.querySelectorAll("[data-sample]").forEach((item) => item.addEventListener("click", () => {
+    setMode("text");
+    input.value = item.dataset.sample;
     input.focus();
-  });
+  }));
   button.addEventListener("click", verify);
 })();
