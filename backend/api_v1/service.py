@@ -102,25 +102,35 @@ class EvidenceService:
             else []
         )
         for item, score in zip(evidence, scores):
+            dataset_label = item.stance if item.source_type == "project_dataset" else None
             item.nli = NLIScores(
                 entailment=score["entailment"],
                 neutral=score["neutral"],
                 contradiction=score["contradiction"],
             )
-            item.stance_confidence = max(score.values())
-            item.stance = (
-                Stance.SUPPORTS
-                if score["entailment"] == item.stance_confidence
-                else Stance.CONTRADICTS
-                if score["contradiction"] == item.stance_confidence
-                else Stance.NEUTRAL
-            )
-            item.weight = max(0.5, min(1.0, item.credibility_score / 100.0))
+            if dataset_label is not None:
+                # FEVER's explicit label must not be overwritten by NLI
+                # scoring the label-bearing dataset passage itself.
+                item.stance = dataset_label
+                item.stance_confidence = 1.0
+                item.weight = 1.0
+            else:
+                item.stance_confidence = max(score.values())
+                item.stance = (
+                    Stance.SUPPORTS
+                    if score["entailment"] == item.stance_confidence
+                    else Stance.CONTRADICTS
+                    if score["contradiction"] == item.stance_confidence
+                    else Stance.NEUTRAL
+                )
+                item.weight = max(0.5, min(1.0, item.credibility_score / 100.0))
         aggregation = aggregate_evidence(evidence)
         verdict = decide_from_aggregation(aggregation)
         flags = []
         if not evidence:
             flags.append("no_evidence")
+        if any(item.source_type == "project_dataset" for item in evidence):
+            flags.append("project_dataset_match")
         if aggregation.contested:
             flags.append("contested")
         structure = extract_structure(claim)

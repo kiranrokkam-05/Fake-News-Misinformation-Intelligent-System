@@ -64,7 +64,8 @@ def retrieve_evidence_with_status(claim: str) -> RetrievalResult:
         provider_results = []
         failures = []
         successes = 0
-        for query in queries[:2]:
+        adapter_queries = [claim] if adapter.provider_name == "project_dataset" else queries[:2]
+        for query in adapter_queries:
             try:
                 results = adapter.search(
                     query, max_results=config.MAX_RESULTS_PER_ADAPTER

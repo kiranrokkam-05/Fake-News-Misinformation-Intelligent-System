@@ -63,6 +63,17 @@ def test_project_dataset_adapter_matches_labeled_claim():
     assert results[0].stance.value == "supports"
 
 
+def test_fever_dev_claims_match_project_dataset_labels():
+    from verification_module.adapters.local_claims_adapter import LocalClaimsAdapter
+
+    adapter = LocalClaimsAdapter()
+    assert len(adapter.records) > 100_000
+    refute_claim = "Savages was exclusively a German film."
+    results = adapter.search(refute_claim)
+    assert results
+    assert results[0].stance.value == "contradicts"
+
+
 def test_frontend_labels_support_and_refute_signals():
     frontend = Path("frontend/app.js").read_text(encoding="utf-8")
     assert "Supports (TRUE signal)" in frontend
