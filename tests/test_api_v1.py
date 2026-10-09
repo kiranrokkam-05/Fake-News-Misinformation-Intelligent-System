@@ -67,3 +67,14 @@ def test_frontend_labels_support_and_refute_signals():
     frontend = Path("frontend/app.js").read_text(encoding="utf-8")
     assert "Supports (TRUE signal)" in frontend
     assert "Refutes (FALSE signal)" in frontend
+
+
+def test_api_errors_are_json():
+    client = app.test_client()
+    response = client.post(
+        "/api/v1/verify/url",
+        json={"url": "not-a-url"},
+    )
+    assert response.status_code == 400
+    assert response.is_json
+    assert response.get_json()["error"]["code"] == "invalid_request"

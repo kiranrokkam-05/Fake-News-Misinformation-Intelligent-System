@@ -5,6 +5,7 @@ import time
 from collections import defaultdict, deque
 from pathlib import Path
 from flask import Flask, jsonify, request, send_from_directory
+from werkzeug.exceptions import HTTPException
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 if str(BASE_DIR) not in sys.path:
@@ -27,6 +28,25 @@ _RATE_LIMIT_WINDOW_SECONDS = 60
 MODEL_PATH = BASE_DIR / "models" / "fake_news_model.joblib"
 METRICS_PATH = BASE_DIR / "models" / "model_metrics.json"
 _pipeline = None
+
+
+@app.errorhandler(Exception)
+def handle_unexpected_error(error):
+    if isinstance(error, HTTPException):
+        status = error.code or 500
+        message = error.description
+    else:
+        status = 500
+        message = "The server could not complete the request."
+        logger.exception("Unhandled backend error")
+    if request.path.startswith("/api/"):
+        return jsonify({
+            "error": {
+                "code": "internal_server_error" if status == 500 else "http_error",
+                "message": message,
+            }
+        }), status
+    return error
 
 
 @app.before_request

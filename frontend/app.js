@@ -149,7 +149,10 @@
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body),
       });
-      const payload = await response.json().catch(() => ({}));
+      const contentType = response.headers.get("content-type") || "";
+      const payload = contentType.includes("application/json")
+        ? await response.json().catch(() => ({}))
+        : {};
       if (!response.ok) throw new Error(payload.error?.message || "Verification request failed.");
       render(payload);
     } catch (cause) {
