@@ -74,6 +74,16 @@ def test_fever_dev_claims_match_project_dataset_labels():
     assert results[0].stance.value == "contradicts"
 
 
+def test_scifact_claims_match_scientific_dataset_labels():
+    from verification_module.adapters.local_claims_adapter import LocalClaimsAdapter
+
+    adapter = LocalClaimsAdapter()
+    results = adapter.search("1 in 5 million in UK have abnormal PrP positivity.")
+    assert results
+    assert results[0].source_type == "project_dataset"
+    assert results[0].stance.value == "contradicts"
+
+
 def test_frontend_labels_support_and_refute_signals():
     frontend = Path("frontend/app.js").read_text(encoding="utf-8")
     assert "Supports (TRUE signal)" in frontend

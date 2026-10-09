@@ -3,6 +3,7 @@ from verification_module.adapters.gnews_adapter import GNewsAdapter
 from verification_module.adapters.google_cse_adapter import GoogleCSEAdapter
 from verification_module.adapters.local_claims_adapter import LocalClaimsAdapter
 from verification_module.adapters.newsapi_adapter import NewsAPIAdapter
+from verification_module.adapters.scifact_corpus_adapter import SciFactCorpusAdapter
 from verification_module.adapters.wikipedia_adapter import WikipediaAdapter
 
 # Every adapter the pipeline knows about. Add a new provider by
@@ -10,6 +11,7 @@ from verification_module.adapters.wikipedia_adapter import WikipediaAdapter
 # else in the pipeline needs to change.
 ALL_ADAPTERS = [
     LocalClaimsAdapter(),
+    SciFactCorpusAdapter(),
     WikipediaAdapter(),
     NewsAPIAdapter(),
     GNewsAdapter(),

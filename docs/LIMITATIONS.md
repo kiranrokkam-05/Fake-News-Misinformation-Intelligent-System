@@ -21,3 +21,7 @@
   window (the UI requests four hours). Undated reference sources can still
   remain, and a recent article cannot be classified as fake or real without
   corroborating or contradicting evidence.
+- FEVER and SciFact labeled claim records are matched when the submitted claim
+  matches a stored dataset claim. The SciFact corpus is also searched as
+  scientific evidence. The article-level `REAL`/`FAKE` CSV remains a training
+  artifact and is not treated as independent proof for arbitrary claims.
