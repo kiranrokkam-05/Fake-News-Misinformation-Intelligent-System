@@ -1,0 +1,11 @@
+* text=auto
+*.bat text eol=crlf
+*.docx binary
+*.joblib binary
+*.pt binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary

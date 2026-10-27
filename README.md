@@ -1,290 +1,185 @@
-# Fake News & Misinformation Intelligent System
+# Fake News and Misinformation Intelligent System
 
-## 1. Project overview
+A local Flask research prototype for checking factual claims against retrieved evidence. The browser experience uses a versioned retrieval and natural language inference (NLI) pipeline. A separate legacy article classifier is also included, but the current browser does not call it.
 
-This Flask research prototype brings together article-style REAL/FAKE classification, NLP preprocessing and claim extraction, evidence search, heuristic evidence verification, and an explainable final assessment. It is **not a single classifier** and it is not an authoritative fact-checker. Its classifier learns text patterns from a small labeled corpus; its evidence path searches configured sources for one focal claim and applies rule-based/lexical checks. Read the source passages and dates before relying on a result.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the development workflow and [SECURITY.md](SECURITY.md) for private vulnerability reporting and secret handling.
 
-## 2. Current project status
+This tool supports investigation; it does not prove truth or replace human fact-checking. Review the passages, source links in the API response, dates, and context. An `INSUFFICIENT` result means the system did not establish support or contradiction from the evidence it processed; it does not mean the claim is false.
 
-| Area | Status |
-| --- | --- |
-| Flask application and browser demo | Implemented; startup verified |
-| Word/character TF-IDF + LinearSVC article classifier | Implemented; saved model and metrics present |
-| NLP preprocessing and claim/entity extraction | Implemented, with model/resource fallbacks |
-| Evidence retrieval and heuristic verification | Implemented; providers can be skipped or fail independently |
-| Combined `/api/check` final assessment | Implemented |
-| Automated tests | 43 passing in the latest full run; 9 artifact-version warnings |
-| External evaluation schema/evaluator/leakage audit | Implemented |
-| Verified external evaluation articles | Not yet supplied (0 records) |
-| Source-held-out/time-held-out generalization evaluation | Pending source/date metadata and an external set |
+## Current browser experience
 
-The code is runnable for a Review 2 demonstration. The unfinished research task is credible external generalization evaluation, not achieving a target score by tuning against the current split.
+The Flask server serves the frontend from `frontend/`. The page accepts pasted text or a public article URL and displays an evidence verdict, evidence strength, NLI-assessed passages, provider statuses, aggregated support/refute signals, and extracted entities.
 
-## 3. System architecture
+The browser sends text to `POST /api/v1/verify` as one claim. Its text area allows up to 20,000 characters, but the single-claim endpoint accepts at most 1,000 characters. Longer text may therefore be rejected by the API. The separate `/api/v1/verify/article` endpoint processes sentence-sized requests, but the current page does not use it.
+
+The API returns source URLs, but the current result renderer does not display clickable evidence links. The interface currently advises users to review linked sources; inspect the API response directly when you need those URLs.
+
+The browser does not call the legacy article classifier or the combined legacy `/api/check` route. Keep the two output types separate when interpreting results or metrics.
+
+## Architecture
 
 ```text
-Article or claim
-      ↓
-Browser frontend → Flask API
-      ↓
-NLP preprocessing, sentence handling, claim/entity extraction
-      ├── article classifier (applicable to longer input)
-      └── focal claim selection
-                 ↓
-        provider query generation and evidence retrieval
-                 ↓
-        source scoring and lexical stance/verdict rules
-                 ↓
-        final decision layer combines the two signals
+Browser (frontend/)
+  ├── POST /api/v1/verify       pasted text, treated as one claim
+  └── POST /api/v1/verify/url   public article URL
+          ↓
+Flask API (backend/app.py, backend/api_v1/)
+          ↓
+Claim normalization and query generation
+          ↓
+Configured local and web evidence providers
+          ↓
+Source scoring and DeBERTa NLI passage assessment
+          ↓
+Source-capped support/refute aggregation
+          ↓
+SUPPORTS, REFUTES, or INSUFFICIENT
 ```
 
-The classifier estimates whether longer input resembles the REAL/FAKE training examples. The verifier separately retrieves passages for a factual claim. `backend/final_decision.py` combines those outputs while preserving uncertainty. A classifier label is not proof that a statement is true, and an inconclusive search is not evidence that a claim is false.
+The active API v1 evidence model is `MoritzLaurer/DeBERTa-v3-base-mnli-fever-anli`. It compares retrieved passages with the submitted claim, then combines passage stance and source weights. Exact matches from project claim datasets retain their supplied dataset stance. Model scores and evidence-strength values are uncalibrated and are not probabilities of truth.
 
-## 4. Repository structure
+The repository also includes a distinct word/character TF-IDF plus LinearSVC article classifier. The legacy `/api/analyze` route runs it, and `/api/check` combines its output with a separate heuristic evidence route. Neither route is called by the current browser.
 
-| Path | Role |
+## Evidence decisions and scope
+
+The evidence service:
+
+1. Builds deterministic queries from claim text, entities, and quantities.
+2. Runs configured adapters and records whether each provider succeeded, was skipped, or failed.
+3. Deduplicates retrieved results by URL and filters timestamped items to the requested recency window. Undated reference sources can remain.
+4. Assesses passages with NLI, scores source credibility, and aggregates at most one item per source domain.
+5. Uses the decision rules in `verification_module/reasoning/decision.py` to return `SUPPORTS`, `REFUTES`, or `INSUFFICIENT`.
+
+The current UI requests up to 10 evidence items and a four-hour recency window. The API supports 1–20 evidence items and windows from 1 to 168 hours. Decision thresholds are currently fixed in code and are not calibrated or established for production use. A provider error, skipped provider, or empty search is missing information, not refutation.
+
+URL verification accepts HTTP or HTTPS, rejects localhost and private-address targets, disables redirects, uses an eight-second request timeout, and limits fetched response content to 2 MB. The backend extracts readable HTML text and verifies only its first 1,000 characters; it does not check every claim in the article.
+
+## API
+
+All POST endpoints require JSON. The versioned endpoints are registered under `/api/v1`.
+
+| Method and route | Purpose and limits |
 | --- | --- |
-| `backend/app.py` | Flask app, legacy routes, model loading, startup report, combined `/api/check` |
-| `backend/final_decision.py` | Transparent combination rules for classifier and evidence signals |
-| `backend/api_v1/` | Separate versioned evidence/NLI API; not the browser's `/api/check` pipeline |
-| `frontend/` | Vanilla HTML, CSS, and JavaScript user interface |
-| `nlp/` | Preprocessing, claim/entity extraction, and orchestration |
-| `ml/` | Active article classifier, confidence semantics, and training code |
-| `verification_module/` | Search adapters, retrieval, source scoring, lexical comparison, and evidence verdicts |
-| `data/` | Article training CSV and separate claim-level corpora |
-| `models/` | Production article model, metrics, and separate v2 artifacts |
-| `evaluation/` | External benchmark schema, exclusions log, and evaluation instructions/results |
-| `scripts/` | Training/evaluation/audit and demonstration utilities |
-| `tests/`, `verification_module/tests/` | Unit and integration tests |
-| `start_flask_server.bat` | Windows launcher for the Flask app |
-| `BALANCE_FIXES.md` | Team continuation and handover notes |
-| `PROJECT_REFERENCE_GUIDE.docx` | Longer project reference; check it against source before relying on details |
+| `POST /api/v1/verify` | Verify one claim (5–1,000 characters). Options: `max_evidence` (1–20), `recent_window_hours` (1–168), and `include_baseline`. |
+| `POST /api/v1/verify/batch` | Verify 1–10 claims using the single-claim request schema. |
+| `POST /api/v1/verify/article` | Accept up to 20,000 characters; splits on periods and checks at most 20 sentences of at least five characters. This route is not used by the browser UI. |
+| `POST /api/v1/verify/url` | Fetch and verify a public HTTP(S) article URL; see URL limits above. |
+| `GET /api/v1/health/live` | Process liveness. |
+| `GET /api/v1/health/ready` | Attempts to load the NLI model and reports readiness. First use may take time or require a model download. |
+| `GET /api/v1/version` | API and pipeline version. |
+| `GET /api/v1/models` | Evidence model and optional baseline metadata. |
+| `GET /api/v1/providers` | Lists known providers and whether each is configured. |
 
-Important files: `backend/app.py`, `backend/final_decision.py`, `ml/classifier.py`, `ml/train.py`, `models/fake_news_model.joblib`, `models/model_metrics.json`, `data/fake_and_real_news_dataset.csv`, `evaluation/external_evaluation.csv`, `evaluation/excluded_articles.csv`, `evaluation/README.md`, `scripts/evaluate_external.py`, and `scripts/audit_external_evaluation.py`.
+Example request:
 
-## 5. Technology stack
+```json
+{
+  "claim": "The Moon orbits the Earth.",
+  "options": {
+    "max_evidence": 10,
+    "recent_window_hours": 4
+  }
+}
+```
 
-- Python, Flask, and a vanilla HTML/CSS/JavaScript frontend.
-- pandas and NumPy for data handling; scikit-learn for TF-IDF and LinearSVC; SciPy sparse matrices and joblib model serialization.
-- NLTK, spaCy (with fallback entity extraction), and VADER sentiment support in the NLP code.
-- Requests/HTTP retrieval through Wikipedia, NewsAPI, GNews, Google Custom Search, and Google Fact Check Tools adapters. Wikipedia is enabled without a key; other providers require optional environment variables.
-- PyTorch is used by the separate FEVER-based v2/claim API experiment. That is distinct from the active article classifier used by the browser.
+The response includes the verdict, evidence strength and band, calibration status, recency details, flags, evidence passages and source metadata, aggregation scores, queries, provider statuses, explanation steps, model metadata, limitations, and request timing. Validation errors return HTTP 400; an unavailable NLI model returns HTTP 503. The API's successful JSON payload is the most complete source for provider URLs and returned evidence.
 
-## 6. Machine-learning classifier and current metrics
+### Separate legacy Flask routes
 
-The active Flask article model is a word-and-character TF-IDF `LinearSVC`, saved at `models/fake_news_model.joblib`. The word vectorizer uses up to 60,000 features and unigrams/bigrams; the character vectorizer uses up to 80,000 `char_wb` features and 3–5 character n-grams. The saved training configuration uses `LinearSVC(C=10.0)`.
-
-`ml.train` reads `data/fake_and_real_news_dataset.csv`, combines title and body, normalizes the REAL/FAKE labels, removes duplicate/short content, and uses a stratified 80/20 split with `random_state=42`. The cleaned corpus has 4,572 articles: 2,278 REAL and 2,294 FAKE. The recorded split has 3,657 training and 915 test articles.
-
-| Random held-out measure | Result |
-| --- | ---: |
-| Accuracy | 96.28% |
-| Macro F1 | 96.28% |
-| ROC AUC | 99.32% |
-| Training accuracy | 100.00% |
-
-| Class | Precision | Recall | F1 |
-| --- | ---: | ---: | ---: |
-| REAL | 97.31% | 95.18% | 96.23% |
-| FAKE | 95.31% | 97.39% | 96.34% |
-
-Confusion matrix (rows = actual class; columns = predicted class; order REAL, FAKE):
-
-|  | Predicted REAL | Predicted FAKE |
-| --- | ---: | ---: |
-| Actual REAL | 434 | 22 |
-| Actual FAKE | 12 | 447 |
-
-These results describe the current **random held-out test split**. They are not real-world accuracy or proof of performance on unseen publishers, topics, or later dates. The 100% training accuracy plus near-duplicate train/test overlap are reasons for caution. Do not combine this score with a future external score.
-
-The saved metrics JSON reports binary precision/recall/F1 for the FAKE class; the per-class REAL values above are from the reproduced classification report for the same split. The startup metrics table currently shows training accuracy as `N/A` because the reporter looks for it inside each model metric row, while the JSON stores it at the top level. The saved file remains the source of the recorded 100% value.
-
-## 7. Decision margin and uncertainty
-
-The current classifier returns decisive `FAKE` for `decision_margin >= 1`, decisive `REAL` for `decision_margin <= -1`, and `SUSPICIOUS / UNCERTAIN` inside the open interval `(-1, 1)`. This is an abstention rule on the raw LinearSVC margin, not a probability threshold.
-
-On the random 915-row holdout, 448 samples abstained (48.96%) and 467 were decisive (51.04% coverage). The decisive subset scored 100% on that split, but this applies only to the covered subset. **It is not overall 100% accuracy.**
-
-## 8. Probability and confidence semantics
-
-LinearSVC does not produce calibrated probabilities here. Legacy `fake_probability` and `real_probability` response keys contain uncalibrated sigmoid display scores and remain only for API compatibility; use `fake_score`, `real_score`, `score_kind`, `probability_calibrated`, and `decision_margin` to understand their semantics. The frontend labels the classifier score uncalibrated. Do not call these values factual probabilities or calibrated confidence. The evidence verifier's confidence is a separate heuristic measure.
-
-## 9. Evidence verification pipeline
-
-The main `verification_module/verify_pipeline.py` path generates concise entity/quantity-preserving queries, requests at most two queries per configured provider, normalizes and deduplicates evidence, applies source-credibility rules, and compares the claim to passages using lexical overlap and confirmation/negation cues. It is **heuristic retrieval and stance logic, not a production-grade natural-language-inference fact checker**. Provider states are exposed. A failed or unconfigured provider is not negative evidence.
-
-The provider adapters are Wikipedia (no key), NewsAPI (`NEWSAPI_KEY`), GNews (`GNEWS_KEY`), Google Custom Search (`GOOGLE_CSE_KEY` plus `GOOGLE_CSE_CX`), and Google Fact Check Tools (`GOOGLE_FACTCHECK_KEY`). Copy `verification_module/.env.example` to the ignored `verification_module/.env` and fill only keys you personally configure. Never commit or paste secret values. Network availability, quotas, provider coverage, query wording, and indexing affect results.
-
-`backend/api_v1/` is a separate, versioned evidence service using a DeBERTa MNLI/FEVER/ANLI model and explicit `calibration: uncalibrated` metadata. It has a distinct model-readiness path and is not the classifier/evidence route used by the current browser's `/api/check`. Do not conflate those pipelines or their labels/metrics.
-
-## 10. Evidence scope and limitations
-
-For long input, `/api/check` selects one representative extracted sentence (highest verifiability score, with tie-breakers) and verifies that focal claim. It does not establish every sentence or every fact in the article. Short input (up to 25 words and 2 sentences in the NLP pipeline) bypasses the article classifier and goes through evidence verification. Search results can be stale, irrelevant, incomplete, or contextually mismatched; topic existence does not establish the exact current claim.
-
-## 11. Final decision rules
-
-The rules in `backend/final_decision.py` return `REAL`, `FAKE`, `SUSPICIOUS / UNCERTAIN`, or `UNVERIFIED`:
-
-| Situation | Final assessment |
+| Route | Purpose |
 | --- | --- |
-| Evidence verdict is VERIFIED and does not conflict with a strong FAKE classifier margin | REAL (evidence supports the focal claim) |
-| Evidence verdict is FALSE / CONTRADICTED or REFUTES and does not conflict with a strong REAL classifier margin | FAKE (evidence contradicts the focal claim) |
-| Supporting evidence conflicts with a decisive FAKE signal, or refuting evidence conflicts with a decisive REAL signal | SUSPICIOUS / UNCERTAIN |
-| Evidence is partially true/mixed | SUSPICIOUS / UNCERTAIN |
-| No usable evidence, no provider completed successfully, or classifier is uncertain | UNVERIFIED |
-| No evidence, at least one provider status is `ok`, and an applicable classifier has a decisive margin | Classifier-only REAL/FAKE, explicitly not externally verified |
-| Retrieved evidence exists but does not establish a stance | UNVERIFIED |
+| `GET /api/health` | Legacy article-model health summary. |
+| `GET /api/model-metrics` | Saved article-classifier metrics. |
+| `POST /api/analyze` | NLP and article-style REAL/FAKE classification; requires `models/fake_news_model.joblib`. |
+| `POST /api/verify` | Evidence-only legacy heuristic verification. |
+| `POST /api/check` | Combines the legacy classifier and legacy evidence path. For long input, verifies one representative extracted claim rather than every sentence. |
 
-Provider errors are never treated as evidence against a claim. Final status is a transparent combination of signals, not an independent proof of factual truth.
+These routes are retained for compatibility and comparison. Their outputs and metrics are separate from the current browser's API v1 NLI results.
 
-## 12. API endpoints
+To deliberately retrain the legacy article classifier, run `.venv\Scripts\python.exe -m ml.train`. This overwrites `models/fake_news_model.joblib` and `models/model_metrics.json`; it is not required to run the browser evidence-verification flow.
 
-The Flask app exposes these routes from `backend/app.py`:
+## Evidence providers and configuration
 
-| Route | Input | Purpose/output |
-| --- | --- | --- |
-| `GET /api/health` | None | Readiness summary: status, service, modelReady, bestModel, trainingRows |
-| `GET /api/model-metrics` | None | Contents of `models/model_metrics.json` |
-| `POST /api/analyze` | JSON `{ "text": "..." }` | NLP summary, classification fields, claim/entity data, and score metadata; rejects text under 5 characters |
-| `POST /api/check` | JSON `text` or `claim` | Analysis, verification, `verification_focus`, `verification_scope`, `final_decision`, and optional `verification_error` |
-| `GET /api/verify` | None | Usage description for the POST route |
-| `POST /api/verify` | JSON `claim` or `text` | Evidence-only verification result, queries, provider statuses, evidence and verdict |
+The adapter registry includes local project-claim records, SciFact, Wikipedia, NewsAPI, GNews, Google Custom Search, and Google Fact Check Tools. Optional provider credentials are read from environment variables or ignored local dotenv files.
 
-There is also a registered versioned blueprint under `/api/v1`: `GET /health/live`, `GET /health/ready`, `GET /version`, `GET /models`, `POST /verify`, `POST /verify/batch`, and `POST /verify/article` (all prefixed `/api/v1`). POST routes require JSON. `/verify` accepts `{ "claim": "...", "options": {"max_evidence": 5, "include_baseline": false} }`; batch accepts 1–10 verify requests; article accepts `{ "text": "..." }` and processes up to 20 period-delimited sentences. This is a separate evidence/NLI API, not the frontend's `/api/check` route.
+| Variable | Provider |
+| --- | --- |
+| `NEWSAPI_KEY` | NewsAPI |
+| `GNEWS_KEY` | GNews |
+| `GOOGLE_CSE_KEY` and `GOOGLE_CSE_CX` | Google Custom Search |
+| `GOOGLE_FACTCHECK_KEY` | Google Fact Check Tools |
+| `WIKIPEDIA_USER_AGENT` | Optional Wikipedia request identification; a default is provided. |
 
-## 13. Run the project on Windows
+Copy `verification_module/.env.example` to `verification_module/.env` to configure local keys, or set environment variables. The root `.env` is also supported. Never commit credentials. Provider quotas, network access, freshness, search coverage, and source quality affect the results. Claim text may be sent to enabled external providers during verification.
 
-Open PowerShell in the repository root. On a fresh clone, create the environment and install requirements:
+## Setup and run on Windows
+
+From PowerShell in the repository root:
 
 ```powershell
 py -m venv .venv
 .venv\Scripts\python.exe -m pip install --upgrade pip
 .venv\Scripts\python.exe -m pip install -r requirements.txt
-```
-
-Start the local Flask server:
-
-```powershell
 .\start_flask_server.bat
 ```
 
-Or use the Python fallback:
+Open <http://127.0.0.1:5000> and stop the server with Ctrl+C. The launcher starts Waitress through `backend.wsgi:app`; it does not train a model. The current evidence API needs the NLI model to be available in the local Hugging Face cache or downloadable when the model is first loaded. Network access may also be needed by web evidence providers.
+
+To run the Flask app directly instead of using the launcher:
 
 ```powershell
 .venv\Scripts\python.exe -m backend.app
 ```
 
-Open <http://127.0.0.1:5000>. Stop with Ctrl+C. The batch file uses the repository `.venv` when present, checks for the saved artifact, prints the startup report, and runs Flask; it does not train. The built-in Flask server is for local demonstration, not production deployment.
+The repository includes a Dockerfile, but no `docker-compose.yml`. A public deployment needs separate configuration for TLS, network egress, secrets, shared rate limiting, monitoring, and data-retention policy.
 
-Useful endpoint checks from another PowerShell window:
+## Data, models, and evaluation
 
-```powershell
-Invoke-RestMethod http://127.0.0.1:5000/api/health
-Invoke-RestMethod http://127.0.0.1:5000/api/model-metrics
-```
+| Path | Role |
+| --- | --- |
+| `data/fake_and_real_news_dataset.csv` | Article-level REAL/FAKE training data for the legacy LinearSVC classifier. |
+| `data/fever/` | FEVER-derived claim records for separate claim-model and dataset matching components. |
+| `data/eval/scifact/` | SciFact material used by the evidence/research components when present locally. |
+| `models/fake_news_model.joblib` and `models/model_metrics.json` | Legacy article-classifier artifact and random-split metrics. |
+| `models/pytorch_claim_binary_v2_*` | Separate FEVER-derived classifier artifacts; not the browser's NLI model. |
+| `reports/custom_validation.json` | Small report-only validation run; not a general benchmark. |
+| `evaluation/` | External article-evaluation schema, protocol, and exclusion log. |
 
-## 14. Review 2 demonstration flow
+The saved article classifier reports approximately 96.28% accuracy and 96.28% macro F1 on its 915-row random held-out split, with 100% training accuracy. These numbers describe that experiment only. They are not current browser metrics or an estimate of broad real-world accuracy. The external article evaluation CSV currently has no valid records, so there is no external generalization result. Do not use external evaluation records for training or model tuning.
 
-1. Start Flask and open the browser page.
-2. Submit a longer article or claim and show the classifier verdict, margin, and extracted claims.
-3. Open **View searched sources** to show queries, provider statuses, and returned passages.
-4. Show how the final assessment differs from the separate classifier and evidence outcomes.
-5. Demonstrate a short factual claim (classifier bypass), an uncertain longer input, and examples with supporting/refuting evidence when providers return it.
-6. If showing REAL/FAKE examples, explain that they are demonstration inputs, not the external benchmark and not proof of overall performance.
-7. Mention the limited evidence scope, abstention coverage, and lack of external benchmark.
+The complete SciFact benchmark was not completed; the custom report contains only a small validation set. Do not present it as benchmark performance. See [evaluation/README.md](evaluation/README.md) for the separate article evaluation protocol and [docs/LIMITATIONS.md](docs/LIMITATIONS.md) for current caveats.
 
-Do not promise that a live search will return a particular result; provider availability and indexing vary.
+## Tests
 
-## 15. Current testing status
-
-The latest full test run reported **43 passed, 9 warnings**. The warnings are scikit-learn version mismatch notices while loading separate saved v2 artifacts created with 1.7.2 under 1.9.1. Flask startup and test-client checks for `/api/health`, `/api/model-metrics`, `/api/analyze`, `/api/verify`, and `/api/check` were run; the frontend JavaScript syntax check and `git diff --check` also passed during the handover/evaluation work. The server's first-run NLTK check reported WordNet missing in the restricted environment, while startup still succeeded.
-
-Run the suite from the project root:
+Run the project test suite from the repository root:
 
 ```powershell
 .venv\Scripts\python.exe -m pytest -q
 ```
 
-Live evidence providers require network access; deterministic automated tests use controlled/mock responses.
+Automated tests use controlled or mocked evidence responses. They do not guarantee live provider availability or a particular search result. Re-run the suite on the current checkout before reporting a current pass count; older implementation notes record earlier incremental runs.
 
-## 16. Dataset and evaluation
+## Repository map
 
-The training file `data/fake_and_real_news_dataset.csv` is distinct from `evaluation/external_evaluation.csv`. The former trains the article classifier. The latter is reserved only for evaluation **after the production model and protocol are fixed**. Never pass external evaluation data to training, fitting, hyperparameter/threshold tuning, feature selection, or model selection.
+| Path | Purpose |
+| --- | --- |
+| `backend/app.py`, `backend/wsgi.py` | Flask application, legacy routes, request protections, Waitress entry point. |
+| `backend/api_v1/` | Versioned JSON API, request schemas, and NLI evidence service. |
+| `frontend/` | Browser interface served by Flask. |
+| `verification_module/` | Evidence providers, retrieval, claim parsing, source scoring, and NLI reasoning. |
+| `nlp/`, `ml/` | Legacy article text preprocessing, claim extraction, classifier, and training code. |
+| `data/`, `models/` | Training/evidence datasets and saved model artifacts. |
+| `tests/`, `verification_module/tests/` | Unit and API tests. |
+| `evaluation/`, `reports/` | Evaluation protocol, audit outputs, and report-only results. |
+| `PROJECT_REFERENCE_GUIDE.docx` | Detailed project reference guide. |
 
-The external schema and rules are in [evaluation/README.md](evaluation/README.md). It currently has zero valid article records; no external metrics exist. Required fields: `id`, `title`, `text`, `label`, `source`, `publication_date`, `source_url`, `verification_date`, `verification_notes`; optional `topic`. Excluded candidates belong in `evaluation/excluded_articles.csv` with a reason.
+## Security and known limitations
 
-After 100 or more traceable, verified articles are supplied, run:
-
-```powershell
-.venv\Scripts\python.exe scripts\audit_external_evaluation.py
-.venv\Scripts\python.exe scripts\evaluate_external.py
-```
-
-Inspect and adjudicate overlap flags before evaluation. The external evaluator enforces the 100-valid-article minimum, loads the saved model without retraining, and writes under `evaluation/results/` rather than `models/model_metrics.json`. Keep the future external score separate from the 96.28% random-split Macro F1; do not average them or call either real-world accuracy.
-
-`data/README.md` describes the article training data. `data/fever/` and the v2/PyTorch files are separate claim-classification/evidence experiments and their metrics are not comparable with this article classifier.
-
-## 17. Dataset leakage and generalization limits
-
-The previous practical train/test text-similarity audit found 34/915 (3.72%) test articles with maximum word unigram/bigram TF-IDF cosine similarity ≥0.90; 21 (2.30%) ≥0.95; 12 (1.31%) ≥0.98; and 8 (0.87%) ≥0.99. These are heuristic similarity flags, not proof of duplicates. The active training dataset has no reliable publisher or publication-date fields; its opaque `idd` is not provenance. Source-held-out and time-held-out evaluation could not be performed. The random split may therefore overstate generalization.
-
-## 18. Known limitations and risks
-
-### Technical
-
-- The LinearSVC scores are not calibrated probabilities. The ±1 margin rule abstains on many samples and limits coverage.
-- The main evidence path is heuristic and can miss paraphrase, context, temporal changes, or nuanced reasoning.
-- Provider access, quotas, network availability, retrieval quality, and source-credibility rules affect results.
-- The separate `/api/v1` NLI service has its own model readiness and uncalibrated scores; it should not be mistaken for `/api/check`.
-- Startup currently displays `Train Acc: N/A` due the metric JSON shape, even though the saved JSON has training accuracy at the top level.
-
-### Dataset and evaluation
-
-- The training corpus is small and lacks publisher/date provenance; random splits cannot measure source/time generalization.
-- Near-duplicate similarity overlap was observed in the random split; inspect flags rather than treating them as confirmed duplicates.
-- The external benchmark has no valid records, so there is no external performance estimate.
-
-### Evidence and demo
-
-- `/api/check` covers one representative claim in long input, not all article claims.
-- Provider errors and no indexed results can leave true claims UNVERIFIED.
-- A local demo can show the pipeline, but live provider results are not deterministic.
-
-## 19. What is safe to change / what needs caution
-
-Normal areas for independent work include documentation, evaluation reporting, UI improvements, test coverage, claim extraction, evidence ranking, and additional provider adapters.
-
-Treat these as controlled changes: `ml/train.py`, the training labels/dataset, `models/fake_news_model.joblib`, `models/model_metrics.json`, the ±1 threshold, final-decision rules, evidence interpretation, and API response contracts. Before changes, define an evaluation plan, preserve artifact provenance, run tests, and verify frontend/API compatibility. Do not change them just to improve a displayed metric.
-
-## 20. Things not to do
-
-- Do not call 96.28% real-world accuracy or report decisive-subset 100% as overall accuracy.
-- Do not fabricate articles, sources, URLs, dates, labels, or evidence for the external benchmark.
-- Do not use external benchmark articles for training or tuning.
-- Do not randomly change thresholds, retrain to inflate the score, or overwrite the production artifact without a documented plan.
-- Do not call compatibility sigmoid scores calibrated probabilities.
-- Do not claim every fact in an article has been verified.
-- Do not remove leakage flags without review or remove failing tests to hide regressions.
-- Do not change API response shapes without checking callers, including the frontend.
-- Never commit API keys or local `.env` files.
-
-## 21. Review 2 talking points
-
-- The project combines an article-style text classifier with a separate evidence retrieval/verification path.
-- The active article model is word/character TF-IDF plus LinearSVC, with an uncertainty band based on its signed margin.
-- The random held-out split produced 96.28% Macro F1; this is not an estimate of real-world generalization.
-- Evidence is searched for one focal claim and assessed with heuristic retrieval/stance rules; provider failure is not treated as refutation.
-- `/api/check` returns classifier and evidence signals plus an explainable final assessment.
-- The next research step is a traceable 100–200 article external benchmark, with duplicates reviewed and no use in training.
-
-## 22. Recommended next work and handover
-
-1. Re-run the test suite and local API demo in the receiving environment.
-2. Collect a balanced initial external set (for example, 50 REAL and 50 FAKE) with verified provenance and diverse Indian/international sources, topics, and dates. Do not invent records.
-3. Run `scripts/audit_external_evaluation.py`; manually adjudicate text/title similarity flags and record exclusions.
-4. Freeze the benchmark and evaluation protocol before scoring.
-5. Run `scripts/evaluate_external.py`; report the separate external metrics, abstention/coverage, source/topic/date distributions, exclusions, and overlap findings.
-6. Compare—not average—the external Macro F1 with the random-split 96.28% reference. Investigate domain shift and label quality before considering model changes.
-7. Only after a defensible benchmark, consider source/time-held-out training-data evaluation, improved claim extraction/evidence ranking, stronger NLI, calibration, or a more diverse training dataset.
-
-See [BALANCE_FIXES.md](BALANCE_FIXES.md) for the continuation checklist, known warnings, commands, and file-level change cautions. The project is runnable for Review 2; external generalization evaluation remains unfinished until verified articles are supplied.
+- Flask limits request bodies to 128 KiB and applies an in-memory rate limit of 60 requests per client address per minute. The limiter is per process and is not a shared multi-worker control.
+- The app sets basic security response headers and the Windows launcher binds to localhost. The Docker command binds inside the container to `0.0.0.0`.
+- URL-fetch protections reduce common risks but do not replace hardened outbound network controls.
+- NLI scores, evidence strength, and source credibility are not calibrated probabilities. Current decision thresholds are not production-tuned.
+- Retrieval can be incomplete, stale, irrelevant, or contextually mismatched. Undated sources may remain in recent-news results.
+- The article classifier and the NLI verifier use different tasks, data, and metrics. Neither independently establishes factual truth.
+- The browser currently accepts longer pasted text than the single-claim API schema allows, and it does not render the source URLs returned by the API.
+- No cloud deployment is documented. Require human review for consequential decisions.
