@@ -149,6 +149,9 @@ activemq-data/
 
 # Environments
 .env
+.env.*
+!.env.example
+!**/.env.example
 .envrc
 .venv
 env/
@@ -200,6 +203,9 @@ cython_debug/
 #   and can be added to the global gitignore or merged into this file. However, if you prefer, 
 #   you could uncomment the following to ignore the entire vscode folder
 # .vscode/
+# Keep workspace settings local unless the team intentionally shares them.
+.vscode/
+.idea/
 # Temporary file for partial code execution
 tempCodeRunnerFile.py
 
@@ -218,6 +224,20 @@ __marimo__/
 .streamlit/secrets.toml
 
 # Local verification module secrets
+# Environment files are ignored at every project depth; examples remain tracked.
+**/.env
+**/.env.*
+!**/.env.example
+
+# Credentials, private keys, and local certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+credentials.json
+client_secret*.json
 
 # Generated project artifacts
 models/*.joblib
@@ -233,3 +253,12 @@ reports/scifact*_progress.jsonl
 node_modules/
 .cache/
 huggingface/
+
+# Local editor, OS, and generated documentation artifacts
+.docx_render/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
